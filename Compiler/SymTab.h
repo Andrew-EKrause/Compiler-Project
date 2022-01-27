@@ -25,7 +25,6 @@ typedef struct {
     SymEntry *current;
 } SymTab;
 
-
 // --> DELETE LATER...FUNCTION COMPLETED!!!
 SymTab * createSymTab(int size);
 /* 
@@ -35,16 +34,15 @@ SymTab * createSymTab(int size);
     Return a pointer to a new symbol table
 */
 
-
 // In the following functions assume a pre condition that table references a
 // previously created symbol table:
 
-
+// --> DELETE LATER...FUNCTION COMPLETED!!!
 void destroySymTab(SymTab *table);
 // recover space created by the symbol table functions
 // no functions should use the symbol table after it is destroyed
 
-int enterName(SymTab * table, char *name);
+int enterName(SymTab *table, char *name);
 /*
     if name is not in the symbol table, a copy of name is added to the symbol table
     with a NULL attribute, set current to reference the new (name, attribute) pair
