@@ -15,6 +15,7 @@
 // and the  SymTab.h file.
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "SymTab.h"
 
 /**
@@ -55,7 +56,7 @@ SymTab *createSymTab(int size) {
 /**
  * The function destroys the Symbol table by setting
  * the various attributes of the table to NULL as well
- * as by freeing all of the data attributes.
+ * as freeing all of the data attributes.
  */
 // --> SEE IF THERE IS A MORE SIMPLE WAY TO DO THIS!!!
 void destroySymTab(SymTab *table) {
@@ -96,7 +97,6 @@ void destroySymTab(SymTab *table) {
             // SymEntry itself.
             // --> CHECK LATER!!!
             free(specificEntry->name);
-            free(specificEntry->attribute);
             free(specificEntry);
 
             // Set the specificEntry temp variable equal
@@ -112,7 +112,6 @@ void destroySymTab(SymTab *table) {
         free(nextEntryPoint);
         free(specificEntry);
         free(table->contents);
-        free(table->current);
         free(table);
     }
 }
@@ -121,12 +120,11 @@ void destroySymTab(SymTab *table) {
  * The function inserts a new name into the symbol
  * table. If name is not in the symbol table, a copy 
  * of name is added to the symbol table with a NULL 
- * attribute, set current to reference the new (name, attribute) 
- * pair and return 1 if name is in the symbol table, 
- * set current to reference the (name, attribute) pair 
- * and return 0.
+ * attribute, and current is set to reference the new 
+ * (name, attribute) pair and return 1. If name is in 
+ * the symbol table, set current to reference the 
+ * (name, attribute) pair and return 0.
  */
-// --> COMPLETE LATER!!!
 int enterName(SymTab *table, char *name) {
 
     // If the name is not already in the symbol table,
@@ -134,7 +132,35 @@ int enterName(SymTab *table, char *name) {
     // symbol table.
     if(findName(table, name) == 0) {
 
+        // Determine where to insert the new name in the table.
+        int newHashValue = createHashValue(table->size, name);
+        
+        // Create space in memory for the new entry.
+        SymEntry *newEntry = malloc(sizeof(SymEntry));
+
+        // Create space in memory for the name of the entry and 
+        // create a copy of the nane to add it to the symbol table.
+        newEntry->name = (char *)malloc(sizeof(char) * strlen(name));
+        newEntry->name = strdup(name);
+
+        // Set the new entry attribute to NULL.
+        newEntry->attribute = NULL;
+
+        // SET THE NEXT FIELD AT ALL HERE???
+        newEntry->next = table->contents[newHashValue];
+
+        // Store the new entry in the symbol table at the hashed
+        // location and set current to be the new entry value.
+        table->contents[newHashValue] = newEntry;
+        talbe->current = newEntry;
+        
+        // After adding the new entry 
+        // to the symbol table, return 1.
+        return 1;
+
     } else {
+
+        // --> SET CURRENT TO REFERENCE THE (NAME, ATTRIBUTE) PAIR???
 
         // If the name is already in the symbol table,
         // set current to reference the name attribute
@@ -212,7 +238,7 @@ int hasCurrent(SymTab *table) {
  * in the symbol table to the specified
  * parameter attribute.
  */
-void setCurrentAttr(SymTab *table, void * attr) {
+void setCurrentAttr(SymTab *table, void *attr) {
 
     // PRE: hashCurrent() == 1
     // change the attribute value of the 
@@ -222,14 +248,15 @@ void setCurrentAttr(SymTab *table, void * attr) {
 
 /**
  * The function gets the current attribute
- * in the symbol table. 
+ * in the symbol table.  The value is
+ * returned from the function.
  */
-void * getCurrentAttr(SymTab *table) {
+void *getCurrentAttr(SymTab *table) {
 
     // PRE: hasCurrent() == 1
     // return the attribute in the 
     // current (name, attribute) pair
-    table->current->attribute;
+    return table->current->attribute;
 }
 
 /**
@@ -238,7 +265,7 @@ void * getCurrentAttr(SymTab *table) {
  * the symbol table. The value is 
  * returned from the function,
  */
-char * getCurrentName(SymTab *table) {
+char *getCurrentName(SymTab *table) {
 
     // PRE: hasCurrent() == 1
     // return the name in the 
@@ -248,8 +275,8 @@ char * getCurrentName(SymTab *table) {
 
 /**
  * The function sets current to the "first" (name, attribute)
- * pair in the symbol table and return 1. Otherwise, if the
- * table is empty, return 0.
+ * pair in the symbol table and returns 1. Otherwise, if the
+ * table is empty, it returns 0.
  */
 int startIterator(SymTab *table) {
 
@@ -283,11 +310,59 @@ int startIterator(SymTab *table) {
 
 
 
-int nextEntry(SymTab *table) {
 
-}
 /*
     if all (name, attribute) pairs have been visited since the last call to
     startIterator, return 0
     otherwise set current to the "next" (name, attribute) pair and return 1
 */
+int nextEntry(SymTab *table) {
+
+    // First check if current is NULL, which indicates
+    // that all (name, attribute) pairs have been visited
+    // since the last call or the table is empty.
+    if(table->current == NULL) {
+        return 0;
+    }
+    // TEMPORARY
+    return 0;
+}
+
+
+
+
+/**
+ * The function returns a hash value that is used
+ * to determine which slot in the symbol table any
+ * given entry is inserted in. The hash function is
+ * generated by first summing the ASCII values of  
+ * each character in the name being processed in the 
+ * fucntion. Next, that obtained sum is modded by 
+ * the current size of the symbol table to produce
+ * the hash value. This function is used in the
+ * enterName() function.
+ */
+// --> CHECH THIS!!! IT MIGHT NOT BE CORRECT!!!
+int createHashValue(int size, char *name) {
+
+    // Create a counter variable 
+    // and a hash value variable.
+    int i;
+    int hashVal = 0;
+
+    // Sum the ASCII character values of 
+    // the name variable up to obtain part 
+    // of the hash value.
+    for(i = 0; i < strlen(name); i++) {
+
+        // Sum up ASCII values.
+        hashVal += name[i];
+    }
+
+    // Mod the obtained sum of characters
+    // to get the final hash value.
+    hashVal %= size;
+
+    // Return the hash value from the function.
+    return hashVal;
+}

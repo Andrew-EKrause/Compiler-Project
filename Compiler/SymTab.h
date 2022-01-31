@@ -85,3 +85,15 @@ int nextEntry(SymTab *table);
     startIterator, return 0
     otherwise set current to the "next" (name, attribute) pair and return 1
 */
+
+// Generaate a hash value for the table.
+// --> CHECK LATER!!!
+int createHashValue(int size, char *name);
+/*
+    this function was not initially provided in the .h
+    file by the professor. I created it myself. 
+*/
+
+
+// --> DELETE LATER!!!
+int generateHash(int size, char *name);
