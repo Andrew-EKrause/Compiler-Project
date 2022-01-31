@@ -152,7 +152,7 @@ int enterName(SymTab *table, char *name) {
         // Store the new entry in the symbol table at the hashed
         // location and set current to be the new entry value.
         table->contents[newHashValue] = newEntry;
-        talbe->current = newEntry;
+        table->current = newEntry;
         
         // After adding the new entry 
         // to the symbol table, return 1.
@@ -312,9 +312,9 @@ int startIterator(SymTab *table) {
 
 
 /*
-    if all (name, attribute) pairs have been visited since the last call to
-    startIterator, return 0
-    otherwise set current to the "next" (name, attribute) pair and return 1
+    If all (name, attribute) pairs have been visited since the last call to
+    startIterator, return 0. Otherwise, set current to the "next" (name, attribute) 
+    pair and return 1.
 */
 int nextEntry(SymTab *table) {
 

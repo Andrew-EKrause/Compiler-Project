@@ -30,7 +30,7 @@ int main() {
    // Display a message to the user indicating the
    // start of tests for the Symbol Table
    printf("\n\n\n\n\n\n---------------------------------------------------------");
-   printf("\nTests for Symbol Table:");
+   printf("\nTESTS FOR SYMBOL TABLE:");
    printf("\n---------------------------------------------------------\n");
 
    // Tests for the *createSymTab(int size) function.
@@ -67,12 +67,14 @@ int main() {
    printf("EXPECTED: Size of testTable1 is: < 100 >\n");
    printf("ACTUAL: Size of testTable1 is: %d\n", testTable3->size);
    printf("\n");
-   printf("SUMMARY: < %d/3 > tests passed for *createSymTab(int size).", numPassed1);
+   printf("(1) SUMMARY: < %d/3 > tests passed for *createSymTab(int size).", numPassed1);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
    printf("\n");
    // ===================================================================================================
+
+
 
 
    // Tests for the destroySymTab(SymTab *table) function.
@@ -123,12 +125,14 @@ int main() {
 
    // --> UNCOMMENT ENDMARKER
 
-   // printf("SUMMARY: < %d/3 > tests passed for *destroySymTab(SymTab *table).", numPassed2);
+   // printf("(2) SUMMARY: < %d/3 > tests passed for *destroySymTab(SymTab *table).", numPassed2);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
    printf("\n");
    // ===================================================================================================
+
+
 
 
    // Tests for the enterName(SymTab *table, char *name) function.
@@ -227,13 +231,15 @@ int main() {
    }
    printf("\n");
 
-   printf("SUMMARY: < %d/10 > tests passed for enterName(SymTab *table, char *name) with expected return values.", returnNumPassed3);
-   printf("\nSUMMARY: < %d/3 > tests passed for enterName(SymTab *table, char *name) with expected current name values.", numPassed3);
+   printf("(3.1) SUMMARY: < %d/10 > tests passed for enterName(SymTab *table, char *name) with expected return values.", returnNumPassed3);
+   printf("\n(3.2) SUMMARY: < %d/3 > tests passed for enterName(SymTab *table, char *name) with expected current name values.", numPassed3);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
    printf("\n");
    // ===================================================================================================
+
+
 
 
    // Tests for the enterName(SymTab *table, char *name) function.
@@ -350,12 +356,14 @@ int main() {
    printf("\n\n");
 
    // Print out the summary of the test results.
-   printf("SUMMARY: < %d/9 > tests passed for findName(SymTab *table, char *name) with expected return values.", numPassed4);
+   printf("(4) SUMMARY: < %d/9 > tests passed for findName(SymTab *table, char *name) with expected return values.", numPassed4);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
    printf("\n");
    // ===================================================================================================
+
+
 
 
    // Tests for the hasCurrent(SymTab *table) function.
@@ -415,12 +423,14 @@ int main() {
    printf("\n\n");
 
    // Print out the summary of the test results.
-   printf("SUMMARY: < %d/4 > tests passed for hasCurrent(SymTab *table) with expected return values.", numPassed5);
+   printf("(5) SUMMARY: < %d/4 > tests passed for hasCurrent(SymTab *table) with expected return values.", numPassed5);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
    printf("\n");
    // ===================================================================================================
+
+
 
 
    // Tests for the setCurrentAttr(SymTab *table, void *attr) and *getCurrentAttr(SymTab *table) functions.
@@ -522,7 +532,7 @@ int main() {
    free(memory4);
 
    // Print out the summary of the test results.
-   printf("SUMMARY: < %d/4 > tests passed for setCurrentAttr(SymTab *table, void *attr) and *getCurrentAttr(SymTab *table) with expected values.", numPassed6And7);
+   printf("(6) SUMMARY: < %d/4 > tests passed for setCurrentAttr(SymTab *table, void *attr) and *getCurrentAttr(SymTab *table) with expected values.", numPassed6And7);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
@@ -530,7 +540,9 @@ int main() {
    // ===================================================================================================
 
 
-   // Tests for the setCurrentAttr(SymTab *table, void *attr) and *getCurrentAttr(SymTab *table) functions.
+
+
+   // Tests for the getCurrentName(SymTab *table) function.
    printf("\n--> Tests for getCurrentName(SymTab *table):\n\n");
 
    // Declare new symbol tables before allocating size for them.
@@ -539,7 +551,7 @@ int main() {
    SymTab *testTable7;
 
    // Create new symbol tables to test the function with.
-   testTable5 = createSymTab(3);
+   testTable5 = createSymTab(5);
    testTable6 = createSymTab(30);
    testTable7 = createSymTab(200);
 
@@ -549,7 +561,7 @@ int main() {
    int entry15 = enterName(testTable5, "change");
 
    // Enter names into testTable6.
-   int entry16 = enterName(testTable6, "one");
+   int entry16 = enterName(testTable6, "once");
    int entry17 = enterName(testTable6, "upon");
    int entry18 = enterName(testTable6, "time");
 
@@ -590,7 +602,7 @@ int main() {
    printf("\n\n");
 
    // Print out the summary of the test results.
-   printf("SUMMARY: < %d/3 > tests passed for getCurrentName(SymTab *table) with expected values.", numPassed8);
+   printf("(7) SUMMARY: < %d/3 > tests passed for getCurrentName(SymTab *table) with expected values.", numPassed8);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
@@ -600,26 +612,413 @@ int main() {
 
 
 
+   // Tests for the startIterator(SymTab *table) function.
+   printf("\n--> Tests for startIterator(SymTab *table):\n");
+   printf("--> (Symbol tables used in this test are the same as tables in the getCurrentName() test.)\n\n");
+
+   // Create an integer to track the number of tests passed.
+   int numPassed9 = 0;
+
+   // Use the startIterator function to check if the first (name, attribute) pair is visited.
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable5.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The names that were entered into testTable5 in the previous tests were: 'the', 'times', and 'change'.\n\n");
+
+   // Expected slot for the name 'the' in testTable5.
+   printf("'the' has a hash value of %d.\n", createHashValue(5, "the")); 
+   printf("'the' should be in slot %d of the symbol table.\n\n", createHashValue(5, "the"));
+
+   // Expected slot for the name 'the' in testTable5.
+   printf("'times' has a hash value of %d.\n", createHashValue(5, "times")); 
+   printf("'times' should be in slot %d of the symbol table.\n\n", createHashValue(5, "times"));
+
+   // Expected slot for the name 'the' in testTable5.
+   printf("'change' has a hash value of %d.\n", createHashValue(5, "change")); 
+   printf("'change' should be in slot %d of the symbol table.\n\n", createHashValue(5, "change"));
+
+   printf("EXPECTED: based on the above information, < times > should be the first entry visited.\n");
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int iteratorTest1 = startIterator(testTable5);
+   if((iteratorTest1 == 1) && (strcmp(testTable5->current->name, "times") == 0)) {
+      printf("ACTUAL: the first entry visited is %s\n", testTable5->current->name);
+      numPassed9 += 1;
+   } else {
+      printf("ACTUAL: the first entry visited is NOT times.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable6.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The names that were entered into testTable5 in the previous tests were: 'once', 'upon', and 'time'.\n\n");
+
+   // Expected slot for the name 'the' in testTable6.
+   printf("'once' has a hash value of %d.\n", createHashValue(30, "once")); 
+   printf("'once' should be in slot %d of the symbol table.\n\n", createHashValue(30, "once"));
+
+   // Expected slot for the name 'the' in testTable6.
+   printf("'upon' has a hash value of %d.\n", createHashValue(30, "upon")); 
+   printf("'upon' should be in slot %d of the symbol table.\n\n", createHashValue(30, "upon"));
+
+   // Expected slot for the name 'the' in testTable6.
+   printf("'time' has a hash value of %d.\n", createHashValue(30, "time")); 
+   printf("'time' should be in slot %d of the symbol table.\n\n", createHashValue(30, "time"));
+
+   printf("EXPECTED: based on the above information, < upon > should be the first entry visited.\n");
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int iteratorTest2 = startIterator(testTable6);
+   if((iteratorTest2 == 1) && (strcmp(testTable6->current->name, "upon") == 0)) {
+      printf("ACTUAL: the first entry visited is %s\n", testTable6->current->name);
+      numPassed9 += 1;
+   } else {
+      printf("ACTUAL: the first entry visited is NOT upon.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable7.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The names that were entered into testTable7 in the previous tests were: 'mr', 'tambourine', and 'man'.\n\n");
+
+   // Expected slot for the name 'the' in testTable7.
+   printf("'mr' has a hash value of %d.\n", createHashValue(200, "mr")); 
+   printf("'mr' should be in slot %d of the symbol table.\n\n", createHashValue(200, "mr"));
+
+   // Expected slot for the name 'the' in testTable7.
+   printf("'tambourine' has a hash value of %d.\n", createHashValue(200, "tambourine")); 
+   printf("'tambourine' should be in slot %d of the symbol table.\n\n", createHashValue(200, "tambourine"));
+
+   // Expected slot for the name 'the' in testTable7.
+   printf("'man' has a hash value of %d.\n", createHashValue(200, "man")); 
+   printf("'man' should be in slot %d of the symbol table.\n\n", createHashValue(200, "man"));
+
+   printf("EXPECTED: based on the above information, < mr > should be the first entry visited.\n");
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int iteratorTest3 = startIterator(testTable7);
+   if((iteratorTest3 == 1) && (strcmp(testTable7->current->name, "mr") == 0)) {
+      printf("ACTUAL: the first entry visited is %s\n", testTable7->current->name);
+      numPassed9 += 1;
+   } else {
+      printf("ACTUAL: the first entry visited is NOT mr.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable8.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The symbol table, testTable8, is empty. Therefore, the iterator function should return 0.\n\n");
+   printf("EXPECTED: based on the above information, the iterator function should return 0.\n");
+
+   // Declare a new, empty symbol table.
+   SymTab *testTable8;
+   testTable8 = createSymTab(12);
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int iteratorTest4 = startIterator(testTable8);
+   if(iteratorTest4 == 0) {
+      printf("ACTUAL: the return value of the iterator function is %d\n", iteratorTest4);
+      numPassed9 += 1;
+   } else {
+      printf("ACTUAL: the return value of the iterator function is NOT 0.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // Print out the summary of the test results.
+   printf("(8) SUMMARY: < %d/4 > tests passed for getCurrentName(SymTab *table) with expected values.", numPassed9);
+   printf("\n---------------------------------------------------------\n");
+
+   // Include an extra print statement at the end.
+   printf("\n");
+   // ===================================================================================================
 
 
 
 
+   // Tests for the startIterator(SymTab *table) function.
+   printf("\n--> Tests for nextEntry(SymTab *table):\n");
+   printf("--> (Symbol tables used in this test are the same as tables in the getCurrentName() and startIterator(SymTab *table) tests.)\n\n");
+
+   // Create an integer to track the number of tests passed.
+   int numPassed10 = 0;
+
+   // Use the nextEntry function to check if the next (name, attribute) pair is visited.
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable5.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The names that were entered into testTable5 in the previous tests were: 'the', 'times', and 'change'.\n\n");
+
+   // Expected slot for the name 'the' in testTable5.
+   printf("'the' has a hash value of %d.\n", createHashValue(5, "the")); 
+   printf("'the' should be in slot %d of the symbol table.\n\n", createHashValue(5, "the"));
+
+   // Expected slot for the name 'the' in testTable5.
+   printf("'times' has a hash value of %d.\n", createHashValue(5, "times")); 
+   printf("'times' should be in slot %d of the symbol table.\n\n", createHashValue(5, "times"));
+
+   // Expected slot for the name 'the' in testTable5.
+   printf("'change' has a hash value of %d.\n", createHashValue(5, "change")); 
+   printf("'change' should be in slot %d of the symbol table.\n\n", createHashValue(5, "change"));
+
+   printf("EXPECTED: based on the above information, < the > should be the next entry visited.\n");
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int entryTest1 = nextEntry(testTable5);
+   if((entryTest1 == 1) && (strcmp(testTable5->current->name, "the") == 0)) {
+      printf("ACTUAL: the next entry visited is %s\n", testTable5->current->name);
+      numPassed10 += 1;
+   } else {
+      printf("ACTUAL: the next entry visited is NOT the.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable6.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The names that were entered into testTable5 in the previous tests were: 'once', 'upon', and 'time'.\n\n");
+
+   // Expected slot for the name 'the' in testTable6.
+   printf("'once' has a hash value of %d.\n", createHashValue(30, "once")); 
+   printf("'once' should be in slot %d of the symbol table.\n\n", createHashValue(30, "once"));
+
+   // Expected slot for the name 'the' in testTable6.
+   printf("'upon' has a hash value of %d.\n", createHashValue(30, "upon")); 
+   printf("'upon' should be in slot %d of the symbol table.\n\n", createHashValue(30, "upon"));
+
+   // Expected slot for the name 'the' in testTable6.
+   printf("'time' has a hash value of %d.\n", createHashValue(30, "time")); 
+   printf("'time' should be in slot %d of the symbol table.\n\n", createHashValue(30, "time"));
+
+   printf("EXPECTED: based on the above information, < once > should be the next entry visited.\n");
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int entryTest2 = nextEntry(testTable6);
+   if((entryTest2 == 1) && (strcmp(testTable6->current->name, "once") == 0)) {
+      printf("ACTUAL: the next entry visited is %s\n", testTable6->current->name);
+      numPassed10 += 1;
+   } else {
+      printf("ACTUAL: the next entry visited is NOT once.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable7.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The names that were entered into testTable7 in the previous tests were: 'mr', 'tambourine', and 'man'.\n\n");
+
+   // Expected slot for the name 'the' in testTable7.
+   printf("'mr' has a hash value of %d.\n", createHashValue(200, "mr")); 
+   printf("'mr' should be in slot %d of the symbol table.\n\n", createHashValue(200, "mr"));
+
+   // Expected slot for the name 'the' in testTable7.
+   printf("'tambourine' has a hash value of %d.\n", createHashValue(200, "tambourine")); 
+   printf("'tambourine' should be in slot %d of the symbol table.\n\n", createHashValue(200, "tambourine"));
+
+   // Expected slot for the name 'the' in testTable7.
+   printf("'man' has a hash value of %d.\n", createHashValue(200, "man")); 
+   printf("'man' should be in slot %d of the symbol table.\n\n", createHashValue(200, "man"));
+
+   printf("EXPECTED: based on the above information, < tambourine > should be the next entry visited.\n");
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int entryTest3 = nextEntry(testTable7);
+   if((entryTest3 == 1) && (strcmp(testTable7->current->name, "tambourine") == 0)) {
+      printf("ACTUAL: the next entry visited is %s\n", testTable7->current->name);
+      numPassed10 += 1;
+   } else {
+      printf("ACTUAL: the next entry visited is NOT tambourine.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // ------------------------------------------------------------------------------------------------
+   // List the expected order of the entered names for testTable8.
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("The symbol table, testTable8, is empty. Therefore, the next entry function should return 0.\n\n");
+   printf("EXPECTED: based on the above information, the next entry function should return 0.\n");
+
+   // Call the iterator function and set the value to the latest entry in the first non-empty slot.
+   int entryTest4 = nextEntry(testTable8);
+   if(entryTest4 == 0) {
+      printf("ACTUAL: the return value of the iterator function is %d\n", entryTest4);
+      numPassed10 += 1;
+   } else {
+      printf("ACTUAL: the return value of the next entry function is NOT 0.\n");
+   }
+   printf("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+   printf("\n");
+   // ------------------------------------------------------------------------------------------------
+
+   // Print out the summary of the test results.
+   printf("(9) SUMMARY: < %d/4 > tests passed for nextEntry(SymTab *table) with expected values.", numPassed10);
+   printf("\n---------------------------------------------------------\n");
+
+   // Include an extra print statement at the end.
+   printf("\n");
+   // ===================================================================================================
 
 
 
+   
+   // Tests for the createHashValue(int size, char *name) function.
+   printf("\n--> Tests for createHashValue(int size, char *name):\n\n");
 
+   // Create an integer to track the number of tests passed.
+   int numPassed11 = 0;
 
+   // Create variables to store the hash values.
+   int createHashTest1 = createHashValue(4, "integer"); 
+   int createHashTest2 = createHashValue(10, "string"); 
+   int createHashTest3 = createHashValue(2, "candy"); 
+   int createHashTest4 = createHashValue(15, "Gendreau"); 
+   int createHashTest5 = createHashValue(13, "Saupe77"); 
+   int createHashTest6 = createHashValue(58, "Charlie_T"); 
+   int createHashTest7 = createHashValue(72, "Andrew_E_K"); 
+   int createHashTest8 = createHashValue(18, "compilers_is_tough"); 
+   int createHashTest9 = createHashValue(45, "floatVal"); 
+   int createHashTest10 = createHashValue(200, "supercallifragilisticexpialidocious");
 
+   // Check if the hash values fall between the correct ranges.
+   if((createHashTest1 >= 0) && (createHashTest1 < 4)) {
 
+      printf("createHashTest1 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest1 FAILED.\n");
+   }
+
+   if((createHashTest2 >= 0) && (createHashTest2 < 10)) {
+
+      printf("createHashTest2 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest2 FAILED.\n");
+   }
+
+   if((createHashTest3 >= 0) && (createHashTest3 < 2)) {
+
+      printf("createHashTest3 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest3 FAILED.\n");
+   }
+
+   if((createHashTest4 >= 0) && (createHashTest4 < 15)) {
+
+      printf("createHashTest4 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest4 FAILED.\n");
+   }
+
+   if((createHashTest5 >= 0) && (createHashTest5 < 13)) {
+
+      printf("createHashTest5 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest5 FAILED.\n");
+   }
+
+   if((createHashTest6 >= 0) && (createHashTest6 < 58)) {
+
+      printf("createHashTest6 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest6 FAILED.\n");
+   }
+
+   if((createHashTest7 >= 0) && (createHashTest7 < 72)) {
+
+      printf("createHashTest7 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest7 FAILED.\n");
+   }
+
+   if((createHashTest8 >= 0) && (createHashTest8 < 18)) {
+
+      printf("createHashTest8 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest8 FAILED.\n");
+   }
+
+   if((createHashTest9 >= 0) && (createHashTest9 < 45)) {
+
+      printf("createHashTest9 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest9 FAILED.\n");
+   }
+
+   if((createHashTest10 >= 0) && (createHashTest9 < 200)) {
+
+      printf("createHashTest10 PASSED.\n");
+      numPassed11 += 1;
+
+   } else {
+      printf("createHashTest10 FAILED.\n");
+   }
+
+   // Print out the summary of the test results.
+   printf("\n(10) SUMMARY: < %d/10 > tests passed for createHashValue(int size, char *name) with expected values.", numPassed11);
+   printf("\n---------------------------------------------------------\n");
+
+   // Include an extra print statement at the end.
+   printf("\n");
+   // ===================================================================================================
 
 
 
 
    // Print the final summaries for all the tests as one large summary below.
-   // --> COMPLETE THIS LATER!!!
+   printf("\n=================================================================\n");
+   printf("THIS FINAL SECTION LISTS OUT THE SUMMARIES OF ALL THE TESTS THAT\n");
+   printf("WERE IMPLEMENTED ON THE DIFFERENT FUNCTIONS OF THE SYMBOL TABLE.\n");
+   printf("=================================================================\n\n");
+
+   // Print out all the summary print statements that appear in all of the other tests.
+   printf("(1) SUMMARY: < %d/3 > tests passed for *createSymTab(int size).\n", numPassed1);
+   // printf("(2) SUMMARY: < %d/3 > tests passed for *destroySymTab(SymTab *table).\n", numPassed2);
+   printf("(3.1) SUMMARY: < %d/10 > tests passed for enterName(SymTab *table, char *name) with expected return values.\n", returnNumPassed3);
+   printf("(3.2) SUMMARY: < %d/3 > tests passed for enterName(SymTab *table, char *name) with expected current name values.\n", numPassed3);
+   printf("(4) SUMMARY: < %d/9 > tests passed for findName(SymTab *table, char *name) with expected return values.\n", numPassed4);
+   printf("(5) SUMMARY: < %d/4 > tests passed for hasCurrent(SymTab *table) with expected return values.\n", numPassed5);
+   printf("(6) SUMMARY: < %d/4 > tests passed for setCurrentAttr(SymTab *table, void *attr) and *getCurrentAttr(SymTab *table) with expected values.\n", numPassed6And7);
+   printf("(7) SUMMARY: < %d/3 > tests passed for getCurrentName(SymTab *table) with expected values.\n", numPassed8);
+   printf("(8) SUMMARY: < %d/4 > tests passed for getCurrentName(SymTab *table) with expected values.\n", numPassed9);
+   printf("(9) SUMMARY: < %d/4 > tests passed for nextEntry(SymTab *table) with expected values.\n", numPassed10);
+   printf("(10) SUMMARY: < %d/10 > tests passed for createHashValue(int size, char *name) with expected values.\n", numPassed11);
 
    // Include an extra print statement at the end.
-   printf("\n");
+   printf("\nEND OF TESTS FOR SYMBOL TABLE\n\n");
 
+   // Return 0 at the end of the main function 
+   // after all the tests have run.
    return 0;
 }
