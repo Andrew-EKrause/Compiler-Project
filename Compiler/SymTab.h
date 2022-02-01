@@ -25,75 +25,73 @@ typedef struct {
     SymEntry *current;
 } SymTab;
 
-// --> DELETE LATER...FUNCTION COMPLETED!!!
-SymTab * createSymTab(int size);
 /* 
     PRE: size >= 0
     size is an estimate of the number of items that will be stored in the symbol
     table
     Return a pointer to a new symbol table
 */
+SymTab * createSymTab(int size);
 
-// In the following functions assume a pre condition that table references a
-// previously created symbol table:
+// ============================================================================
+// In the following functions assume a pre condition that table references a 
+// previously created symbol table: 
+// ============================================================================
 
-// --> DELETE LATER...FUNCTION COMPLETED!!!
-void destroySymTab(SymTab *table);
 // recover space created by the symbol table functions
 // no functions should use the symbol table after it is destroyed
+void destroySymTab(SymTab *table);
 
-int enterName(SymTab *table, char *name);
 /*
-    if name is not in the symbol table, a copy of name is added to the symbol table
+    If name is not in the symbol table, a copy of name is added to the symbol table
     with a NULL attribute, set current to reference the new (name, attribute) pair
     and return 1
     if name is in the symbol table, set current to reference the (name, attribute)
     pair and return 0
 */
+int enterName(SymTab *table, char *name);
 
-int findName(SymTab *table, char *name);
 /*
     if name is in the symbol table, set current to reference the (name, attribute)
     pair and return 1
     otherwise do not change current and return 0
 */
+int findName(SymTab *table, char *name);
 
-int hasCurrent(SymTab *table);
-// if current references a (name, attribute) pair return 1
+// If current references a (name, attribute) pair return 1
 // otherwise return 0;
+int hasCurrent(SymTab *table);
 
-void setCurrentAttr(SymTab *table, void * attr);
 // PRE: hashCurrent() == 1
 // change the attribute value of the current (name, attribute) pair to attr
+void setCurrentAttr(SymTab *table, void * attr);
 
-void * getCurrentAttr(SymTab *table);
 // PRE: hasCurrent() == 1
 // return the attribute in the current (name, attribute) pair
+void * getCurrentAttr(SymTab *table);
 
-char * getCurrentName(SymTab *table);
 // PRE: hasCurrent() == 1
 // return the name in the current (name, attribute) pair
+char * getCurrentName(SymTab *table);
 
-// Assume no changes are made to the symbol table while iterating through the symbol table
+/* 
+    Assume no changes are made to the symbol table while 
+    iterating through the symbol table. If the symbol table 
+    is empty, return 0 otherwise set current to the "first"
+    (name, attribute) pair in the symbol table and return 1.
+*/ 
 int startIterator(SymTab *table);
-// if the symbol table is empty, return 0
-// otherwise set current to the "first" (name, attribute) pair in the symbol table and return 1
 
-int nextEntry(SymTab *table);
 /*
     if all (name, attribute) pairs have been visited since the last call to
     startIterator, return 0
     otherwise set current to the "next" (name, attribute) pair and return 1
 */
+int nextEntry(SymTab *table);
 
-// Generaate a hash value for the table.
-// --> CHECK LATER!!!
-int createHashValue(int size, char *name);
 /*
-    this function was not initially provided in the .h
+    Generate a hash value for the table.
+    This function was not provided in the .h
     file by the professor. I created it myself. 
 */
-
-
-// --> DELETE LATER!!!
-int generateHash(int size, char *name);
+int createHashValue(int size, char *name);

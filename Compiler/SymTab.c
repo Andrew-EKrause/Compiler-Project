@@ -1,5 +1,13 @@
 /**
- * DESCRIPTION...
+ * The file contains functions needed to create 
+ * and interact with a Symbol Table data structure.
+ * The different attributes within the file include
+ * functions for creating the Symbol Table, destroying
+ * it, adding a new name to the table, finding a name
+ * in the table. Besides the functions listed above,
+ * and others not listed that help maintain the 
+ * Symbol Table, a function for creating a new hash
+ * value is also included in the file.
  * 
  * @file SymTab.c
  * @author Andrew Krause
@@ -97,6 +105,7 @@ void destroySymTab(SymTab *table) {
             // SymEntry itself.
             // --> CHECK LATER!!!
             free(specificEntry->name);
+            // ADD MORE???
             free(specificEntry);
 
             // Set the specificEntry temp variable equal
@@ -124,6 +133,10 @@ void destroySymTab(SymTab *table) {
  * (name, attribute) pair and return 1. If name is in 
  * the symbol table, set current to reference the 
  * (name, attribute) pair and return 0.
+ * 
+ * The way I wrote this function, entries with the
+ * same hash value are inserted before the other 
+ * entries.
  */
 int enterName(SymTab *table, char *name) {
 
@@ -139,8 +152,8 @@ int enterName(SymTab *table, char *name) {
         SymEntry *newEntry = malloc(sizeof(SymEntry));
 
         // Create space in memory for the name of the entry and 
-        // create a copy of the nane to add it to the symbol table.
-        newEntry->name = (char *)malloc(sizeof(char) * strlen(name));
+        // create a copy of the name to add it to the symbol table.
+        newEntry->name = (char *)malloc(sizeof(char) * strlen(name)); // --> LIKELY DO NOT NEED THIS!!!
         newEntry->name = strdup(name);
 
         // Set the new entry attribute to NULL.
@@ -307,10 +320,6 @@ int startIterator(SymTab *table) {
     return 0;
 }
 
-
-
-
-
 /*
     If all (name, attribute) pairs have been visited since the last call to
     startIterator, return 0. Otherwise, set current to the "next" (name, attribute) 
@@ -322,14 +331,81 @@ int nextEntry(SymTab *table) {
     // that all (name, attribute) pairs have been visited
     // since the last call or the table is empty.
     if(table->current == NULL) {
+
+        // Did not move to any next entry.
         return 0;
     }
-    // TEMPORARY
-    return 0;
+
+    // Get the hash value of the current attribute in the symbol table.
+    int hashValue = createHashValue(table->size, table->current->name);
+
+    // If the hash value is the table size - 1, that means that the
+    // current (name, attribute) pair is located in the last slot
+    // of the symbol table. Therefore, you need to check 
+    if(hashValue == table->size - 1) {
+
+        // Create temporary variables to traverse 
+        // through the entries in the given slot.
+        SymEntry *currentEntry = table->contents[hashValue];
+        SymEntry *nextEntry;
+
+        // While there are still entries in the slot,
+        // move through each entry in the given slot.
+        while(currentEntry != NULL) {
+
+            // Move to the next entry in the slot.
+            nextEntry = currentEntry;
+            currentEntry = currentEntry->next;
+        }
+
+        // When you get to the end of the entries in 
+        // the given slot, check if there are no other
+        // entries after the current entry in the slot.
+        if(nextEntry != NULL && (strcmp(nextEntry->name, table->current->name) == 0)) {
+
+            // If the conditional is met, there are
+            // no other next entries in the table.
+            return 0;
+        }
+    }
+
+    // If the current entry in the table has a next reference,
+    // move to that next reference, which is the next entry.
+    if(table->current->next == NULL) {
+
+        // Move to the next slot in the table.
+        hashValue += 1;
+
+        // While the given slot in the table is NULL,
+        // move to the next slot in the symbol table.
+        while(table->contents[hashValue] == NULL) {
+
+            // Move to the next slot in the symbol table.
+            hashValue += 1;
+
+            // If there are no other slots to visit
+            // in the symbol table, return 0.
+            if(hashValue == (table->size - 1)) {
+                
+                // No other next entry.
+                return 0;
+            }
+        }
+
+        // Set the next entry equal to the first entry 
+        // in the next open, non-NULL slot in the table.
+        table->current = table->contents[hashValue];
+    } else {
+
+        // Otherwise, if the current entry in the table has a next 
+        // reference, move to that next reference, which is the next 
+        // entry.
+        table->current = table->current->next;
+    }
+
+    // Return 1 to indicate a move to the next entry.
+    return 1;
 }
-
-
-
 
 /**
  * The function returns a hash value that is used
@@ -342,7 +418,6 @@ int nextEntry(SymTab *table) {
  * the hash value. This function is used in the
  * enterName() function.
  */
-// --> CHECH THIS!!! IT MIGHT NOT BE CORRECT!!!
 int createHashValue(int size, char *name) {
 
     // Create a counter variable 

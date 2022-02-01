@@ -1,5 +1,10 @@
 /**
- * DESCRIPTION...
+ * The file contains main function with many different
+ * tests for the other functions in the SymTab.c file.
+ * The tests determine if the Symbol Table created in 
+ * the SymTab.c file behaves as expected under different
+ * scenarios and function calls. A final summary of the
+ * test results is printed out at the end of the program.
  * 
  * @file SymTabDriver.c
  * @author Andrew Krause
