@@ -42,7 +42,7 @@ SymTab *createSymTab(int size) {
     // include the table size and the table contents. 
     // Create space in memory for the symbol table contents.
     symbolTable->size = size;
-    symbolTable->contents = malloc(sizeof(SymEntry*) * symbolTable->size); // MAY NEED TO ADD +1 FOR CURRENT
+    symbolTable->contents = malloc(sizeof(SymEntry*) * symbolTable->size);
 
     // Create a for loop to set all of the entries in the symbol
     // table to NULL. The entries are encompassed in the 
@@ -66,14 +66,13 @@ SymTab *createSymTab(int size) {
  * the various attributes of the table to NULL as well
  * as freeing all of the data attributes.
  */
-// --> SEE IF THERE IS A MORE SIMPLE WAY TO DO THIS!!!
+// --> COULD USE AN ITERATOR FOR THIS BUT IT WORKS FOR NOW.
 void destroySymTab(SymTab *table) {
 
     // Create temporary variables to help free the 
     // different data attributes in the symbol table.
     SymEntry *currentSlot = NULL;
     SymEntry *nextEntryPoint = NULL;
-    SymEntry *specificEntry = NULL;
 
     // Create a for loop to visit each entry in the
     // array of linked lists and free the data in order
@@ -87,42 +86,33 @@ void destroySymTab(SymTab *table) {
         // table.
         currentSlot = table->contents[i];
 
-        // The second variable is used to traverse each 
-        // linked list in each the symbol table entry.
-        specificEntry = currentSlot;
-
         // Until the end of the linked list is reached,
         // free each entry/node/SymEntry of the linked
         // list.
-        while(specificEntry != NULL) {
+        while(currentSlot != NULL) {
 
             // Set one of the temp variables to the 
             // next node/entry in the linked list.
-            nextEntryPoint = specificEntry->next;
+            nextEntryPoint = currentSlot->next;
 
             // Free the specific features of the
             // given SymEntry before freeing that
             // SymEntry itself.
-            // --> CHECK LATER!!!
-            free(specificEntry->name);
-            // ADD MORE???
-            free(specificEntry);
+            free(currentSlot->name);
+            free(currentSlot);
 
             // Set the specificEntry temp variable equal
             // to the other temp variable that was assigned
             // first in the while loop to continue the 
             // process of freeing memory. 
-            specificEntry = nextEntryPoint;
+            currentSlot = nextEntryPoint;
         }
-
-        // Make sure that the rest of the table
-        // and any lingering data is destroyed.
-        // --> CHECK LATER!!!
-        free(nextEntryPoint);
-        free(specificEntry);
-        free(table->contents);
-        free(table);
     }
+
+    // Make sure that the rest of the table
+    // and any lingering data is destroyed.
+    free(table->contents); 
+    free(table); 
 }
 
 /**
@@ -153,7 +143,6 @@ int enterName(SymTab *table, char *name) {
 
         // Create space in memory for the name of the entry and 
         // create a copy of the name to add it to the symbol table.
-        newEntry->name = (char *)malloc(sizeof(char) * strlen(name)); // --> LIKELY DO NOT NEED THIS!!!
         newEntry->name = strdup(name);
 
         // Set the new entry attribute to NULL.

@@ -6,6 +6,9 @@
  * scenarios and function calls. A final summary of the
  * test results is printed out at the end of the program.
  * 
+ * IMPORTANT: To run this file, type the following command
+ * in to the terminal: gcc SymTab.c SymTabDriver.c 
+ * 
  * @file SymTabDriver.c
  * @author Andrew Krause
  * @version 0.1
@@ -20,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "SymTab.c"
+#include "SymTab.h"
 
 // Create a main function to test the Symbol Table
 // based off of the SymTab.h file and the SymTab.c file.
@@ -87,12 +90,12 @@ int main() {
    printf("--> WITH THESE TEST I HAVE BEEN GETTING A WERID ERROR. RUN REPEATEDLY. <--\n\n");
    printf("--> UNCOMMENT THE CODE IN THE TEST FILE TO RUN THIS PARTICULAR TEST. <--\n\n");
 
-   // --> UNCOMMENT EVERYTHING BELOW THIS LINE TO THE "--> UNCOMMENT ENDMARKER"
+   // Destroy the symbol tables.
+   destroySymTab(testTable1);
+   destroySymTab(testTable2);
+   destroySymTab(testTable3);
 
-   // // Destroy the symbol tables.
-   // destroySymTab(testTable1);
-   // destroySymTab(testTable2);
-   // destroySymTab(testTable3);
+   // --> UNCOMMENT EVERYTHING BELOW THIS LINE TO THE "--> UNCOMMENT ENDMARKER"
 
    // // Create an integer to track the number of passed tests.
    // int numPassed2 = 0;
@@ -100,7 +103,7 @@ int main() {
    // // Determine the if the size of the symbol tables matches 
    // // the expected output in the print statements.
    // printf("EXPECTED: testTable1 has been cleared\n");
-   // if(testTable1->current == NULL) {
+   // if(testTable1 == NULL) {
    //    numPassed2 += 1;
    //    printf("ACTUAL: testTable1 has been cleared\n");
    // } else {
@@ -452,24 +455,20 @@ int main() {
 
    // Create pointers to pass into the function as an attribute parameter.
    // Create a pointer for the value of 4.
-   void *memory1 = malloc(sizeof(int));
+   void *memory1 = (int *)malloc(sizeof(int));
    int *four = (int *)memory1;
    *four = 4;
 
    // Create a pointer for the value of 100.
-   void *memory2 = malloc(sizeof(int));
+   void *memory2 = (int *)malloc(sizeof(int));
    int *hundred = (int *)memory2;
    *hundred = 100;
 
    // Create a pointer for the value of "c".
-   void *memory3 = malloc(sizeof(char));
-   char *characterC = (char *)memory3;
-   strcpy(characterC, "c");
+   char *characterC = strdup("c");
 
    // Create a pointer for the value of "hello".
-   void *memory4 = malloc(sizeof(char));
-   char *helloString = (char *)memory4;
-   strcpy(helloString, "hello");
+   char *helloString = strdup("hello");
 
    // Set the current attributes of the four symbol tables that were created earlier on.
    setCurrentAttr(testTable1, four);
@@ -533,8 +532,8 @@ int main() {
    // Free the memory that was used above for the test cases.
    free(memory1);
    free(memory2);
-   free(memory3);
-   free(memory4);
+   free(characterC);
+   free(helloString);
 
    // Print out the summary of the test results.
    printf("(6) SUMMARY: < %d/4 > tests passed for setCurrentAttr(SymTab *table, void *attr) and *getCurrentAttr(SymTab *table) with expected values.", numPassed6And7);
@@ -1001,6 +1000,17 @@ int main() {
 
 
 
+   // Destroy all of the symbol tables
+   // at the conclusion of the tests.
+   destroySymTab(testTable1);
+   destroySymTab(testTable2);
+   destroySymTab(testTable3);
+   destroySymTab(testTable4);
+   destroySymTab(testTable5);
+   destroySymTab(testTable6);
+   destroySymTab(testTable7);
+   destroySymTab(testTable8);
+
    // Print the final summaries for all the tests as one large summary below.
    printf("\n=================================================================\n");
    printf("THIS FINAL SECTION LISTS OUT THE SUMMARIES OF ALL THE TESTS THAT\n");
@@ -1010,6 +1020,7 @@ int main() {
    // Print out all the summary print statements that appear in all of the other tests.
    printf("(1) SUMMARY: < %d/3 > tests passed for *createSymTab(int size).\n", numPassed1);
    // printf("(2) SUMMARY: < %d/3 > tests passed for *destroySymTab(SymTab *table).\n", numPassed2);
+   printf("(2) SUMMARY: No tests for now.\n"); // --> TEMPORARY!!!
    printf("(3.1) SUMMARY: < %d/10 > tests passed for enterName(SymTab *table, char *name) with expected return values.\n", returnNumPassed3);
    printf("(3.2) SUMMARY: < %d/3 > tests passed for enterName(SymTab *table, char *name) with expected current name values.\n", numPassed3);
    printf("(4) SUMMARY: < %d/9 > tests passed for findName(SymTab *table, char *name) with expected return values.\n", numPassed4);
