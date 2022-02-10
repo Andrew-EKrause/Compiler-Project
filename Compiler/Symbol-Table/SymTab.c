@@ -32,7 +32,6 @@
  * attributes of the table, and setting all values to NULL
  * at the start.
  */
-// --> SEE IF THERE IS A MORE SIMPLE WAY TO DO THIS!!!
 SymTab *createSymTab(int size) {
 
     // Create space in memory for the symbol table.
@@ -66,7 +65,6 @@ SymTab *createSymTab(int size) {
  * the various attributes of the table to NULL as well
  * as freeing all of the data attributes.
  */
-// --> COULD USE AN ITERATOR FOR THIS BUT IT WORKS FOR NOW.
 void destroySymTab(SymTab *table) {
 
     // Create temporary variables to help free the 
@@ -98,6 +96,7 @@ void destroySymTab(SymTab *table) {
             // Free the specific features of the
             // given SymEntry before freeing that
             // SymEntry itself.
+            // free(currentSlot->attribute); // --> KEEP AN EYE ON THIS!!!
             free(currentSlot->name);
             free(currentSlot);
 
@@ -148,7 +147,7 @@ int enterName(SymTab *table, char *name) {
         // Set the new entry attribute to NULL.
         newEntry->attribute = NULL;
 
-        // SET THE NEXT FIELD AT ALL HERE???
+        // SET THE NEXT FIELD AT ALL HERE??? --> 
         newEntry->next = table->contents[newHashValue];
 
         // Store the new entry in the symbol table at the hashed
@@ -182,36 +181,31 @@ int findName(SymTab *table, char *name) {
     // determine if the name is in the table.
     SymEntry *currentSlot = NULL;
     SymEntry *nextEntryPoint = NULL;
-    SymEntry *specificEntry = NULL;
 
-    // Create a for loop to visit each entry in the
-    // array of linked lists and determine if the 
-    // name is in the symbol table.
-    int i;
-    for(i = 0; i < table->size; i++) {
+    // Obtain the hash value for the name being searched
+    // for in order to get to the right slot in the table.
+    int hashValue = createHashValue(table->size, name);
 
-        // Move through each slot in the symbol table.
-        currentSlot = table->contents[i]; 
-        specificEntry = currentSlot; // --> SEE IF THIS VARIABLE NAME IS NECESSARY!!!
+    // Move through each slot in the symbol table.
+    currentSlot = table->contents[hashValue]; 
 
-        // In any given row of the symbol, traverse  
-        // until last entry is reached.
-        while(specificEntry != NULL) {
+    // In any given row of the symbol, traverse  
+    // until last entry is reached.
+    while(currentSlot != NULL) {
 
-            // If the name in the symbol table is found,
-            // set current to reference the (name, attribute) 
-            // pair and return 1.
-            if(strcmp(specificEntry->name, name) == 0) {
+        // If the name in the symbol table is found,
+        // set current to reference the (name, attribute) 
+        // pair and return 1.
+        if(strcmp(currentSlot->name, name) == 0) {
 
-                table->current = specificEntry;
-                return 1;
-            }
-
-            // Move to the next entry in any 
-            // given row of the symbole table.
-            nextEntryPoint = specificEntry->next;
-            specificEntry = nextEntryPoint;
+            table->current = currentSlot;
+            return 1;
         }
+
+        // Move to the next entry in any 
+        // given row of the symbole table.
+        nextEntryPoint = currentSlot->next;
+        currentSlot = nextEntryPoint;
     }
 
     // If the name is not in the symbol table, 
@@ -330,7 +324,7 @@ int nextEntry(SymTab *table) {
 
     // If the hash value is the table size - 1, that means that the
     // current (name, attribute) pair is located in the last slot
-    // of the symbol table. Therefore, you need to check 
+    // of the symbol table. Therefore, you need to check it.
     if(hashValue == table->size - 1) {
 
         // Create temporary variables to traverse 
@@ -407,7 +401,7 @@ int nextEntry(SymTab *table) {
  * the hash value. This function is used in the
  * enterName() function.
  */
-int createHashValue(int size, char *name) {
+int createHashValue(int tableSize, char *name) {
 
     // Create a counter variable 
     // and a hash value variable.
@@ -425,8 +419,77 @@ int createHashValue(int size, char *name) {
 
     // Mod the obtained sum of characters
     // to get the final hash value.
-    hashVal %= size;
+    hashVal %= tableSize;
 
     // Return the hash value from the function.
     return hashVal;
+}
+
+/**
+ * The function prints out any symbol
+ * table passed into it onto the terminal
+ * screen.
+ */
+void printSymbolTable(SymTab *table) {
+
+    // Create a title for the symbol table.
+    printf("==========================\n");
+    printf("   Symbol Table Printed\n");
+    printf("==========================\n\n");
+
+    // Create temporary variables to help
+    // determine if the name is in the table.
+    SymEntry *currentSlot = NULL;
+    SymEntry *nextEntryPoint = NULL;
+
+    // Create a counter variable for the for loop.
+    // Create a variable for printing out first arrow.
+    int i;
+    int firstArrow ;
+
+    // Create a for loop to visit each entry in the
+    // array of linked lists and determine if the 
+    // name is in the symbol table.
+    for(i = 0; i < table->size; i++) {
+
+        // Move through each slot in the symbol table.
+        // Print out the row number. Set the first arrow
+        // variable to one on each iteration.
+        currentSlot = table->contents[i]; 
+        printf("Row %d: ", i);
+        // specificEntry = currentSlot; // --> SEE IF THIS VARIABLE NAME IS NECESSARY!!!
+        firstArrow = 1;
+
+        // In any given row of the symbol, traverse  
+        // until last entry is reached.
+        while(currentSlot != NULL) {
+
+            // Add the first arrow to each non-empty slot.
+            if(firstArrow == 1) {
+                printf("--> ");
+                firstArrow = 0;
+            }
+
+            // Move to the next entry in any 
+            // given row of the symbole table.
+            nextEntryPoint = currentSlot->next;
+
+            // Print the given entry name.
+            // Then move to the next entry.
+            printf("%s ", currentSlot->name);
+            currentSlot = nextEntryPoint;
+
+            // If the next entry is not NULL,
+            // print out an arrow between entries. 
+            if(currentSlot != NULL) {
+                printf("--> ");
+            }
+        }
+        // Print out an extra space.
+        printf("\n");
+    }
+
+    // Print a final space between the 
+    // table and the other content.
+    printf("\n==========================\n\n");
 }

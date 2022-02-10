@@ -7,9 +7,9 @@
  * test results is printed out at the end of the program.
  * 
  * IMPORTANT: To run this file, type the following command
- * in to the terminal: gcc SymTab.c SymTabDriver.c 
+ * in to the terminal: gcc SymTab.c SymTabTests.c 
  * 
- * @file SymTabDriver.c
+ * @file SymTabTests.c
  * @author Andrew Krause
  * @version 0.1
  * @date 2022-01-26
@@ -42,7 +42,7 @@ int main() {
    printf("\n---------------------------------------------------------\n");
 
    // Tests for the *createSymTab(int size) function.
-   printf("\n--> Tests for SymTab *createSymTab(int size):\n\n");
+   printf("\n\n--> Tests for SymTab *createSymTab(int size):\n\n");
 
    // Create new symbol tables.
    testTable1 = createSymTab(6);
@@ -87,8 +87,6 @@ int main() {
 
    // Tests for the destroySymTab(SymTab *table) function.
    printf("\n--> Tests for SymTab destroySymTab(SymTab *table):\n\n");
-   printf("--> WITH THESE TEST I HAVE BEEN GETTING A WERID ERROR. RUN REPEATEDLY. <--\n\n");
-   printf("--> UNCOMMENT THE CODE IN THE TEST FILE TO RUN THIS PARTICULAR TEST. <--\n\n");
 
    // Destroy the symbol tables.
    destroySymTab(testTable1);
@@ -134,6 +132,7 @@ int main() {
    // --> UNCOMMENT ENDMARKER
 
    // printf("(2) SUMMARY: < %d/3 > tests passed for *destroySymTab(SymTab *table).", numPassed2);
+   printf("(2) SUMMARY: NO TESTS FOR NOW");
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
@@ -170,6 +169,15 @@ int main() {
    int entry8 = enterName(testTable3, "height");
    int entry9 = enterName(testTable3, "perimeter");
    int entry10 = enterName(testTable3, "area");
+
+   // Print out the symbol tables that names were entered into.
+   // --> THE CODE BELOW CAN BE UNCOMMENTED TO VIEW THE TABLES.
+   // printf("testTable1 Printed Out:\n");
+   // printSymbolTable(testTable1);
+   // printf("testTable2 Printed Out:\n");
+   // printSymbolTable(testTable2);
+   // printf("testTable3 Printed Out:\n");
+   // printSymbolTable(testTable3);
 
    // Create if statements to determine how many  
    // tests were passed for the enter name function
@@ -506,7 +514,8 @@ int main() {
 
    printf("EXPECTED: current attribute of testTable4 is < hello >\n");
    if(strcmp(getCurrentAttr(testTable4), "hello") == 0) {
-      // printf("ACTUAL: current attribute of testTable4 is %s", *(testTable4->current->attribute));
+      
+      // Initial print statement for the test.
       printf("ACTUAL: current attribute of testTable4 is ");
 
       // Cast the void pointer to a char value and print out 
@@ -1002,6 +1011,7 @@ int main() {
 
    // Destroy all of the symbol tables
    // at the conclusion of the tests.
+   // This is done to avoid memory leaks.
    destroySymTab(testTable1);
    destroySymTab(testTable2);
    destroySymTab(testTable3);

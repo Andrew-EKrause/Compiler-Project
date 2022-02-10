@@ -95,3 +95,11 @@ int nextEntry(SymTab *table);
     file by the professor. I created it myself. 
 */
 int createHashValue(int size, char *name);
+
+/*
+    Print out the symbol table that is passed
+    through this function. The table is 
+    represented as an array of linked lists 
+    that is printed out.
+*/
+void printSymbolTable(SymTab *table);
