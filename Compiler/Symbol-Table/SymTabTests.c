@@ -18,6 +18,10 @@
  * 
  */
 
+// --> LIKELY DO NOT NEED; MAY DELETE LATER!!!
+// int createHashValue(int tableSize, char *name);
+// void printSymbolTable(SymTab *table);
+
 // Include the standard I/O library
 // as well as the  SymTab.h file.
 #include <stdio.h>
@@ -93,7 +97,7 @@ int main() {
    destroySymTab(testTable2);
    destroySymTab(testTable3);
 
-   // --> UNCOMMENT EVERYTHING BELOW THIS LINE TO THE "--> UNCOMMENT ENDMARKER"
+   // --> MAYBE FIND A DIFFERENT WAY TO RUN THESE TESTS LATER ON
 
    // // Create an integer to track the number of passed tests.
    // int numPassed2 = 0;
@@ -128,8 +132,6 @@ int main() {
    //    printf("ACTUAL:testTable3 has NOT been cleared\n");
    // }
    // printf("\n");
-
-   // --> UNCOMMENT ENDMARKER
 
    // printf("(2) SUMMARY: < %d/3 > tests passed for *destroySymTab(SymTab *table).", numPassed2);
    printf("(2) SUMMARY: NO TESTS FOR NOW");

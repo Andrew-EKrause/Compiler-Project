@@ -94,6 +94,7 @@ int nextEntry(SymTab *table);
     This function was not provided in the .h
     file by the professor. I created it myself. 
 */
+// --> SHOULD NOT HAVE THIS IN THE .h FILE!!!
 int createHashValue(int size, char *name);
 
 /*
@@ -102,4 +103,5 @@ int createHashValue(int size, char *name);
     represented as an array of linked lists 
     that is printed out.
 */
+// --> SHOULD NOT HAVE THIS IN THE .h FILE!!!
 void printSymbolTable(SymTab *table);

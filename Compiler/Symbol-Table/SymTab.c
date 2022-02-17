@@ -26,6 +26,10 @@
 #include <string.h>
 #include "SymTab.h"
 
+// Define functions not specified in the .h file here (internal functions). --> ASK QUINN!!!
+// int createHashValue(int tableSize, char *name);
+// void printSymbolTable(SymTab *table);
+
 /**
  * The function creates a new Symbol table by allocating
  * space for the data structure, initializing the various
@@ -147,7 +151,10 @@ int enterName(SymTab *table, char *name) {
         // Set the new entry attribute to NULL.
         newEntry->attribute = NULL;
 
-        // SET THE NEXT FIELD AT ALL HERE??? --> 
+        // SET THE NEXT FIELD AT ALL HERE??? I THINK SO --> 
+        // Given that the new entry is always inserted at the start of the
+        // slot in the hash table, need to set its next to reference 
+        // all entries that may already exists in that slot.
         newEntry->next = table->contents[newHashValue];
 
         // Store the new entry in the symbol table at the hashed
@@ -457,7 +464,6 @@ void printSymbolTable(SymTab *table) {
         // variable to one on each iteration.
         currentSlot = table->contents[i]; 
         printf("Row %d: ", i);
-        // specificEntry = currentSlot; // --> SEE IF THIS VARIABLE NAME IS NECESSARY!!!
         firstArrow = 1;
 
         // In any given row of the symbol, traverse  

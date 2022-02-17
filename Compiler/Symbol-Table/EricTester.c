@@ -105,18 +105,13 @@ int main(int argc, char** argv) {
     printf("Output: %s\n", getCurrentName(table));
     printf("Expected: Shepard Pie\n");
     
-
     // looked through hash function by hand, this should be the order
     // Hello -> world -> Dog -> mouse -> Shepard Pie
 
     destroySymTab(table);
 
-    
     printf("SymTab Destroyed\n");
     printf("-----Test Complete-----\n");
 
-    
-
-    
     return 0;
 }
