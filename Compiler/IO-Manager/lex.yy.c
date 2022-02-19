@@ -442,21 +442,14 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "lex2c.l"
-#line 2 "lex2c.l"
+#line 1 "lex2b.l"
+#line 2 "lex2b.l"
 #include <stdio.h>
-#include "IOMngr.h"
-#define YY_INPUT(buf, result, max_size) \
-{ int c = getNextSourceChar(); \
-      result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
-    }
-
-int numIds = 0;
-int numInts = 0;
-int numLines = 0;
-
-#line 458 "lex.yy.c"
-#line 459 "lex.yy.c"
+#define IDENT 1
+#define INTEGER 2
+#define LINE 3
+#line 451 "lex.yy.c"
+#line 452 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -673,10 +666,10 @@ YY_DECL
 		}
 
 	{
-#line 18 "lex2c.l"
+#line 11 "lex2b.l"
 
 
-#line 679 "lex.yy.c"
+#line 672 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -735,31 +728,31 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 20 "lex2c.l"
-{numIds++;}
+#line 13 "lex2b.l"
+{return INDENT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 21 "lex2c.l"
-{numInts++;}
+#line 14 "lex2b.l"
+{return INTEGER;}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 22 "lex2c.l"
-{numLines++;}
+#line 15 "lex2b.l"
+{return LINE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 23 "lex2c.l"
+#line 16 "lex2b.l"
 { }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "lex2c.l"
+#line 18 "lex2b.l"
 ECHO;
 	YY_BREAK
-#line 762 "lex.yy.c"
+#line 755 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1764,18 +1757,32 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 25 "lex2c.l"
+#line 18 "lex2b.l"
 
 
-int main(int argc, char * argv[]) {
-    openFiles(argv[1], argv[2]);
-    yylex();
+int main(int argh, char * argv[]) {
+    int numIds = 0;
+    int numInts = 0;
+    int nuLines = 0;
+
+    int token;
+    while((token = yylex())) {
+        if(token == IDENT) numIds++;
+        else if(token == INTEGER) numInts++;
+        else numLines++;
+    }
+    printf("The number of identifiers is %d\n", numIds);
+    printf("The number of integers is %d\n", numInts);
+    printf("The number of lines is %d\n", numLines);    
 }
 
 int yywrap() {
-
-    printf("The number of identifiers is %d\n", numIds);
-    printf("The number of integers is %d\n", numInts);
-    printf("The number of lines is %d\n", numLines);
     return 1;
-}
+}int num2 = 3;
+int num3;
+int num4;
+int num5;
+int num1;
+
+
+

@@ -1,0 +1,2 @@
+lexInput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexInput.txt
+lexOutput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexOutput.txt
