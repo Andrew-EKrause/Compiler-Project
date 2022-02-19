@@ -5,7 +5,9 @@
     The symbol table is implemented using a separate chaining hash table.
 */
 
-// A SymEntry is the building block for linked lists of (name, attribute) pairs
+/* 
+    A SymEntry is the building block for linked lists of (name, attribute) pairs.
+*/
 typedef struct SymEntry {
     char * name;
     void * attribute;
