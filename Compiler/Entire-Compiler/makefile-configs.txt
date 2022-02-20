@@ -1,0 +1,29 @@
+// ORIGINAL
+
+output: SymTab.o SymTabTests.o
+	gcc SymTab.o SymTabTests.o -o symtabtests
+
+SymTab.o: SymTab.c SymTab.h
+	gcc -c SymTab.c
+
+SymTabTests.o: SymTabTests.c
+	gcc -c SymTabTests.c
+
+clean:
+	rm *.o symtabtests
+// ===============================================================
+
+// FSANITIZE --> ASK QUINN HOW TO APPLY THIS FOR MEM CHECKS; AT THIS POINT I DO NOT THINK VALGRIND WILL WORK.
+
+output: SymTab.o SymTabTests.o
+	gcc SymTab.o SymTabTests.o -o symtabtests
+
+SymTab.o: SymTab.c SymTab.h
+	gcc -c SymTab.c -g -Wall -Werror -Wextra -fsanitize=address
+
+SymTabTests.o: SymTabTests.c
+	gcc -c SymTabTests.c -g -Wall -Werror -Wextra -fsanitize=address
+
+clean:
+	rm *.o symtabtests
+// ===============================================================

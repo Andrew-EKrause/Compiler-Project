@@ -1,0 +1,10 @@
+lexInput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexInput.txt
+lexOutput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexOutput.txt
+
+======================================
+Series of Commands to test IO Manager:
+======================================
+
+1. flex lex2c.l // --> THIS FILE NAME CAN CHANGE FOR EACH TEST
+2. gcc -o lex1 IOMngr.c lex.yy.c -ll
+3. ./lex1 lexInput.txt lexOutput.txt 
