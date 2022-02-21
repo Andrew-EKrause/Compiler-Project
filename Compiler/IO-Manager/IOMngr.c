@@ -68,7 +68,7 @@ int openFiles(char *sourceName, char *listingName) {
     // If the listingName parameter is not NULL,
     // open the file with that name and check if
     // the file is empty.
-    if(listingName != NULL) {
+    if(listingName) {
 
         // Open the listing file with the listingName.
         // Immediately give it read/write permissions.
@@ -92,14 +92,15 @@ int openFiles(char *sourceName, char *listingName) {
  */
 void closeFiles() {
     
-    // --> CONSIDER ADDING NULL CHECKS
-    // Close the source file.
-    fclose(sourceFile);
+    // If the source file is not NULL,
+    // close the source file.
+    if(sourceFile) {
+        fclose(sourceFile);
+    }
 
     // If the listing file is not NULL,
     // close the listing file.
-    if(listingFile != NULL) {
-
+    if(listingFile) {
         fclose(listingFile);
     }
 }
@@ -113,13 +114,15 @@ void closeFiles() {
  * listing file should be numbered. Using
  * fgetc, EOF should be returned when the 
  * end of the source file is reached. Also,
- * increment the global variables pertianing
+ * increment the global variables pertaining
  * to line and column number as needed.
  */
 char getNextSourceChar() {
 
     // --> REMEMBER THAT WHENEVER THIS FUNCTION IS CALLED,
     // --> IT IS ASSUMED THAT A SOURCE FILE WILL BE PROVIDED.
+    // --> MAY ACTUALLY NEED TO PERFORM NULL CHECKS IN THIS FUNCTION.
+    // --> FIXME: NEED TO ECHO LINES WITH CORRESPONDING NUMBERS TO LISTING FILE IF ONE EXISTS!
 
     // Create a variable to store the next source
     // character in it from the source file via
@@ -128,13 +131,20 @@ char getNextSourceChar() {
 
     // --> MAY NOT NEED THIS!!!
     // Check if the end of the file has been reached.
-    // if(nextSourceChar == EOF) {
+    if(nextSourceChar == EOF) {
 
-    //     return EOF;
-    // }
+        return EOF;
+    }
 
     // Check if the next source character is a newline.
     if(nextSourceChar == '\n') {
+
+        // Check if the listing file exists. If the
+        // listing file exists, write out the current
+        // column number to it.
+        if(listingFile) {
+            fputc(currentLineNum, listingFile); // --> NOT SURE THIS IS CORRECT. FIX LATER!!!
+        }
 
         // If the next source character in the file
         // is a newline, set the current column number
@@ -192,7 +202,7 @@ void writeIndicator(int column) {
     // If the listing file is not NULL, place
     // a indicator in the appropriate location
     // of the listing file.
-    if(listingFile != NULL) {
+    if(listingFile) {
 
         // Write the specified string to the stream
         // up to but not including the NULL character.
@@ -253,7 +263,7 @@ void writeMessage(char *message) {
     // If the listing File is not NULL,
     // Put a message in the listing file
     // along with a newline character.
-    if(listingFile != NULL) {
+    if(listingFile) {
 
         // If the listing File is not NULL,
         // Put a message in the listing file

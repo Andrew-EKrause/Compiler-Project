@@ -442,17 +442,17 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "lex2d.l"
-#line 2 "lex2d.l"
-#include <stdio.h>
-#include "IOMngr.h"
-#define IDENT 1
-#define INTEGER 2
-#define LINE 3
-#define YY_INPUT(buf, result, max_size) \
-{ int c = getNextSourceChar();\
-      result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
-    }
+#line 1 "lexical.l"
+#line 2 "lexical.l"
+    #include <stdio.h>
+    #include "IOMngr.h"
+    #define IDENT 1
+    #define INTEGER 2
+    #define LINE 3
+    #define YY_INPUT(buf,result,max_size) \
+        { int c = getNextSourceChar(); \
+            result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
+        }
 #line 456 "lex.yy.c"
 #line 457 "lex.yy.c"
 
@@ -671,10 +671,11 @@ YY_DECL
 		}
 
 	{
-#line 16 "lex2d.l"
+#line 16 "lexical.l"
 
-
-#line 677 "lex.yy.c"
+#line 18 "lexical.l"
+    
+#line 678 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -733,31 +734,31 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 18 "lex2d.l"
+#line 19 "lexical.l"
 {return IDENT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 19 "lex2d.l"
+#line 21 "lexical.l"
 {return INTEGER;}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 20 "lex2d.l"
+#line 23 "lexical.l"
 {return LINE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 21 "lex2d.l"
+#line 25 "lexical.l"
 { }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 23 "lex2d.l"
+#line 27 "lexical.l"
 ECHO;
 	YY_BREAK
-#line 760 "lex.yy.c"
+#line 761 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1762,26 +1763,29 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 23 "lex2d.l"
+#line 27 "lexical.l"
 
 
 int main(int argc, char * argv[]) {
     int numIds = 0;
     int numInts = 0;
     int numLines = 0;
-
     int token;
     openFiles(argv[1], argv[2]);
-    while(token == yylex()) {
-        if(token == IDENT) numIds++;
-        else if(token == INTEGER) numInts++;
+    while ((token = yylex())) {
+        if (token == IDENT) numIds++;
+        else if (token == INTEGER) numInts++;
         else numLines++;
     }
     printf("The number of identifiers is %d\n", numIds);
     printf("The number of integers is %d\n", numInts);
     printf("The number of lines is %d\n", numLines);
+
+    closeFiles();
+    yylex_destroy();
 }
 
 int yywrap() {
     return 1;
 }
+
