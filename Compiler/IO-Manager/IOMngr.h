@@ -45,6 +45,14 @@ char getNextSourceChar();
 void writeIndicator(int column);
 
 /*
+    The function counts the number of digits
+    that a given line number and returns the
+    total digits. This function is used only
+    for formatting the output.
+*/
+int countDigitSpace();
+
+/*
     The function is used to write
     a message, usually an error
     message to certain files or

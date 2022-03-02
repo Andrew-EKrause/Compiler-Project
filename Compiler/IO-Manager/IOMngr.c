@@ -27,13 +27,20 @@
 #include "IOMngr.h"
 
 // Create global variables 
-// for the IO Manager file.
+// such as files for the 
+// IO Manager file.
 FILE *sourceFile;
-FILE *secondSourceFile;
+//FILE *secondSourceFile;
 FILE *listingFile;
 char *fileSourceName;
-int currentLineNum = 0;
-int currentColumnNum = 0;
+
+// Create another set of global
+// variables for IO Manager.
+int onWriteIndicatorLine = 1;
+int moveToNextLine = 1;
+char lineOfChars[MAXLINE];
+int currentLineNum = 1;
+int currentColumnNum = -1;
 
 /**
  * The function opens the source file whose name 
@@ -50,7 +57,6 @@ int openFiles(char *sourceName, char *listingName) {
     // opened file in the global sourceFile variable.
     // Also store the opened file name in a global var.
     sourceFile = fopen(sourceName, "r");
-    // fileSourceName = strdup(sourceName); // --> ORIGINALLY LISTED HERE
 
     // If the source file is empty, then
     // return 0 to indicate that the opening
@@ -59,7 +65,6 @@ int openFiles(char *sourceName, char *listingName) {
         return 0;
     }
 
-    // --> MOVE HERE FOR NOW
     // If the source file is not NULL, then 
     // store the source name in the global 
     // variable for the file source name.
@@ -116,50 +121,64 @@ void closeFiles() {
  * end of the source file is reached. Also,
  * increment the global variables pertaining
  * to line and column number as needed.
+ * 
+ * PLEASE NOTE: If there is a listing file,
+ * lines are printed to that file here.
+ * 
  */
 char getNextSourceChar() {
 
-    // --> REMEMBER THAT WHENEVER THIS FUNCTION IS CALLED,
-    // --> IT IS ASSUMED THAT A SOURCE FILE WILL BE PROVIDED.
-    // --> MAY ACTUALLY NEED TO PERFORM NULL CHECKS IN THIS FUNCTION.
-    // --> FIXME: NEED TO ECHO LINES WITH CORRESPONDING NUMBERS TO LISTING FILE IF ONE EXISTS!
+    // Check if the source file exists. If the source file
+    // exists, then proceed with the operations.
+    if(sourceFile) {
 
-    // Create a variable to store the next source
-    // character in it from the source file via
-    // the fgetc function.
-    char nextSourceChar = fgetc(sourceFile);
+        // Check if the end of the a given line was reached.
+        if((int)(strlen(lineOfChars)) < currentColumnNum) {
 
-    // --> MAY NOT NEED THIS!!!
-    // Check if the end of the file has been reached.
-    if(nextSourceChar == EOF) {
-
-        return EOF;
-    }
-
-    // Check if the next source character is a newline.
-    if(nextSourceChar == '\n') {
-
-        // Check if the listing file exists. If the
-        // listing file exists, write out the current
-        // column number to it.
-        if(listingFile) {
-            fputc(currentLineNum, listingFile); // --> NOT SURE THIS IS CORRECT. FIX LATER!!!
+            // If end of file reached, reset the 
+            // variables for the next iteration.
+            currentColumnNum = -1;
+            moveToNextLine = 1;
+            currentLineNum++;
         }
 
-        // If the next source character in the file
-        // is a newline, set the current column number
-        // to zero and increase the current line num.
-        currentColumnNum = 0;
-        currentLineNum++;
-    } else {
+        // Check if you need to move to the next line in the file.
+        if(moveToNextLine == 1) {
 
-        // Otherwise, increase the current 
-        // column number.
+            // Once the newline is reached on any given line, 
+            // get the next line from the source file.
+            fgets(lineOfChars, MAXLINE, sourceFile); 
+
+            // Check if the end of the file has been reached
+            // after obtaining the next line in the file.
+            if(feof(sourceFile)) {
+                return EOF;
+            }
+
+            // Check if the listing file exists. If the listing
+            // file exists, write out current line to it.
+            if(listingFile) {
+                fprintf(listingFile, "%d. %s", currentLineNum, lineOfChars);
+            }
+
+            // When you move to the next line, change variables to
+            // indicate that you are now no longer on the old line.
+            // The writeIndicatorLine variable is only for the case
+            // when information is printed to standard out.
+            onWriteIndicatorLine = currentLineNum;
+            moveToNextLine = 0;
+        }
+
+        // Increase the current column number.
         currentColumnNum++;
-    }
 
-    // Return the next source character.
-    return nextSourceChar;
+        // Return the next source character.
+        return lineOfChars[currentColumnNum];
+
+    // If the source file does not exist, return EOF.
+    } else {
+        return EOF;
+    }
 }
 
 /**
@@ -170,6 +189,14 @@ char getNextSourceChar() {
  * to stdout the first time (for that line)
  * that writeIndicator or writeMessage is
  * called.
+ * 
+ * PLEASE NOTE: If there is NOT a listing file,
+ * the appropriate lines are written to standard
+ * out through this function.
+ * 
+ * MAYBE ADD CHECKS TO SEE IF FILE IS NULL AS WELL AS
+ * IF THE FUNCTION WAS USED IN THE PROPER ORDER!!!
+ * 
  */
 void writeIndicator(int column) {
 
@@ -177,66 +204,52 @@ void writeIndicator(int column) {
     // which column needs to be written to.
     int i = 0;
 
-    // In order to avoid conflicting data, use the
-    // second source file variable and open the source
-    // file using that variable.
-    secondSourceFile = fopen(fileSourceName, "r");
+    // If the write indicator was called, make sure that
+    // the only printed line is the line that write 
+    // indicator was called on.
+    if(onWriteIndicatorLine == currentLineNum) {
 
-    // Specify the number of characters read per line.
-    char charactersPerLine[1024]; // --> MAYBE 1028
+        // Print the line that has errors or other messages associated 
+        // with it to standard output.
+        fprintf(stdout, "%d. %s", currentLineNum, lineOfChars);
 
-    // While the counter variable is less than the
-    // current column number, read a line from the
-    // specified stream.
-    while(i <= getCurrentLineNum()) {
-
-        // Read line using fgets() and increment counter.
-        fgets(charactersPerLine, 1024, secondSourceFile); // --> MAYBE 124 OR 128
-        i++;
+        // Set the write indicator variable 
+        // to zero in order to only write out
+        // the line associated with the function
+        // and no other line.
+        onWriteIndicatorLine = 0;
     }
-
-    // Reset the counter variable back to zero.
-    // Then check if the listing file is NULL.
-    i = 0;
 
     // If the listing file is not NULL, place
     // a indicator in the appropriate location
-    // of the listing file.
+    // of the listing file. Otherwise, write the 
+    // '^' character to standard output.
     if(listingFile) {
-
-        // Write the specified string to the stream
-        // up to but not including the NULL character.
-        fputs(charactersPerLine, listingFile);
 
         // While the counter variable is less than the
         // column parameter, move the '^' variable by
         // a space until you reach the correct location
         // to insert.
-        while(i < column) {
+        while(i < (column + countDigitSpace())) {
 
             // Place a space in the listing file 
             // and increment the counter variable.
-            fputc(' ', listingFile);
+            fprintf(listingFile, " ");
             i++;
         }
 
         // Put the '^' indicator in the listing file
         // after reaching the location based on the column.
-        fputc('^', listingFile);
-    } else {
+        fprintf(listingFile, "^");
+        fprintf(listingFile, "\n");
 
-        // Otherwise, write the '^' character
-        // to standard output by echoing the
-        // line to stdout the first time (for
-        // that line) that writeIndicator or
-        // writeMessage is called. 
-        fprintf(stdout, "\n");
+    } else {
 
         // While the counter variable is less than the
         // column parameter, move the '^' variable by
         // a space until you reach the correct location
         // to insert.
-        while(i < column) {
+        while(i < (column + countDigitSpace())) {
 
             // Place a space in the standard output
             // and increment the counter variable.
@@ -247,7 +260,33 @@ void writeIndicator(int column) {
         // Put the '^' indicator in the standard output
         // after reaching the location based on the column.
         fprintf(stdout, "^");
+        fprintf(stdout, "\n");
     }
+}
+
+/**
+ * The function counts the number of spaces
+ * taken up by the line numbers in the source
+ * file as well as the space and dot characters.
+ */
+int countDigitSpace() {
+     
+     // The number variable is initially one to
+     // account for the dot and space values.
+     int counter = 2;
+     int number = currentLineNum;
+
+    // While the number is not zero,
+    // count the digits in the number.
+     while(number != 0) {
+
+         // Count digits and increment counter.
+         number = number / 10;
+         counter++;
+     }
+
+    // Return the counter variable.
+    return counter;
 }
 
 /**
@@ -268,8 +307,8 @@ void writeMessage(char *message) {
         // If the listing File is not NULL,
         // Put a message in the listing file
         // along with a newline character.
-        fputs(message, listingFile);
-        fputc('\n', listingFile);
+        fprintf(listingFile, "%s\n", message); 
+
     } else {
 
         // If the listing file is NULL, write
@@ -283,7 +322,6 @@ void writeMessage(char *message) {
  * line number for the source file.
  */
 int getCurrentLineNum() {
-    
     return currentLineNum;
 }
 
@@ -292,6 +330,5 @@ int getCurrentLineNum() {
  * column number for the source file.
  */
 int getCurrentColumnNum() {
-    
     return currentColumnNum;
 }

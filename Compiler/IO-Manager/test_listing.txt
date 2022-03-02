@@ -1,0 +1,7 @@
+1. public class HelloWorld {
+2.     public static void main(String[] args) {
+3.         // Prints "Hello, World" to the terminal window.
+4.         System.out.println("Hello, World");
+5.         System.out.println("This is a very long line that will most definitely be longer than the MAX_LINE size which means it is bound to find some bugs because I don't know how to write C to save my life.");
+6.     }
+7. }

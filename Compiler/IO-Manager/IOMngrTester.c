@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     }
     
 
-   //fprintf(stdout, "%s", fread(1, sizeof(char), 1024, sourceFile));
+    //fprintf(stdout, "%s", fread(1, sizeof(char), 1024, sourceFile));
     closeFiles();
     return 1;
 }
