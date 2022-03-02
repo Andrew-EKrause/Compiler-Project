@@ -207,7 +207,7 @@ void writeIndicator(int column) {
     // If the write indicator was called, make sure that
     // the only printed line is the line that write 
     // indicator was called on.
-    if(onWriteIndicatorLine == currentLineNum) {
+    if(!listingFile && onWriteIndicatorLine == currentLineNum) {
 
         // Print the line that has errors or other messages associated 
         // with it to standard output.

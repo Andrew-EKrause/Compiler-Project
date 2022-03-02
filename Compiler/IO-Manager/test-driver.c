@@ -7,41 +7,39 @@
 int main(){
 
     // TEST 1
-    // if(openFiles("sample_source.txt", "test_listing.txt")){
+    if(openFiles("sample_source.txt", "test_listing.txt")){
 
-    //     while(getNextSourceChar() != EOF){
+        while(getNextSourceChar() != EOF){
 
-    //     }
+        }
 
-    //     closeFiles();
+        closeFiles();
 
-    //     printf("Test 1 Done.\n");
-    // } else {
-    //     printf("Test 1 Skipped.\n");
-    // }
+        printf("Test 1 Done.\n");
+    } else {
+        printf("Test 1 Skipped.\n");
+    }
 
+    // TEST 2
+    if(openFiles("sample_source.txt", NULL)){
 
-    // // TEST 2
-    // if(openFiles("sample_source.txt", NULL)){
+        while(getNextSourceChar() != EOF){
 
-    //     while(getNextSourceChar() != EOF){
+        }
 
-    //     }
+        closeFiles();
 
-    //     closeFiles();
-
-    //     printf("Test 2 done.\n");
-    // } else {
-    //     printf("Test 2 skipped.\n");
-    // }
+        printf("Test 2 done.\n");
+    } else {
+        printf("Test 2 skipped.\n");
+    }
 
     // TEST 3
-    if(openFiles("sample_source.txt", NULL)){ // THIS SECOND PARAMETER IS NORMALLY NULL!!!
+    if(openFiles("sample_source.txt", NULL)){ // Be sure to test with the listing file here as well: "test_listing.txt"
 
         char c = getNextSourceChar();
         while(c != EOF){
             if(c == 'p'){
-                //printf("FOUND p\n");
                 int current_column_number = getCurrentColumnNum();
 
                 printf("current column: %d\n", current_column_number);
