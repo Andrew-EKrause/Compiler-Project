@@ -26,9 +26,7 @@
 #include <string.h>
 #include "IOMngr.h"
 
-// Create global variables 
-// such as files for the 
-// IO Manager file.
+// Create global file variables. 
 FILE *sourceFile;
 FILE *listingFile;
 char *fileSourceName;
@@ -43,7 +41,7 @@ int currentColumnNum;
 
 /**
  * The function opens the source file whose name 
- * is given in the sourceName paramter. If the 
+ * is given in the sourceName parameter. If the 
  * listingName paramter is not NULL, open the listing
  * file whose name is given in the listingName param.
  * If listingName is NULL , the output goes to stdout.
@@ -54,8 +52,7 @@ int openFiles(char *sourceName, char *listingName) {
 
     // Each time you open files, reset the file 
     // information to NULL in order to avoid data
-    // conflicts. This enables multiple sequential 
-    // runs.
+    // conflicts. This enables sequential runs.
     sourceFile = NULL;
     listingFile = NULL;
     fileSourceName = NULL;
@@ -71,9 +68,8 @@ int openFiles(char *sourceName, char *listingName) {
     // Also store the opened file name in a global var.
     sourceFile = fopen(sourceName, "r");
 
-    // If the source file is empty, then
-    // return 0 to indicate that the opening
-    // failed.
+    // If the source file is empty, then return 0
+    // to indicate that the opening failed.
     if(sourceFile == NULL) {
         return 0;
     }
@@ -98,7 +94,7 @@ int openFiles(char *sourceName, char *listingName) {
         }
     }
 
-    // If the file open(s) were successful,
+    // If the file opening was successful,
     // return 1 to indicate completion.
     return 1;
 }
@@ -145,7 +141,7 @@ char getNextSourceChar() {
     // exists, then proceed with the operations.
     if(sourceFile) {
 
-        // Check if the end of the a given line was reached.
+        // Check if the end of a given line was reached.
         if((int)(strlen(lineOfChars)) < currentColumnNum) {
 
             // If end of file reached, reset the 
@@ -208,7 +204,7 @@ char getNextSourceChar() {
  * out through this function.
  * 
  * MAYBE ADD CHECKS TO SEE IF FILE IS NULL AS WELL AS
- * IF THE FUNCTION WAS USED IN THE PROPER ORDER!!!
+ * AND/OR IN THE PROPER ORDER!!!
  * 
  */
 void writeIndicator(int column) {
@@ -217,15 +213,10 @@ void writeIndicator(int column) {
     // which column needs to be written to.
     int i = 0;
 
-    //printf("%d\n", onWriteIndicatorLine);
-    //printf("%d\n", currentLineNum);
-
     // If the write indicator was called, make sure that
     // the only printed line is the line that write 
     // indicator was called on.
     if(!listingFile && onWriteIndicatorLine == currentLineNum) {
-
-        //printf("INSIDE WRITE INDICATOR FOR STDOUT\n");
 
         // Print the line that has errors or other messages associated 
         // with it to standard output.
@@ -263,7 +254,6 @@ void writeIndicator(int column) {
 
     } else {
 
-        //printf("INSIDE WRITE INDICATOR FOR STDOUT");
         // While the counter variable is less than the
         // column parameter, move the '^' variable by
         // a space until you reach the correct location

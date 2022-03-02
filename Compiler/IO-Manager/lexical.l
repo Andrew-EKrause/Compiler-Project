@@ -36,7 +36,7 @@ int main(int argc, char * argv[]) {
         else if (token == INTEGER) numInts++;
         else numLines++;
     }
-    printf("The number of identifiers is %d\n", numIds);
+    printf("\nThe number of identifiers is %d\n", numIds);
     printf("The number of integers is %d\n", numInts);
     printf("The number of lines is %d\n", numLines);
 

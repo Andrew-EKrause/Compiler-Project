@@ -35,7 +35,7 @@ int main(){
     }
 
     // TEST 3
-    if(openFiles("sample_source.txt", NULL)){ // Be sure to test with the listing file here as well: "test_listing.txt"
+    if(openFiles("sample_source.txt", "test_listing.txt")){ // Test with listing file and NULL: "test_listing.txt" | NULL
         char c = getNextSourceChar();
         while(c != EOF){
             if(c == 'p'){
