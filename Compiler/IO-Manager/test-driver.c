@@ -36,12 +36,10 @@ int main(){
 
     // TEST 3
     if(openFiles("sample_source.txt", NULL)){ // Be sure to test with the listing file here as well: "test_listing.txt"
-
         char c = getNextSourceChar();
         while(c != EOF){
             if(c == 'p'){
                 int current_column_number = getCurrentColumnNum();
-
                 printf("current column: %d\n", current_column_number);
                 writeIndicator(current_column_number);
                 writeMessage("Here is a p!");

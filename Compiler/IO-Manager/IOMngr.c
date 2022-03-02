@@ -30,17 +30,16 @@
 // such as files for the 
 // IO Manager file.
 FILE *sourceFile;
-//FILE *secondSourceFile;
 FILE *listingFile;
 char *fileSourceName;
 
 // Create another set of global
 // variables for IO Manager.
-int onWriteIndicatorLine = 1;
-int moveToNextLine = 1;
 char lineOfChars[MAXLINE];
-int currentLineNum = 1;
-int currentColumnNum = -1;
+int onWriteIndicatorLine;
+int moveToNextLine;
+int currentLineNum;
+int currentColumnNum;
 
 /**
  * The function opens the source file whose name 
@@ -52,6 +51,20 @@ int currentColumnNum = -1;
  * otherwise return 0.
  */
 int openFiles(char *sourceName, char *listingName) {
+
+    // Each time you open files, reset the file 
+    // information to NULL in order to avoid data
+    // conflicts. This enables multiple sequential 
+    // runs.
+    sourceFile = NULL;
+    listingFile = NULL;
+    fileSourceName = NULL;
+
+    // Reset the global variables here.
+    onWriteIndicatorLine = 1;
+    moveToNextLine = 1;
+    currentLineNum = 1;
+    currentColumnNum = -1;
 
     // Open the file with the source name and store the
     // opened file in the global sourceFile variable.
@@ -204,10 +217,15 @@ void writeIndicator(int column) {
     // which column needs to be written to.
     int i = 0;
 
+    //printf("%d\n", onWriteIndicatorLine);
+    //printf("%d\n", currentLineNum);
+
     // If the write indicator was called, make sure that
     // the only printed line is the line that write 
     // indicator was called on.
     if(!listingFile && onWriteIndicatorLine == currentLineNum) {
+
+        //printf("INSIDE WRITE INDICATOR FOR STDOUT\n");
 
         // Print the line that has errors or other messages associated 
         // with it to standard output.
@@ -245,6 +263,7 @@ void writeIndicator(int column) {
 
     } else {
 
+        //printf("INSIDE WRITE INDICATOR FOR STDOUT");
         // While the counter variable is less than the
         // column parameter, move the '^' variable by
         // a space until you reach the correct location
