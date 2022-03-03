@@ -15,6 +15,7 @@
 # Include makefile flags here.
 # ===============================================
 CC = gcc # Flag to pass to gcc
+LEX = lexical.l # Lexical file; this file name can change
 OFLAG = -o # Flag to indicate use of object file
 CFLAG = -c # Flag to avoid linking
 GFLAG = -g # Flag to invoke GDB debugger
@@ -26,7 +27,7 @@ FFLAG = -fsanitize=address # Flag to use fsanitize for memory leaks
 # ===============================================
 main: IOMngr.o IOMngrTests.o
 	$(CC) IOMngr.o IOMngrTests.o $(OFLAG) iomanagertests $(GFLAG) -Wextra $(FFLAG)
-	flex lexical.l
+	flex $(LEX)
 	$(CC) IOMngr.c lex.yy.c -ll $(OFLAG) lexicaltests
 
 # ===============================================
@@ -47,5 +48,4 @@ IOMngrTests.o: IOMngrTests.c
 
 # Remove any object files as well as the executable files.
 clean:
-	rm *.o iomanagertests
-	rm lexicaltests
+	rm *.o lex.yy.c iomanagertests lexicaltests
