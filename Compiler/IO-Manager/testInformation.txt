@@ -8,6 +8,7 @@ TEST 1: Series of Commands to test IO Manager:
 1. flex lex2c.l // --> THIS FILE NAME CAN CHANGE FOR EACH TEST
 2. gcc -o lex1 IOMngr.c lex.yy.c -ll
 3. ./lex1 lexInput.txt lexOutput.txt 
+YOU ALSO HAVE A makefile FOR THIS NOW.
 
 ===============================================
 TEST 2: Series of Commands to test IO Manager:
@@ -15,5 +16,17 @@ TEST 2: Series of Commands to test IO Manager:
 
 1. gcc -o lex1 IOMngr.c test-driver.c
 2. ./lex1
+YOU ALSO HAVE A makefile FOR THIS NOW.
 
+===============================================
+NOTES:
+===============================================
+
+// Keep getting this strange error when running with 
+// the fsanitize flags. Seems to be an error given the
+// fact that you are using an operating system created
+// by Apple - based on your research at least.
+// ERROR/WARNING: iomanagertests(10227,0x10a127600) malloc: nano zone abandoned due to inability to preallocate reserved vm space.
+
+// Alternative line for test file.
 System.out.println("This is a very long line that will most definitely be longer than the MAX_LINE size which means it is bound to find some bugs because I don't know how to write C to save my life. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");

@@ -117,6 +117,11 @@ void closeFiles() {
     if(listingFile) {
         fclose(listingFile);
     }
+
+    // Free the pointer that was allocated
+    // memory space with strdup() for an array 
+    // of characters (a string for a name).
+    free(fileSourceName);
 }
 
 /**

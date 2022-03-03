@@ -7,7 +7,7 @@
 int main(){
 
     // TEST 1
-    if(openFiles("sample_source.txt", "test_listing.txt")){
+    if(openFiles("testSourceFile.txt", "testListingFile.txt")){
 
         while(getNextSourceChar() != EOF){
 
@@ -21,7 +21,7 @@ int main(){
     }
 
     // TEST 2
-    if(openFiles("sample_source.txt", NULL)){
+    if(openFiles("testSourceFile.txt", NULL)){
 
         while(getNextSourceChar() != EOF){
 
@@ -35,7 +35,7 @@ int main(){
     }
 
     // TEST 3
-    if(openFiles("sample_source.txt", "test_listing.txt")){ // Test with listing file and NULL: "test_listing.txt" | NULL
+    if(openFiles("testSourceFile.txt", "testListingFile.txt")){ // Test with listing file and NULL: "testListingFile.txt" | NULL
         char c = getNextSourceChar();
         while(c != EOF){
             if(c == 'p'){
