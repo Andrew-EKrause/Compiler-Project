@@ -1,5 +1,5 @@
-lexInput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexInput.txt
-lexOutput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexOutput.txt
+Filepath for lexInput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexInput.txt
+Filepath for lexOutput: ~/Desktop/CS442/Compiler-Project/Compiler/IO-Manager/lexOutput.txt
 
 ===============================================
 TEST 1: Series of Commands to test IO Manager:

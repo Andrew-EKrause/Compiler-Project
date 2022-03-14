@@ -20,7 +20,7 @@
 
 // Include the standard I/O library,
 // a second C library of functions,
-// and the IOMngr.h source file.
+// and the  IOMngr.h source file.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
