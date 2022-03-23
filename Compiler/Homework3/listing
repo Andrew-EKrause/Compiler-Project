@@ -1,0 +1,5 @@
+1. x = {a,b,c} + {d,e,f};
+2. y = {};
+3. z = {x};
+             ^
+Illegal Character in YACC

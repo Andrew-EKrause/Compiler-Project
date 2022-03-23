@@ -1,0 +1,8 @@
+// The following information explains how to
+// test the program provided by Professor 
+// Gendreau in the example that he gave you.
+// ================================================================
+1. bison -d boolExpr.y 
+2. flex boolLex.l 
+3. gcc -o h3 boolExpr.tab.c lex.yy.c semantics.c SymTab.c IOMngr.c main.c
+// ================================================================

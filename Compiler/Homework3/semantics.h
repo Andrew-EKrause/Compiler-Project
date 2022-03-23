@@ -6,14 +6,19 @@
     files interact with the SymTab files as
     well as the IOMngr files.
 */
-#include <string.h> // --> MAY NOT NEED
-#include <ctype.h> // --> MAY NOT NEED
 #include "SymTab.h"
+#include "IOMngr.h"
 
 /*
     Function prints out the symbol table.
 */
 extern void printSymTab();
+
+/*
+    Function helps print out each set associated
+    with each variable in the table.
+*/
+extern void printSetAttribute(SymTab *printSet);
 
 /*
     Function stores a set in a variable name.
@@ -24,7 +29,7 @@ extern void storeVar(char *name, SymTab *set);
     Function returns the set (symbol table)
     that a set literal (char) is in.
 */
-extern SymTab* getValue(char *name);
+extern SymTab* getVal(char *name);
 
 /*
     Function performs a union of two sets (symbol tables).

@@ -3,11 +3,25 @@
 TEST 1: Series of Commands to test Homework 3:
 ===============================================
 
-1. yacc (or bison) -d h3.y
+1. bison -d h3.y
 2. flex h3.l
-3. gcc -o h3 y.tab.c lex.yy.c semantics.c SymTab.c IOMngr.c main.c
+3. gcc -o h3 h3.tab.c lex.yy.c semantics.c SymTab.c IOMngr.c main.c -fsanitize=address
 CREATE A makefile FOR THIS AT SOME POINT!!!
 
 ===============================================
 NOTES:
+
+// There is some memory management that you may have to worry about 
+// for homework 3.
+
+// Also, make use of the startIterator and nextEntry functions in 
+// the Symbol Table file class to move through the symbol table(s)
+// in your print statement function as well as your other functions.
+
+// When you create your print method for homework 3, make sure that
+// you create a separate, simple print function for printing out 
+// the attributes (other symbol tables) of each attribute for each
+// item in the main symbol table. Again, you can use the startIterator
+// and nextEntry functions in the Symbol Table file for this.
+
 ===============================================

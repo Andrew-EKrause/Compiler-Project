@@ -1,0 +1,5 @@
+x = true;
+y = false;
+w = !x || y;
+z = (x && !y) || w;
+a = x && y;

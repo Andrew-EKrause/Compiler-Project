@@ -1,13 +1,12 @@
 %{
-
     #include "IOMngr.h"
-    #include "y.tab.h"
+    #include "SymTab.h"
+    #include "h3.tab.h"
 
     #define YY_INPUT(buf, result, max_size) \
     { int c = getNextSourceChar(); \
     result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
     }
-
 %}
 
 letter [A-Za-z]
@@ -15,7 +14,7 @@ digit [0-9]
 
 %%
 
-{}|({letter},)*                 {return SetLit;}
+\{\}|\{{letter}(\,{letter})*\}  {return SetLit;}
 {letter}({letter}|{digit})*     {return Ident;}
 \+                              {return UNION;}
 \*                              {return INTERSECT;}
@@ -23,14 +22,17 @@ digit [0-9]
 \;                              {return ';';}
 \(                              {return '(';}
 \)                              {return ')';}
-[]                              {}
+\{                              {return '{';}
+\}                              {return '}';}
+\,                              {return ',';}
+[ ]                             {}
 \t                              {}
 \r                              {}
 \n                              {}
-
+\0                              {}
 .                               {
-                                    WriteIndicator(getCurrentColumnNum());
-                                    WriteMessage("Illegal Character in lex");
+                                    writeIndicator(getCurrentColumnNum());
+                                    writeMessage("Illegal Character in lex");
                                 }
 
 %%

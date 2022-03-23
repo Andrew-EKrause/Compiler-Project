@@ -136,7 +136,7 @@ int enterName(SymTab *table, char *name) {
     // If the name is not already in the symbol table,
     // make a copy of the name and add it to the
     // symbol table.
-    if(findName(table, name)) {
+    if(findName(table, name) == 0) {
 
         // Determine where to insert the new name in the table.
         int newHashValue = createHashValue(table->size, name);
@@ -151,6 +151,7 @@ int enterName(SymTab *table, char *name) {
         // Set the new entry attribute to NULL.
         newEntry->attribute = NULL;
 
+        // SET THE NEXT FIELD AT ALL HERE??? I THINK SO --> 
         // Given that the new entry is always inserted at the start of the
         // slot in the hash table, need to set its next to reference 
         // all entries that may already exists in that slot.
@@ -178,8 +179,8 @@ int enterName(SymTab *table, char *name) {
 
 /**
  * If the name is in the symbol table, set current
- * to reference the (name, attribute) pair and return 1.
- * Otherwise, do not change current and return 0.
+ * to reference the (name, attribute) pair and return
+ * 1. Otherwise, do not change current and return 0.
  */
 int findName(SymTab *table, char *name) {
 
