@@ -66,7 +66,7 @@ int hasCurrent(SymTab *table);
 
 // PRE: hashCurrent() == 1
 // change the attribute value of the current (name, attribute) pair to attr
-void setCurrentAttr(SymTab *table, void * attr);
+void setCurrentAttr(SymTab *table, void *attr);
 
 // PRE: hasCurrent() == 1
 // return the attribute in the current (name, attribute) pair

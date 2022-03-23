@@ -210,7 +210,7 @@ int findName(SymTab *table, char *name) {
         }
 
         // Move to the next entry in any 
-        // given row of the symbole table.
+        // given row of the symbol table.
         nextEntryPoint = currentSlot->next;
         currentSlot = nextEntryPoint;
     }
@@ -246,7 +246,9 @@ void setCurrentAttr(SymTab *table, void *attr) {
     // PRE: hashCurrent() == 1
     // change the attribute value of the 
     // current (name, attribute) pair to attr
-    table->current->attribute = attr;
+    if(hasCurrent(table)) {
+        table->current->attribute = attr;
+    }
 }
 
 /**
