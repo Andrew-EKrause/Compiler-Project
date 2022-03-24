@@ -4,6 +4,7 @@
     associate any attribute type with a name
     The symbol table is implemented using a separate chaining hash table.
 */
+#pragma once
 
 /* 
     A SymEntry is the building block for linked lists of (name, attribute) pairs.
@@ -36,7 +37,7 @@ typedef struct {
 SymTab * createSymTab(int size);
 
 // ============================================================================
-// In the following functions assume a pre condition that table references a 
+// In the following functions, assume a pre-condition that table references a 
 // previously created symbol table: 
 // ============================================================================
 
@@ -90,20 +91,3 @@ int startIterator(SymTab *table);
     otherwise set current to the "next" (name, attribute) pair and return 1
 */
 int nextEntry(SymTab *table);
-
-/*
-    Generate a hash value for the table.
-    This function was not provided in the .h
-    file by the professor. I created it myself. 
-*/
-// --> SHOULD NOT HAVE THIS IN THE .h FILE!!!
-int createHashValue(int size, char *name);
-
-/*
-    Print out the symbol table that is passed
-    through this function. The table is 
-    represented as an array of linked lists 
-    that is printed out.
-*/
-// --> SHOULD NOT HAVE THIS IN THE .h FILE!!!
-void printSymbolTable(SymTab *table);

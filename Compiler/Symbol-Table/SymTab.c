@@ -26,9 +26,10 @@
 #include <string.h>
 #include "SymTab.h"
 
-// Define functions not specified in the .h file here (internal functions). --> ASK QUINN!!!
-// int createHashValue(int tableSize, char *name);
-// void printSymbolTable(SymTab *table);
+// Define functions not specified in the .h file 
+// here as internal functions.
+int createHashValue(int tableSize, char *name);
+// void printSymbolTable(SymTab *table); // --> PUT IN SEPARATE TEST FILES TO PRINT.
 
 /**
  * The function creates a new Symbol table by allocating
@@ -100,7 +101,6 @@ void destroySymTab(SymTab *table) {
             // Free the specific features of the
             // given SymEntry before freeing that
             // SymEntry itself.
-            // free(currentSlot->attribute); // --> KEEP AN EYE ON THIS!!!
             free(currentSlot->name);
             free(currentSlot);
 
@@ -151,7 +151,6 @@ int enterName(SymTab *table, char *name) {
         // Set the new entry attribute to NULL.
         newEntry->attribute = NULL;
 
-        // SET THE NEXT FIELD AT ALL HERE??? I THINK SO --> 
         // Given that the new entry is always inserted at the start of the
         // slot in the hash table, need to set its next to reference 
         // all entries that may already exists in that slot.
@@ -168,8 +167,6 @@ int enterName(SymTab *table, char *name) {
 
     } else {
 
-        // --> SET CURRENT TO REFERENCE THE (NAME, ATTRIBUTE) PAIR???
-
         // If the name is already in the symbol table,
         // set current to reference the name attribute
         // pair and return 0.
@@ -179,8 +176,8 @@ int enterName(SymTab *table, char *name) {
 
 /**
  * If the name is in the symbol table, set current
- * to reference the (name, attribute) pair and return
- * 1. Otherwise, do not change current and return 0.
+ * to reference the (name, attribute) pair and return 1.
+ * Otherwise, do not change current and return 0.
  */
 int findName(SymTab *table, char *name) {
 
@@ -243,9 +240,9 @@ int hasCurrent(SymTab *table) {
  */
 void setCurrentAttr(SymTab *table, void *attr) {
 
-    // PRE: hashCurrent() == 1
-    // change the attribute value of the 
-    // current (name, attribute) pair to attr
+    // Change the attribute value of the 
+    // current (name, attribute) pair to attr.
+    // If there is a current attribute, set it.
     if(hasCurrent(table)) {
         table->current->attribute = attr;
     }
@@ -258,10 +255,13 @@ void setCurrentAttr(SymTab *table, void *attr) {
  */
 void *getCurrentAttr(SymTab *table) {
 
-    // PRE: hasCurrent() == 1
-    // return the attribute in the 
-    // current (name, attribute) pair
-    return table->current->attribute;
+    // If the table is not NULL, return
+    // the current (name, attribute) pair.
+    // Otherwise, return 0.
+    if(hasCurrent(table)) {
+        return table->current->attribute;
+    }
+    return 0;
 }
 
 /**
@@ -272,10 +272,13 @@ void *getCurrentAttr(SymTab *table) {
  */
 char *getCurrentName(SymTab *table) {
 
-    // PRE: hasCurrent() == 1
-    // return the name in the 
-    // current (name, attribute) pair
-    return table->current->name;
+    // If the table is not NULL, return the name
+    // in the current (name, attribute) pair.
+    // Otherwise, return 0.
+    if(hasCurrent(table)) {
+        return table->current->name;;
+    }
+    return 0;
 }
 
 /**
@@ -312,11 +315,12 @@ int startIterator(SymTab *table) {
     return 0;
 }
 
-/*
-    If all (name, attribute) pairs have been visited since the last call to
-    startIterator, return 0. Otherwise, set current to the "next" (name, attribute) 
-    pair and return 1.
-*/
+/**
+ * If all (name, attribute) pairs have been visited
+ * since the last call to startIterator, return 0. 
+ * Otherwise, set current to the "next" (name, attribute) 
+ * pair and return 1.
+ */
 int nextEntry(SymTab *table) {
 
     // First check if current is NULL, which indicates
@@ -434,70 +438,74 @@ int createHashValue(int tableSize, char *name) {
     return hashVal;
 }
 
-/**
- * The function prints out any symbol
- * table passed into it onto the terminal
- * screen.
- */
-void printSymbolTable(SymTab *table) {
+// /**
+//  * The function prints out any symbol
+//  * table passed into it onto the terminal
+//  * screen. 
+//  * 
+//  * IMPORTANT: This function will usually
+//  * need to be placed in test files as a
+//  * separate function.
+//  */
+// void printSymbolTable(SymTab *table) {
 
-    // Create a title for the symbol table.
-    printf("==========================\n");
-    printf("   Symbol Table Printed\n");
-    printf("==========================\n\n");
+//     // Create a title for the symbol table.
+//     printf("==========================\n");
+//     printf("   Symbol Table Printed\n");
+//     printf("==========================\n\n");
 
-    // Create temporary variables to help
-    // determine if the name is in the table.
-    SymEntry *currentSlot = NULL;
-    SymEntry *nextEntryPoint = NULL;
+//     // Create temporary variables to help
+//     // determine if the name is in the table.
+//     SymEntry *currentSlot = NULL;
+//     SymEntry *nextEntryPoint = NULL;
 
-    // Create a counter variable for the for loop.
-    // Create a variable for printing out first arrow.
-    int i;
-    int firstArrow ;
+//     // Create a counter variable for the for loop.
+//     // Create a variable for printing out first arrow.
+//     int i;
+//     int firstArrow ;
 
-    // Create a for loop to visit each entry in the
-    // array of linked lists and determine if the 
-    // name is in the symbol table.
-    for(i = 0; i < table->size; i++) {
+//     // Create a for loop to visit each entry in the
+//     // array of linked lists and determine if the 
+//     // name is in the symbol table.
+//     for(i = 0; i < table->size; i++) {
 
-        // Move through each slot in the symbol table.
-        // Print out the row number. Set the first arrow
-        // variable to one on each iteration.
-        currentSlot = table->contents[i]; 
-        printf("Row %d: ", i);
-        firstArrow = 1;
+//         // Move through each slot in the symbol table.
+//         // Print out the row number. Set the first arrow
+//         // variable to one on each iteration.
+//         currentSlot = table->contents[i]; 
+//         printf("Row %d: ", i);
+//         firstArrow = 1;
 
-        // In any given row of the symbol, traverse  
-        // until last entry is reached.
-        while(currentSlot != NULL) {
+//         // In any given row of the symbol, traverse  
+//         // until last entry is reached.
+//         while(currentSlot != NULL) {
 
-            // Add the first arrow to each non-empty slot.
-            if(firstArrow == 1) {
-                printf("--> ");
-                firstArrow = 0;
-            }
+//             // Add the first arrow to each non-empty slot.
+//             if(firstArrow == 1) {
+//                 printf("--> ");
+//                 firstArrow = 0;
+//             }
 
-            // Move to the next entry in any 
-            // given row of the symbole table.
-            nextEntryPoint = currentSlot->next;
+//             // Move to the next entry in any 
+//             // given row of the symbole table.
+//             nextEntryPoint = currentSlot->next;
 
-            // Print the given entry name.
-            // Then move to the next entry.
-            printf("%s ", currentSlot->name);
-            currentSlot = nextEntryPoint;
+//             // Print the given entry name.
+//             // Then move to the next entry.
+//             printf("%s ", currentSlot->name);
+//             currentSlot = nextEntryPoint;
 
-            // If the next entry is not NULL,
-            // print out an arrow between entries. 
-            if(currentSlot != NULL) {
-                printf("--> ");
-            }
-        }
-        // Print out an extra space.
-        printf("\n");
-    }
+//             // If the next entry is not NULL,
+//             // print out an arrow between entries. 
+//             if(currentSlot != NULL) {
+//                 printf("--> ");
+//             }
+//         }
+//         // Print out an extra space.
+//         printf("\n");
+//     }
 
-    // Print a final space between the 
-    // table and the other content.
-    printf("\n==========================\n\n");
-}
+//     // Print a final space between the 
+//     // table and the other content.
+//     printf("\n==========================\n\n");
+// }

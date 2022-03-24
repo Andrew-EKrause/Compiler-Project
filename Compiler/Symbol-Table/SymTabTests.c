@@ -18,16 +18,16 @@
  * 
  */
 
-// --> LIKELY DO NOT NEED; MAY DELETE LATER!!!
-// int createHashValue(int tableSize, char *name);
-// void printSymbolTable(SymTab *table);
-
 // Include the standard I/O library
 // as well as the  SymTab.h file.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "SymTab.h"
+
+// Define functions that will be used in the test file.
+int createHashValueTest(int tableSize, char *name);
+void printSymbolTable(SymTab *table);
 
 // Create a main function to test the Symbol Table
 // based off of the SymTab.h file and the SymTab.c file.
@@ -641,16 +641,16 @@ int main() {
    printf("The names that were entered into testTable5 in the previous tests were: 'the', 'times', and 'change'.\n\n");
 
    // Expected slot for the name 'the' in testTable5.
-   printf("'the' has a hash value of %d.\n", createHashValue(5, "the")); 
-   printf("'the' should be in slot %d of the symbol table.\n\n", createHashValue(5, "the"));
+   printf("'the' has a hash value of %d.\n", createHashValueTest(5, "the")); 
+   printf("'the' should be in slot %d of the symbol table.\n\n", createHashValueTest(5, "the"));
 
    // Expected slot for the name 'the' in testTable5.
-   printf("'times' has a hash value of %d.\n", createHashValue(5, "times")); 
-   printf("'times' should be in slot %d of the symbol table.\n\n", createHashValue(5, "times"));
+   printf("'times' has a hash value of %d.\n", createHashValueTest(5, "times")); 
+   printf("'times' should be in slot %d of the symbol table.\n\n", createHashValueTest(5, "times"));
 
    // Expected slot for the name 'the' in testTable5.
-   printf("'change' has a hash value of %d.\n", createHashValue(5, "change")); 
-   printf("'change' should be in slot %d of the symbol table.\n\n", createHashValue(5, "change"));
+   printf("'change' has a hash value of %d.\n", createHashValueTest(5, "change")); 
+   printf("'change' should be in slot %d of the symbol table.\n\n", createHashValueTest(5, "change"));
 
    printf("EXPECTED: based on the above information, < times > should be the first entry visited.\n");
 
@@ -672,16 +672,16 @@ int main() {
    printf("The names that were entered into testTable5 in the previous tests were: 'once', 'upon', and 'time'.\n\n");
 
    // Expected slot for the name 'the' in testTable6.
-   printf("'once' has a hash value of %d.\n", createHashValue(30, "once")); 
-   printf("'once' should be in slot %d of the symbol table.\n\n", createHashValue(30, "once"));
+   printf("'once' has a hash value of %d.\n", createHashValueTest(30, "once")); 
+   printf("'once' should be in slot %d of the symbol table.\n\n", createHashValueTest(30, "once"));
 
    // Expected slot for the name 'the' in testTable6.
-   printf("'upon' has a hash value of %d.\n", createHashValue(30, "upon")); 
-   printf("'upon' should be in slot %d of the symbol table.\n\n", createHashValue(30, "upon"));
+   printf("'upon' has a hash value of %d.\n", createHashValueTest(30, "upon")); 
+   printf("'upon' should be in slot %d of the symbol table.\n\n", createHashValueTest(30, "upon"));
 
    // Expected slot for the name 'the' in testTable6.
-   printf("'time' has a hash value of %d.\n", createHashValue(30, "time")); 
-   printf("'time' should be in slot %d of the symbol table.\n\n", createHashValue(30, "time"));
+   printf("'time' has a hash value of %d.\n", createHashValueTest(30, "time")); 
+   printf("'time' should be in slot %d of the symbol table.\n\n", createHashValueTest(30, "time"));
 
    printf("EXPECTED: based on the above information, < upon > should be the first entry visited.\n");
 
@@ -703,16 +703,16 @@ int main() {
    printf("The names that were entered into testTable7 in the previous tests were: 'mr', 'tambourine', and 'man'.\n\n");
 
    // Expected slot for the name 'the' in testTable7.
-   printf("'mr' has a hash value of %d.\n", createHashValue(200, "mr")); 
-   printf("'mr' should be in slot %d of the symbol table.\n\n", createHashValue(200, "mr"));
+   printf("'mr' has a hash value of %d.\n", createHashValueTest(200, "mr")); 
+   printf("'mr' should be in slot %d of the symbol table.\n\n", createHashValueTest(200, "mr"));
 
    // Expected slot for the name 'the' in testTable7.
-   printf("'tambourine' has a hash value of %d.\n", createHashValue(200, "tambourine")); 
-   printf("'tambourine' should be in slot %d of the symbol table.\n\n", createHashValue(200, "tambourine"));
+   printf("'tambourine' has a hash value of %d.\n", createHashValueTest(200, "tambourine")); 
+   printf("'tambourine' should be in slot %d of the symbol table.\n\n", createHashValueTest(200, "tambourine"));
 
    // Expected slot for the name 'the' in testTable7.
-   printf("'man' has a hash value of %d.\n", createHashValue(200, "man")); 
-   printf("'man' should be in slot %d of the symbol table.\n\n", createHashValue(200, "man"));
+   printf("'man' has a hash value of %d.\n", createHashValueTest(200, "man")); 
+   printf("'man' should be in slot %d of the symbol table.\n\n", createHashValueTest(200, "man"));
 
    printf("EXPECTED: based on the above information, < mr > should be the first entry visited.\n");
 
@@ -775,16 +775,16 @@ int main() {
    printf("The names that were entered into testTable5 in the previous tests were: 'the', 'times', and 'change'.\n\n");
 
    // Expected slot for the name 'the' in testTable5.
-   printf("'the' has a hash value of %d.\n", createHashValue(5, "the")); 
-   printf("'the' should be in slot %d of the symbol table.\n\n", createHashValue(5, "the"));
+   printf("'the' has a hash value of %d.\n", createHashValueTest(5, "the")); 
+   printf("'the' should be in slot %d of the symbol table.\n\n", createHashValueTest(5, "the"));
 
    // Expected slot for the name 'the' in testTable5.
-   printf("'times' has a hash value of %d.\n", createHashValue(5, "times")); 
-   printf("'times' should be in slot %d of the symbol table.\n\n", createHashValue(5, "times"));
+   printf("'times' has a hash value of %d.\n", createHashValueTest(5, "times")); 
+   printf("'times' should be in slot %d of the symbol table.\n\n", createHashValueTest(5, "times"));
 
    // Expected slot for the name 'the' in testTable5.
-   printf("'change' has a hash value of %d.\n", createHashValue(5, "change")); 
-   printf("'change' should be in slot %d of the symbol table.\n\n", createHashValue(5, "change"));
+   printf("'change' has a hash value of %d.\n", createHashValueTest(5, "change")); 
+   printf("'change' should be in slot %d of the symbol table.\n\n", createHashValueTest(5, "change"));
 
    printf("EXPECTED: based on the above information, < the > should be the next entry visited.\n");
 
@@ -806,16 +806,16 @@ int main() {
    printf("The names that were entered into testTable5 in the previous tests were: 'once', 'upon', and 'time'.\n\n");
 
    // Expected slot for the name 'the' in testTable6.
-   printf("'once' has a hash value of %d.\n", createHashValue(30, "once")); 
-   printf("'once' should be in slot %d of the symbol table.\n\n", createHashValue(30, "once"));
+   printf("'once' has a hash value of %d.\n", createHashValueTest(30, "once")); 
+   printf("'once' should be in slot %d of the symbol table.\n\n", createHashValueTest(30, "once"));
 
    // Expected slot for the name 'the' in testTable6.
-   printf("'upon' has a hash value of %d.\n", createHashValue(30, "upon")); 
-   printf("'upon' should be in slot %d of the symbol table.\n\n", createHashValue(30, "upon"));
+   printf("'upon' has a hash value of %d.\n", createHashValueTest(30, "upon")); 
+   printf("'upon' should be in slot %d of the symbol table.\n\n", createHashValueTest(30, "upon"));
 
    // Expected slot for the name 'the' in testTable6.
-   printf("'time' has a hash value of %d.\n", createHashValue(30, "time")); 
-   printf("'time' should be in slot %d of the symbol table.\n\n", createHashValue(30, "time"));
+   printf("'time' has a hash value of %d.\n", createHashValueTest(30, "time")); 
+   printf("'time' should be in slot %d of the symbol table.\n\n", createHashValueTest(30, "time"));
 
    printf("EXPECTED: based on the above information, < once > should be the next entry visited.\n");
 
@@ -837,16 +837,16 @@ int main() {
    printf("The names that were entered into testTable7 in the previous tests were: 'mr', 'tambourine', and 'man'.\n\n");
 
    // Expected slot for the name 'the' in testTable7.
-   printf("'mr' has a hash value of %d.\n", createHashValue(200, "mr")); 
-   printf("'mr' should be in slot %d of the symbol table.\n\n", createHashValue(200, "mr"));
+   printf("'mr' has a hash value of %d.\n", createHashValueTest(200, "mr")); 
+   printf("'mr' should be in slot %d of the symbol table.\n\n", createHashValueTest(200, "mr"));
 
    // Expected slot for the name 'the' in testTable7.
-   printf("'tambourine' has a hash value of %d.\n", createHashValue(200, "tambourine")); 
-   printf("'tambourine' should be in slot %d of the symbol table.\n\n", createHashValue(200, "tambourine"));
+   printf("'tambourine' has a hash value of %d.\n", createHashValueTest(200, "tambourine")); 
+   printf("'tambourine' should be in slot %d of the symbol table.\n\n", createHashValueTest(200, "tambourine"));
 
    // Expected slot for the name 'the' in testTable7.
-   printf("'man' has a hash value of %d.\n", createHashValue(200, "man")); 
-   printf("'man' should be in slot %d of the symbol table.\n\n", createHashValue(200, "man"));
+   printf("'man' has a hash value of %d.\n", createHashValueTest(200, "man")); 
+   printf("'man' should be in slot %d of the symbol table.\n\n", createHashValueTest(200, "man"));
 
    printf("EXPECTED: based on the above information, < tambourine > should be the next entry visited.\n");
 
@@ -898,16 +898,16 @@ int main() {
    int numPassed11 = 0;
 
    // Create variables to store the hash values.
-   int createHashTest1 = createHashValue(4, "integer"); 
-   int createHashTest2 = createHashValue(10, "string"); 
-   int createHashTest3 = createHashValue(2, "candy"); 
-   int createHashTest4 = createHashValue(15, "Gendreau"); 
-   int createHashTest5 = createHashValue(13, "Saupe77"); 
-   int createHashTest6 = createHashValue(58, "Charlie_T"); 
-   int createHashTest7 = createHashValue(72, "Andrew_E_K"); 
-   int createHashTest8 = createHashValue(18, "compilers_is_tough"); 
-   int createHashTest9 = createHashValue(45, "floatVal"); 
-   int createHashTest10 = createHashValue(200, "supercallifragilisticexpialidocious");
+   int createHashTest1 = createHashValueTest(4, "integer"); 
+   int createHashTest2 = createHashValueTest(10, "string"); 
+   int createHashTest3 = createHashValueTest(2, "candy"); 
+   int createHashTest4 = createHashValueTest(15, "Gendreau"); 
+   int createHashTest5 = createHashValueTest(13, "Saupe77"); 
+   int createHashTest6 = createHashValueTest(58, "Charlie_T"); 
+   int createHashTest7 = createHashValueTest(72, "Andrew_E_K"); 
+   int createHashTest8 = createHashValueTest(18, "compilers_is_tough"); 
+   int createHashTest9 = createHashValueTest(45, "floatVal"); 
+   int createHashTest10 = createHashValueTest(200, "supercallifragilisticexpialidocious");
 
    // Check if the hash values fall between the correct ranges.
    if((createHashTest1 >= 0) && (createHashTest1 < 4)) {
@@ -1001,7 +1001,7 @@ int main() {
    }
 
    // Print out the summary of the test results.
-   printf("\n(10) SUMMARY: < %d/10 > tests passed for createHashValue(int size, char *name) with expected values.", numPassed11);
+   printf("\n(10) SUMMARY: < %d/10 > tests passed for createHashValueTest(int size, char *name) with expected values.", numPassed11);
    printf("\n---------------------------------------------------------\n");
 
    // Include an extra print statement at the end.
@@ -1041,7 +1041,7 @@ int main() {
    printf("(7) SUMMARY: < %d/3 > tests passed for getCurrentName(SymTab *table) with expected values.\n", numPassed8);
    printf("(8) SUMMARY: < %d/4 > tests passed for getCurrentName(SymTab *table) with expected values.\n", numPassed9);
    printf("(9) SUMMARY: < %d/4 > tests passed for nextEntry(SymTab *table) with expected values.\n", numPassed10);
-   printf("(10) SUMMARY: < %d/10 > tests passed for createHashValue(int size, char *name) with expected values.\n", numPassed11);
+   printf("(10) SUMMARY: < %d/10 > tests passed for createHashValueTest(int size, char *name) with expected values.\n", numPassed11);
 
    // Include an extra print statement at the end.
    printf("\nEND OF TESTS FOR SYMBOL TABLE\n\n");
@@ -1049,4 +1049,111 @@ int main() {
    // Return 0 at the end of the main function 
    // after all the tests have run.
    return 0;
+}
+
+/**
+ * The function returns a hash value that is used
+ * to determine which slot in the symbol table any
+ * given entry is inserted in. The hash function is
+ * generated by first summing the ASCII values of  
+ * each character in the name being processed in the 
+ * fucntion. Next, that obtained sum is modded by 
+ * the current size of the symbol table to produce
+ * the hash value. This function is used in the
+ * enterName() function.
+ */
+int createHashValueTest(int tableSize, char *name) {
+
+    // Create a counter variable 
+    // and a hash value variable.
+    int i;
+    int hashVal = 0;
+
+    // Sum the ASCII character values of 
+    // the name variable up to obtain part 
+    // of the hash value.
+    for(i = 0; i < strlen(name); i++) {
+
+        // Sum up ASCII values.
+        hashVal += name[i];
+    }
+
+    // Mod the obtained sum of characters
+    // to get the final hash value.
+    hashVal %= tableSize;
+
+    // Return the hash value from the function.
+    return hashVal;
+}
+
+/**
+ * The function prints out any symbol
+ * table passed into it onto the terminal
+ * screen. 
+ * 
+ * IMPORTANT: This function will usually
+ * need to be placed in test files as a
+ * separate function.
+ */
+void printSymbolTable(SymTab *table) {
+
+    // Create a title for the symbol table.
+    printf("==========================\n");
+    printf("   Symbol Table Printed\n");
+    printf("==========================\n\n");
+
+    // Create temporary variables to help
+    // determine if the name is in the table.
+    SymEntry *currentSlot = NULL;
+    SymEntry *nextEntryPoint = NULL;
+
+    // Create a counter variable for the for loop.
+    // Create a variable for printing out first arrow.
+    int i;
+    int firstArrow ;
+
+    // Create a for loop to visit each entry in the
+    // array of linked lists and determine if the 
+    // name is in the symbol table.
+    for(i = 0; i < table->size; i++) {
+
+        // Move through each slot in the symbol table.
+        // Print out the row number. Set the first arrow
+        // variable to one on each iteration.
+        currentSlot = table->contents[i]; 
+        printf("Row %d: ", i);
+        firstArrow = 1;
+
+        // In any given row of the symbol, traverse  
+        // until last entry is reached.
+        while(currentSlot != NULL) {
+
+            // Add the first arrow to each non-empty slot.
+            if(firstArrow == 1) {
+                printf("--> ");
+                firstArrow = 0;
+            }
+
+            // Move to the next entry in any 
+            // given row of the symbole table.
+            nextEntryPoint = currentSlot->next;
+
+            // Print the given entry name.
+            // Then move to the next entry.
+            printf("%s ", currentSlot->name);
+            currentSlot = nextEntryPoint;
+
+            // If the next entry is not NULL,
+            // print out an arrow between entries. 
+            if(currentSlot != NULL) {
+                printf("--> ");
+            }
+        }
+        // Print out an extra space.
+        printf("\n");
+    }
+
+    // Print a final space between the 
+    // table and the other content.
+    printf("\n==========================\n\n");
 }
