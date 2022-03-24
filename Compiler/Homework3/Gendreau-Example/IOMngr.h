@@ -7,6 +7,7 @@
     column numbers. An error message is also written out in
     certain cases.    
 */
+#pragma once
 
 // Define the maximum number of characters per line.
 #define MAXLINE 1024

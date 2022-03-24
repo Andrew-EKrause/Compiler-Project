@@ -146,7 +146,7 @@ char getNextSourceChar() {
     if(sourceFile) {
 
         // Check if the end of a given line was reached.
-        if(((int)(strlen(lineOfChars)) <= currentColumnNum) || lineOfChars[currentColumnNum] == '\n') {
+        if(((int)(strlen(lineOfChars)) == currentColumnNum) || lineOfChars[currentColumnNum] == '\n') { // --> KEEP AN EYE ON THIS!!!
 
             // If end of file reached, reset the 
             // variables for the next iteration.

@@ -60,7 +60,7 @@ int openFiles(char *sourceName, char *listingName) {
     // Reset the global variables here.
     onWriteIndicatorLine = 1;
     moveToNextLine = 1;
-    currentLineNum = 1;
+    currentLineNum = 0;
     currentColumnNum = -1;
 
     // Open the file with the source name and store the
@@ -138,7 +138,6 @@ void closeFiles() {
  * 
  * PLEASE NOTE: If there is a listing file,
  * lines are printed to that file here.
- * 
  */
 char getNextSourceChar() {
 
@@ -147,28 +146,30 @@ char getNextSourceChar() {
     if(sourceFile) {
 
         // Check if the end of a given line was reached.
-        // --> MAY ACTUALLY BE <=. KEEP AN EYE ON!!!
-        if((int)(strlen(lineOfChars)) < currentColumnNum) {
+        if(((int)(strlen(lineOfChars)) <= currentColumnNum) || lineOfChars[currentColumnNum] == '\n') {
 
-            // If end of line reached, reset the 
+            // If end of file reached, reset the 
             // variables for the next iteration.
             currentColumnNum = -1;
             moveToNextLine = 1;
-            currentLineNum++;
         }
 
         // Check if you need to move to the next line in the file.
         if(moveToNextLine == 1) {
-
-            // Once the newline is reached on any given line, 
-            // get the next line from the source file.
-            fgets(lineOfChars, MAXLINE, sourceFile); 
 
             // Check if the end of the file has been reached
             // after obtaining the next line in the file.
             if(feof(sourceFile)) {
                 return EOF;
             }
+
+            // If you need to move to the next line in the file,
+            // increment the line number counter for the file.
+            currentLineNum++;
+
+            // Once the newline is reached on any given line, 
+            // get the next line from the source file.
+            fgets(lineOfChars, MAXLINE, sourceFile); 
 
             // Check if the listing file exists. If the listing
             // file exists, write out current line to it.
@@ -208,10 +209,6 @@ char getNextSourceChar() {
  * PLEASE NOTE: If there is NOT a listing file,
  * the appropriate lines are written to standard
  * out through this function.
- * 
- * MAYBE ADD CHECKS TO SEE IF FILE IS NULL AS WELL AS
- * AND/OR IN THE PROPER ORDER!!!
- * 
  */
 void writeIndicator(int column) {
 

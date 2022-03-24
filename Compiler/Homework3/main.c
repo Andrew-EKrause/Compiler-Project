@@ -29,6 +29,10 @@
 // Include the parse function.
 extern int yyparse();
 
+// Include function definitions.
+void freeAllTables(SymTab *freeTable);
+void printSymbolTable(SymTab *table);
+
 // Create a global symbol table.
 SymTab *table;
 
@@ -38,10 +42,6 @@ SymTab *table;
 // of the program.
 SymTab *allTables;
 int countTables = 0;
-
-// Include function definitions.
-void freeAllTables(SymTab *freeTable);
-void printSymbolTable(SymTab *table);
 
 // Creat a main function to help run
 // the programs together and test

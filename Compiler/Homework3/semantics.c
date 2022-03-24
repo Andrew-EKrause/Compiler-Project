@@ -52,7 +52,7 @@ void printSymTab() {
     // values in the table.
     int hasMore = startIterator(table);
 
-    // Print out the first variable and value in the table.
+    // Print out a heading for the output.
     printf("\n============\n");
     printf("   Output:\n");
     printf("============\n\n");
