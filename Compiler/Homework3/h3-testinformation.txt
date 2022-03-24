@@ -6,10 +6,11 @@ TEST 1: Series of Commands to test Homework 3:
 1. bison -d h3.y
 2. flex h3.l
 3. gcc -o h3 h3.tab.c lex.yy.c semantics.c SymTab.c IOMngr.c main.c -fsanitize=address
-CREATE A makefile FOR THIS AT SOME POINT!!!
 
 ===============================================
 NOTES:
+
+// COMPILING WITH gdb WILL HELP YOU DEBUG YOUR CODE EASIER.
 
 // There is some memory management that you may have to worry about 
 // for homework 3.
@@ -25,3 +26,20 @@ NOTES:
 // and nextEntry functions in the Symbol Table file for this.
 
 ===============================================
+
+/*
+    Generate a hash value for the table.
+    This function was not provided in the .h
+    file by the professor. I created it myself. 
+*/
+// --> SHOULD NOT HAVE THIS IN THE .h FILE!!!
+//int createHashValue(int size, char *name);
+
+/*
+    Print out the symbol table that is passed
+    through this function. The table is 
+    represented as an array of linked lists 
+    that is printed out.
+*/
+// --> SHOULD NOT HAVE THIS IN THE .h FILE!!!
+//void printSymbolTable(SymTab *table);

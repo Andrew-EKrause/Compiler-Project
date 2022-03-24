@@ -6,6 +6,7 @@
     files interact with the SymTab files as
     well as the IOMngr files.
 */
+#pragma once
 #include "SymTab.h"
 #include "IOMngr.h"
 
@@ -47,3 +48,11 @@ extern SymTab* doINTERSECT(SymTab *set1, SymTab *set2);
     in as a parameter.
 */
 extern SymTab* makeSet(char *name);
+
+/*
+    Function adds any new symbol table that is utilized
+    throughout the process of the program to a main 
+    symbol table in order to free all of the allocated
+    memory at a later time.
+*/
+extern void addTableReference();

@@ -1,9 +1,9 @@
 /**
- * The semantics.c file utilizes the Symbol Table 
+ * The semantics.c file utilizes the Symbol Table
  * that was created before this file to interpret
- * programs using the grammar that was specified 
+ * programs using the grammar that was specified
  * through the lex and yacc files. The grammar that
- * is being interpreted involves applying simple 
+ * is being interpreted involves applying simple
  * operations on sets of values such as union and
  * intersection operations. The functions in the
  * semantics file help complete various operations
@@ -28,11 +28,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include "IOMngr.h"
+#include "SymTab.h"
 #include "semantics.h"
 
 // Create a global symbol table to be used
 // throughout the semantics.c file program.
-extern struct SymTab *table;
+extern SymTab *table;
+
+// Create a symbol table to track the memory
+// created by other symbol tables as well as
+// a counter variable.
+extern SymTab *allTables;
+extern int countTables;
 
 /**
  * The function prints out the symbol table
@@ -43,25 +50,34 @@ void printSymTab() {
 
     // Create a variable to start printing
     // values in the table.
-    int hasMore = startIterator((SymTab (*))table);
+    int hasMore = startIterator(table);
 
     // Print out the first variable and value in the table.
-    printf("Output:\n\n");
+    printf("\n============\n");
+    printf("   Output:\n");
+    printf("============\n\n");
 
     // While there is another value in the symbol table,
     // print out the values in the symbol table.
     while(hasMore) {
 
         // Print out the the current value in the symbol 
-        // table and move to the next entry in the table. 
-        // Call a separate print function to print out each
-        // attribute (set/symbol table) for each value.
-        printf("%s: ", getCurrentName((SymTab (*))table));
-        printSetAttribute(getCurrentAttr((SymTab (*))table));
+        // table. Call a separate print function to print
+        // out each attribute (set/symbol table) for each 
+        // value. Move to the next entry in the table.
+        printf("%s: ", getCurrentName(table));
+        printSetAttribute(getCurrentAttr(table));
         printf("\n");
-        hasMore = nextEntry((SymTab (*))table);
+        hasMore = nextEntry(table);
     }
-    printSymbolTable(table); // --> DEBUGGING STATEMENT; REMOVE LATER!!!
+
+    // Print a final newline character for the output.
+    printf("\n");
+
+    // Call the add table function to store a
+    // reference to the table created in this 
+    // function in order to destroy it later. --> CHECK THIS LATER!!!
+    addTableReference(table);
 }
 
 /**
@@ -112,8 +128,8 @@ void storeVar(char *name, SymTab *set) {
 
     // Store the variable name in the table
     // and set the current attribute.
-    enterName((SymTab (*))table, name);
-    setCurrentAttr((SymTab (*))table, (void*)set);
+    enterName(table, name);
+    setCurrentAttr(table, (void*)set);
 }
 
 /**
@@ -126,19 +142,23 @@ SymTab* getVal(char *name) {
 
     // Check if the variable name is not 
     // existent in the symbol table. 
-    if(enterName((SymTab (*))table, name)) {
+    if(enterName(table, name)) {
+
+        // Create an empty symbol table to store
+        // in the main symbol table.
+        SymTab* emptyTable = createSymTab(17);
 
         // If the name is not already in the table,
         // set the current attribute to an empty set
         // (NULL) and write out some messages.
         writeIndicator(getCurrentColumnNum());
         writeMessage("Initialize variable to empty");
-        setCurrentAttr((SymTab (*))table, (void*)NULL);
+        setCurrentAttr(table, (void*)emptyTable);
     }
 
     // Return the current attribute in the table
     // (this is the set assigned to a value).
-    return (SymTab*) getCurrentAttr((SymTab (*))table);
+    return (SymTab*)getCurrentAttr(table);
 }
 
 /**
@@ -153,9 +173,9 @@ SymTab* doUNION(SymTab *set1, SymTab *set2) {
     // in as parameters.
     SymTab* unionSymTab = createSymTab(17);
     
-    // If either of the sets/symbol tables are not NULL,
-    // then peform a union of the two sets/symbol tables.
-    if(set1 || set2) {
+    // If the first set/symbol table is not NULL, then add
+    // the contents of that set to the new set/symbol table.
+    if(set1) {
 
         // Create an integer value for the start iterator function.
         // This is for the first set.
@@ -172,6 +192,11 @@ SymTab* doUNION(SymTab *set1, SymTab *set2) {
             entryUnionSymTab1 = enterName(unionSymTab, getCurrentName(set1));
             moveSet1 = nextEntry(set1);
         }
+    }
+
+    // If the second set/symbol table is not NULL, then add
+    // the contents of that set to the new set/symbol table.
+    if(set2) {
 
         // Create an integer value for the start iterator function.
         // This is for the second set.
@@ -189,6 +214,11 @@ SymTab* doUNION(SymTab *set1, SymTab *set2) {
             moveSet2 = nextEntry(set2);
         }
     }
+
+    // Call the add table function to store a
+    // reference to the table created in this 
+    // function in order to destroy it later.
+    addTableReference(unionSymTab);
 
     // Return the set/symbol table that contains
     // the union of set 1 and set 2 (symbol tables).
@@ -237,6 +267,11 @@ SymTab* doINTERSECT(SymTab *set1, SymTab *set2) {
         }
     }
 
+    // Call the add table function to store a
+    // reference to the table created in this 
+    // function in order to destroy it later.
+    addTableReference(intersectSymTab);
+
     // Return the set/symbol table that contains the
     // intersection of set 1 and set 2 (symbol tables).
     return intersectSymTab;
@@ -246,6 +281,15 @@ SymTab* doINTERSECT(SymTab *set1, SymTab *set2) {
  * The function creates a new set (symbol
  * table) from the set literal (char*) that
  * is passed in as a parameter.
+ *
+ * NOTE: In this function, the name is looped 
+ * through backwards in order to ensure that
+ * characters such as the commas, braces,
+ * newline characters and NULL-terminating 
+ * characters are NOT included in the table.
+ *
+ * --> You could have also used the strtok()
+ * --> (the string token function) as well.
  */
 SymTab* makeSet(char *name) {
     
@@ -253,33 +297,60 @@ SymTab* makeSet(char *name) {
     // the set literal will be stored.
     SymTab* newSet = createSymTab(17);
 
-    // Create an integer to detect how the
-    // set literal was inserted into the table.
-    int entry = 0;
+    // Loop through the set literal, which may
+    // be a comma delimited list of letters, and
+    // store the letters in the symbol table.
+    int i;
+    for(i = strlen(name) - 1; i > -1; i--) {
 
-    // If the value of the set literal is empty, "",
-    // then create an empty set. Otherwise, add
-    // the set literal to the symbol table.
-    if(!(strlen(name) == 0)) {
+        // If a given character in the set literal is not
+        // a comma, or brace, store it in the symbol table.
+        if(name[i] != '{' && name[i] != ',' && name[i] != '}') {
 
-        // Loop through the set literal, which may
-        // be a comma delimited list of letters, and
-        // store the letters in the symbol table.
-        int i;
-        for(i = 0; i < strlen(name); i++) {
+            // Enter the given part of the string literal
+            // into the new symbol table (set).
+            enterName(newSet, &name[i]);
+        } else {
 
-            // If a given character in the set literal is not
-            // a comma, or brace, store it in the symbol table.
-            if(name[i] != '{' && name[i] != ',' && name[i] != '}') {
-
-                // Enter the given part of the string literal
-                // into the new symbol table (set).
-                entry = enterName(newSet, &name[i]);
-            }
+            // If the given character is a comma or either
+            // brace, set that character to the NULL char.
+            name[i] = '\0';
         }
     }
+
+    // Call the add table function to store a
+    // reference to the table created in this 
+    // function in order to destroy it later.
+    addTableReference(newSet);
 
     // Return the new symbol table or set
     // from the function
     return newSet;
+}
+
+/**
+ * The function adds any new symbol table that is utilized
+ * throughout the process of running the program to a main 
+ * symbol table in order to free all of the allocated
+ * memory. This process of freeing memory is conducted at
+ * the conclusion of the program.
+ */
+void addTableReference(SymTab *newTable) {
+
+    // Create a char array to store the name for the
+    // table that will be inserted into the table for
+    // tracking all other tables.
+    char newTableName[20];
+
+    // Use the print function to combine the name of the table 
+    // with the table counter. This name is entered into the 
+    // symbol table that holds all of the symbol tables. 
+    snprintf(newTableName, 20, "table_%d", countTables);
+    enterName(allTables, newTableName);
+
+    // The table being inserted into the main symbol table
+    // is added to the attribute for the name that was entered
+    // above. The counter variable is then increased.
+    setCurrentAttr(allTables, newTable);
+    countTables++;
 }

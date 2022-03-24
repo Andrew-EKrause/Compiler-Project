@@ -57,7 +57,7 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 #line 10 "h3.y"
-{ 
+{
     SymTab* set;
     char* string;
 }
