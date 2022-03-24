@@ -6,33 +6,33 @@
 
 int main() {
 
-    // TEST 1
-    if(openFiles("testSourceFile.txt", "testListingFile.txt")) {
+    // // TEST 1
+    // if(openFiles("testSourceFile.txt", "testListingFile.txt")) {
 
-        while(getNextSourceChar() != EOF) {
+    //     while(getNextSourceChar() != EOF) {
 
-        }
+    //     }
 
-        closeFiles();
+    //     closeFiles();
 
-        printf("Test 1 Done.\n");
-    } else {
-        printf("Test 1 Skipped.\n");
-    }
+    //     printf("Test 1 Done.\n");
+    // } else {
+    //     printf("Test 1 Skipped.\n");
+    // }
 
-    // TEST 2
-    if(openFiles("testSourceFile.txt", NULL)) {
+    // // TEST 2
+    // if(openFiles("testSourceFile.txt", NULL)) {
 
-        while(getNextSourceChar() != EOF) {
+    //     while(getNextSourceChar() != EOF) {
 
-        }
+    //     }
 
-        closeFiles();
+    //     closeFiles();
 
-        printf("Test 2 done.\n");
-    } else {
-        printf("Test 2 skipped.\n");
-    }
+    //     printf("Test 2 done.\n");
+    // } else {
+    //     printf("Test 2 skipped.\n");
+    // }
 
     // TEST 3
     if(openFiles("testSourceFile.txt", "testListingFile.txt")) { // Test with listing file and NULL: "testListingFile.txt" | NULL
