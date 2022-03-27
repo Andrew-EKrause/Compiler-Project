@@ -1,0 +1,14 @@
+============
+   Output:
+============
+
+f: {a,b,c,d}
+w: {f,x,a,b,c,d,e}
+g: {f,c,d,e}
+x: {f,a,b,c,d,e}
+h: {a,b,c}
+y: {}
+i: {a,b,c}
+z: {x}
+a: {f,x,a,b,c,d,e}
+b: {}

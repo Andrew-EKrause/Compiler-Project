@@ -29,7 +29,7 @@
 // Define functions not specified in the .h file 
 // here as internal functions.
 int createHashValue(int tableSize, char *name);
-// void printSymbolTable(SymTab *table); // --> PUT IN SEPARATE TEST FILES TO PRINT.
+// void printSymbolTable(SymTab *table); // --> PUT IN SEPARATE TEST FILES TO PRINT TABLE.
 
 /**
  * The function creates a new Symbol table by allocating
@@ -326,7 +326,7 @@ int nextEntry(SymTab *table) {
     // First check if current is NULL, which indicates
     // that all (name, attribute) pairs have been visited
     // since the last call or the table is empty.
-    if(table->current == NULL) {
+    if(!table->current) {
 
         // Did not move to any next entry.
         return 0;
@@ -335,49 +335,19 @@ int nextEntry(SymTab *table) {
     // Get the hash value of the current attribute in the symbol table.
     int hashValue = createHashValue(table->size, table->current->name);
 
-    // If the hash value is the table size - 1, that means that the
-    // current (name, attribute) pair is located in the last slot
-    // of the symbol table. Therefore, you need to check it.
-    if(hashValue == table->size - 1) {
-
-        // Create temporary variables to traverse 
-        // through the entries in the given slot.
-        SymEntry *currentEntry = table->contents[hashValue];
-        SymEntry *nextEntry;
-
-        // While there are still entries in the slot,
-        // move through each entry in the given slot.
-        while(currentEntry != NULL) {
-
-            // Move to the next entry in the slot.
-            nextEntry = currentEntry;
-            currentEntry = currentEntry->next;
-        }
-
-        // When you get to the end of the entries in 
-        // the given slot, check if there are no other
-        // entries after the current entry in the slot.
-        if(nextEntry != NULL && (strcmp(nextEntry->name, table->current->name) == 0)) {
-
-            // If the conditional is met, there are
-            // no other next entries in the table.
-            return 0;
-        }
-    }
-
     // If the current entry in the table has a next reference,
     // move to that next reference, which is the next entry.
     if(table->current->next == NULL) {
 
         // Move to the next slot in the table.
-        hashValue += 1;
+        hashValue++;
 
         // While the given slot in the table is NULL,
         // move to the next slot in the symbol table.
-        while(table->contents[hashValue] == NULL) {
+        while((hashValue < table->size) && (table->contents[hashValue] == NULL)) {
 
             // Move to the next slot in the symbol table.
-            hashValue += 1;
+            hashValue++;
 
             // If there are no other slots to visit
             // in the symbol table, return 0.
@@ -388,9 +358,20 @@ int nextEntry(SymTab *table) {
             }
         }
 
-        // Set the next entry equal to the first entry 
-        // in the next open, non-NULL slot in the table.
-        table->current = table->contents[hashValue];
+        // If the hash value is still less than the table
+        // size, then set the current to the new row in 
+        // table.
+        if(hashValue < table->size) {
+
+            // Set the next entry equal to the first entry 
+            // in the next open, non-NULL slot in the table.
+            table->current = table->contents[hashValue];
+        } else {
+
+            // If the hash value is not less than
+            // the table size, return zero.
+            return 0;
+        }
     } else {
 
         // Otherwise, if the current entry in the table has a next 

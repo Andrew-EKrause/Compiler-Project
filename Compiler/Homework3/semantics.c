@@ -130,6 +130,7 @@ void storeVar(char *name, SymTab *set) {
     // and set the current attribute.
     enterName(table, name);
     setCurrentAttr(table, (void*)set);
+    // --> SUPPOSED TO DO ONE OTHER THING HERE???
 }
 
 /**

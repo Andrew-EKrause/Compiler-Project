@@ -18,16 +18,6 @@
  * 
  */
 
-// ASK BEN ABOUT THE ISSUE WHERE THE INDICATOR IS NOT
-// POINTING TO THE CORRECT LOCATION IN THE CASE OF }p ON 
-// THE LAST LINE. 
-
-// ALSO SEE WHAT IS GOING ON WITH THE CASE WHERE YOU 
-// HAVE AN EXTRA BLANK LINE (AT THE END) AFTER THE
-// OTHER INFO IN YOUR TEST SOURCE FILES, AND THE LAST
-// LINE OF THAT SOURCE FILE IS PRINTED TWICE IN THE 
-// LISTING FILE FOR SOME REASON.
-
 // Include the standard I/O library,
 // a second C library of functions,
 // and the  IOMngr.h source file.
@@ -156,7 +146,7 @@ char getNextSourceChar() {
     if(sourceFile) {
 
         // Check if the end of a given line was reached.
-        if(((int)(strlen(lineOfChars)) == currentColumnNum) || lineOfChars[currentColumnNum] == '\n') { // --> KEEP AN EYE ON THIS!!!
+        if(((int)(strlen(lineOfChars)) == currentColumnNum) || lineOfChars[currentColumnNum] == '\n') {
 
             // If end of file reached, reset the 
             // variables for the next iteration.
@@ -176,6 +166,10 @@ char getNextSourceChar() {
             // If you need to move to the next line in the file,
             // increment the line number counter for the file.
             currentLineNum++;
+
+            // Add an end of line character to the line in order
+            // to properly move to the next line in the file.
+            lineOfChars[0] = '\0';
 
             // Once the newline is reached on any given line, 
             // get the next line from the source file.
@@ -248,6 +242,14 @@ void writeIndicator(int column) {
     // '^' character to standard output.
     if(listingFile) {
 
+        // If the end of the source file has been
+        // reached, print out a newline character
+        // to the listing file before printing out
+        // the indicator.
+        if(feof(sourceFile)) {
+            fprintf(listingFile, "\n");
+        }
+
         // While the counter variable is less than the
         // column parameter, move the '^' variable by
         // a space until you reach the correct location
@@ -266,6 +268,14 @@ void writeIndicator(int column) {
         fprintf(listingFile, "\n");
 
     } else {
+
+        // If the end of the source file has been
+        // reached, print out a newline character
+        // to standard out before printing out the
+        // indicator.
+        if(feof(sourceFile)) {
+            fprintf(stdout, "\n");
+        }
 
         // While the counter variable is less than the
         // column parameter, move the '^' variable by
