@@ -1,0 +1,11 @@
+x = {a,b,c,d,e,f,g,h,i,j,k,l,m} + {n,o,p,q,r,s,t,u,v,w,x,y,z};
+y = {a,b,c};
+z = x * y;
+w = x + z * {};
+a = {a,b,c,d,e};
+b = {h,i,j,k,l};
+c = {m,n,o,p,a};
+f = a + b + c;
+t = a * b * c;
+y = x + y + z * f;
+z = x + y * a + c + {} + t;

@@ -1,0 +1,12 @@
+============
+   Output:
+============
+
+f: {}
+g: {w,y,i,k,l,o,p,q,r,c,t,u,e}
+h: {w,x,g,y,h,i,z,j,k,l,m,n,o,p,r,a,c,u}
+a: {w,x,g,y,z,a,c}
+b: {g,h,j,k,l,a,c}
+c: {w,y,i,k,l,o,r,c,u}
+d: {w,g,x,y,z,k,l,m,n,o,p,a,c}
+e: {w,g,x,y,z,m,n,a,c}

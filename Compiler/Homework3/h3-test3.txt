@@ -1,0 +1,16 @@
+x = {a,b,c,d,e,f,g,h};
+y = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p};
+z = x * y;
+w = x + y * x;
+a = x + y;
+b = (x + y + z + w) * y;
+f = {a,b,c,d};
+g = {c,d,e,f};
+h = {a,b,c};
+i = f * h + g * h;
+j = {q,w,e,r,r,s,d,r};
+k = x + y + z + w + a + b + f + g + h + i + j;
+l = x * y * z * w * a * b * f * g * h * i * j;
+m = k * l;
+n = {};
+o = {a,c,b,d,w,d,s,s,a} + k * j;

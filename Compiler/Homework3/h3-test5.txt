@@ -1,0 +1,8 @@
+a = {a,b,c,d,e,f,g,h} * {a,c,e,g} + {w,x,y,z};
+b = {g,h,j,k,l} + {a,c,e,g};
+c = {w,e,w,i,l,l,w,e,w,i,l,l} + {r,o,c,k,y,o,u};
+d = (a + b) * (a + c) + {m,n,o,p};
+e = ({v,b,n,m,z,x,d,a,q} * d) + a;
+f = {} * {};
+g = {q,w,e,r,t,y,u,i,o,p} + (f + c) * (a + b);
+h = a + b + c + d + (e + f * g);
