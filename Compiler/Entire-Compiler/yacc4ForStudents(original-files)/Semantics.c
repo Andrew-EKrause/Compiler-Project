@@ -15,9 +15,9 @@ extern SymTab *table;
 
 /* Semantics support routines */
 
-struct ExprRes *  doIntLit(char * digits)  { 
+struct ExprRes *  doIntLit(char * digits) { 
 
-   struct ExprRes *res;
+  struct ExprRes *res;
   
   res = (struct ExprRes *) malloc(sizeof(struct ExprRes));
   res->Reg = AvailTmpReg();

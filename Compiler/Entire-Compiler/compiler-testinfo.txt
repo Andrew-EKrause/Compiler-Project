@@ -1,0 +1,23 @@
+
+==================================================
+TEST 1: Series of Commands to test your Compiler:
+==================================================
+
+1. bison -d ExprEval.y
+2. flex lex1.l
+3. gcc -o compiler y.tab.c lex.yy.c Semantics.c SymTab.c IOMngr.c main.c -fsanitize=address
+4. ./compiler source listing.lst asmCode.asm
+
+WILL WANT TO CREATE A makefile AND/OR A BASH SCRIPT FOR ALL THIS!!!
+
+==================================================
+NOTES:
+
+// COMPILING WITH gdb WILL HELP YOU DEBUG YOUR CODE EASIER.
+
+// There is some memory management that you will have to worry about 
+// for the main compiler project.
+
+==================================================
+
+BACKUP:

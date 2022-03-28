@@ -195,5 +195,3 @@ RegOff(int Offset, char * Reg)
   sprintf(Buf,"%d(%s)",Offset,Reg);
   return Buf;
 }
-
-

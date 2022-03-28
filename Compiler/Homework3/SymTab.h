@@ -10,9 +10,9 @@
     A SymEntry is the building block for linked lists of (name, attribute) pairs.
 */
 typedef struct SymEntry {
-    char * name;
-    void * attribute;
-    struct SymEntry * next;
+    char *name;
+    void *attribute;
+    struct SymEntry *next;
 } SymEntry; 
 
 /*
@@ -34,14 +34,14 @@ typedef struct {
     table
     Return a pointer to a new symbol table
 */
-SymTab * createSymTab(int size);
+SymTab *createSymTab(int size);
 
 // ============================================================================
 // In the following functions, assume a pre-condition that table references a 
 // previously created symbol table: 
 // ============================================================================
 
-// recover space created by the symbol table functions
+// Recover space created by the symbol table functions
 // no functions should use the symbol table after it is destroyed
 void destroySymTab(SymTab *table);
 
@@ -55,7 +55,7 @@ void destroySymTab(SymTab *table);
 int enterName(SymTab *table, char *name);
 
 /*
-    if name is in the symbol table, set current to reference the (name, attribute)
+    If name is in the symbol table, set current to reference the (name, attribute)
     pair and return 1
     otherwise do not change current and return 0
 */
@@ -71,11 +71,11 @@ void setCurrentAttr(SymTab *table, void *attr);
 
 // PRE: hasCurrent() == 1
 // return the attribute in the current (name, attribute) pair
-void * getCurrentAttr(SymTab *table);
+void *getCurrentAttr(SymTab *table);
 
 // PRE: hasCurrent() == 1
 // return the name in the current (name, attribute) pair
-char * getCurrentName(SymTab *table);
+char *getCurrentName(SymTab *table);
 
 /* 
     Assume no changes are made to the symbol table while 
@@ -86,7 +86,7 @@ char * getCurrentName(SymTab *table);
 int startIterator(SymTab *table);
 
 /*
-    if all (name, attribute) pairs have been visited since the last call to
+    If all (name, attribute) pairs have been visited since the last call to
     startIterator, return 0
     otherwise set current to the "next" (name, attribute) pair and return 1
 */
