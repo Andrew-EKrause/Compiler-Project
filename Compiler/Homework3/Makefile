@@ -22,8 +22,10 @@ LEX = h3.l # Lexical file; this file name can change
 BISON = h3.y # Bison file; this file name can change
 OFLAG = -o # Flag to indicate use of object file
 CFLAG = -c # Flag to avoid linking
-GFLAG = -g # Flag to invoke GDB debugger
-FFLAG = -fsanitize=address # Flag to use fsanitize for memory leaks
+GFLAG = -g -ggdb # Flags to invoke GDB debugger
+WFLAG = -Wall -Werror -Wextra # Flags to show warnings
+MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan 
+# Flags directly above are used to check for memory leaks
 
 # ===============================================
 # Run all of the tests here. The tests run all 
@@ -32,7 +34,7 @@ FFLAG = -fsanitize=address # Flag to use fsanitize for memory leaks
 main:
 	bison -d $(BISON)
 	flex $(LEX)
-	$(CC) $(OFLAG) h3 h3.tab.c lex.yy.c semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(FFLAG)
+	$(CC) $(OFLAG) h3 h3.tab.c lex.yy.c semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(MEMCHECK)
 
 # ===============================================
 # Group of cleaning protocols after execution.

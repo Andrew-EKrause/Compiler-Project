@@ -247,7 +247,6 @@ void Finish(struct InstrSeq *Code) {
     int hasMore;
     struct Attr * attr;
 
-
     code = GenInstr(NULL, ".text", NULL, NULL, NULL);
     // --> NOT SURE WHY THE CODE BELOW IS COMMENTED OUT. CHECK LATER!!!
     // AppendSeq(code,GenInstr(NULL,".align","2",NULL,NULL));
@@ -260,13 +259,23 @@ void Finish(struct InstrSeq *Code) {
     AppendSeq(code, GenInstr(NULL, ".align", "4", NULL, NULL));
     AppendSeq(code, GenInstr("_nl", ".asciiz", "\"\\n\"", NULL, NULL));
 
+    // Traverse the symbol table and 
     hasMore = startIterator(table);
+
+    // Traverse the symbol table and add the following assembly code
+    // information to each instruction to avoid dropping off of the
+    // program.
     while (hasMore) {
 
+        // Add the following code to the instructions in order to 
+        // avoid dropping off the program, and move to then next
+        // entry in the symbol table.
 	    AppendSeq(code, GenInstr((char *) getCurrentName(table), ".word", "0", NULL, NULL));
         hasMore = nextEntry(table);
     }
   
+    // Write the obtained data out to a listing 
+    // file and return from the function.
     WriteSeq(code);
     return;
 }

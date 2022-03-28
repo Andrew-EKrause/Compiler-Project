@@ -18,15 +18,17 @@ CC = gcc # Flag to pass to gcc
 LEX = lexical.l # Lexical file; this file name can change
 OFLAG = -o # Flag to indicate use of object file
 CFLAG = -c # Flag to avoid linking
-GFLAG = -g # Flag to invoke GDB debugger
-FFLAG = -fsanitize=address # Flag to use fsanitize for memory leaks
+GFLAG = -g -ggdb # Flags to invoke GDB debugger
+WFLAG = -Wall -Werror -Wextra # Flags to show warnings
+MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan 
+# Flags directly above are used to check for memory leaks
 
 # ===============================================
 # Run all of the tests here. The tests for the
 # lexical analysis are run in main as well.
 # ===============================================
 main: IOMngr.o IOMngrTests.o
-	$(CC) IOMngr.o IOMngrTests.o $(OFLAG) iomanagertests $(GFLAG) -Wextra $(FFLAG)
+	$(CC) IOMngr.o IOMngrTests.o $(OFLAG) iomanagertests $(GFLAG) $(WFLAG) $(MEMCHECK)
 	flex $(LEX)
 	$(CC) IOMngr.c lex.yy.c -ll $(OFLAG) lexicaltests
 
@@ -36,11 +38,11 @@ main: IOMngr.o IOMngrTests.o
 
 # Create an object file for the IO Manager file.
 IOMngr.o: IOMngr.c IOMngr.h
-	$(CC) $(CFLAG) IOMngr.c $(GFLAG) $(FFLAG)
+	$(CC) $(CFLAG) IOMngr.c $(GFLAG) $(MEMCHECK)
 
 # Create an object file for the testing file.
 IOMngrTests.o: IOMngrTests.c
-	$(CC) $(CFLAG) IOMngrTests.c $(GFLAG) $(FFLAG)
+	$(CC) $(CFLAG) IOMngrTests.c $(GFLAG) $(MEMCHECK)
 
 # ===============================================
 # Group of cleaning protocols after execution.

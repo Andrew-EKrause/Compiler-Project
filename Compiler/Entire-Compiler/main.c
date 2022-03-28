@@ -26,8 +26,10 @@
 #include "IOMngr.h"
 
 // Include the yyparse() function
-// as an external function.
+// as an external function. Also
+// include the destroy lex function.
 extern int yyparse();
+extern int yylex_destroy();
 
 // Create a global variable of 
 // type symbol table to store
@@ -79,4 +81,9 @@ int main(int argc, char * argv[]) {
 	// Call the yyparse() function to
 	// begin the compiling process.
 	yyparse();
+
+	// Close all the files at the end of the program
+    // and call yylex_destroy() to free up memory.
+    closeFiles();
+    yylex_destroy();
 }

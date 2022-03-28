@@ -27,7 +27,10 @@
 #include "IOMngr.h"
 
 // Include the parse function.
+// Also include the destroy
+// lex function.
 extern int yyparse();
+extern int yylex_destroy();
 
 // Include function definitions.
 void freeAllTables(SymTab *freeTable);
@@ -67,10 +70,15 @@ int main(int argc, char *argv[]) {
     if(!openFiles(argv[1], "listing")) {
         
         // Print file opening failure 
-        // message and exit.
+        // message, clean up memory,
+        // and exit.
         printf("open failed\n");
+        goto cleanup;
         exit(0);
     }
+
+    // Label for cleaning up memory.
+    cleanup:
 
     // Call the parsing function.
     yyparse();
@@ -81,6 +89,11 @@ int main(int argc, char *argv[]) {
     // purposes and should not be included in 
     // regular output.
     // printSymbolTable(table); // --> EXTRA PRINT CHECK.
+
+	// Close all the files at the end of the program
+    // and call yylex_destroy() to free up memory.
+    closeFiles();
+    yylex_destroy();
 
     // Free all the tables at the conclusion
     // of the program.
