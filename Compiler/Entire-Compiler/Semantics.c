@@ -46,44 +46,102 @@ extern SymTab *table;
 /* Semantics support routines */
 /* ========================== */
 
+/**
+ * The function returns a struct that contains
+ * a new instruction generated within the function.
+ * The function handles cases where an int literal
+ * is being evaluated. The function ensures that
+ * the int literal is added into a register via
+ * the "li" label (It loads an immediate value
+ * into a register).
+ */
 struct ExprRes *doIntLit(char *digits) { 
 
+    // Create a struct of type ExprRes to store 
+    // the new instruction being created.
     struct ExprRes *res;
   
+    // Allocate space for the struct, find the available registers to
+    // use for creation of the instruction, and generate the instruction.
     res = (struct ExprRes *) malloc(sizeof(struct ExprRes));
     res->Reg = AvailTmpReg();
     res->Instrs = GenInstr(NULL, "li", TmpRegName(res->Reg), digits, NULL);
 
+    // Return the resulting instruction.
     return res;
 }
 
+/**
+ * The function returns a struct that contains a new
+ * instruction generated within the function. The
+ * function handles cases where data is being stored
+ * at some address in memory. The function ensures
+ * that the r-value is added into a register via
+ * the "lw" label (It loads the data from the data
+ * memory through a specified address).
+ */
 struct ExprRes *doRval(char *name) { 
 
+    // Create a struct of type ExprRes to store
+    // the new instruction being created.
     struct ExprRes *res;
   
+    // If the value is not found in the symbol table,
+    // meaning it was never created, return an error.
     if(!findName(table, name)) {
 		writeIndicator(getCurrentColumnNum());
 		writeMessage("Undeclared variable");
     }
 
+    // Allocate space for the struct, find the available registers to
+    // use for creation of the instruction, and generate the instruction.
     res = (struct ExprRes *) malloc(sizeof(struct ExprRes));
     res->Reg = AvailTmpReg();
     res->Instrs = GenInstr(NULL, "lw", TmpRegName(res->Reg), name, NULL);
 
+    // Return the resulting instruction.
     return res;
 }
 
+/**
+ * The function returns a struct that contains a new
+ * instruction generated within the function. The
+ * function handles cases where data is being added
+ * together. Two integer values are combined in the
+ * process of addition. The function ensures that
+ * the values are added together in a process that 
+ * stores the result in a third register. The label
+ * for this process is the "add" label (It stores 
+ * the data added together via register2 and register3
+ * in register1).
+ */
 struct ExprRes *doAdd(struct ExprRes *Res1, struct ExprRes *Res2) { 
 
+    // Create an integer variable to represent 
+    // the available temporary registers.
     int reg;
     reg = AvailTmpReg();
 
+    // Call the AppendSeq function to determine what
+    // registers are open as well as add the instrutions
+    // to the linked list of instructions.
     AppendSeq(Res1->Instrs, Res2->Instrs);
     AppendSeq(Res1->Instrs, GenInstr(NULL, "add", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
+    
+    // Call the functions below to indicate 
+    // that the registers used in the "add" 
+    // operation are now free to use again. 
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
     
+    // Set the register number of the result
+    // equal to the "reg" variable that was used
+    // to determine what register number to use
+    // for the operation.
     Res1->Reg = reg;
+    
+    // Free the space in the result variable,
+    // and return the other result.
     free(Res2);
     return Res1;
 }

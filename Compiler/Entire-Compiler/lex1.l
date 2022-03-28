@@ -1,7 +1,8 @@
 %{
     // #include "yaccExample.h"
     #include "IOMngr.h"
-    #include "y.tab.h"
+    // #include "y.tab.h"
+    #include "ExprEval.tab.h"
 
     #define YY_INPUT(buf,result,max_size) \
 	{ int c = getNextSourceChar(); \
