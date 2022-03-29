@@ -1,0 +1,25 @@
+
+int val;
+read(val);
+
+if (val % 2 == 0) {
+    print(1);
+} else {
+    print(2);
+}
+
+while(val > 0) {
+    print(val);
+    val = val - 1;
+}
+
+printlines(1);
+
+for (val = 0; val <= 10; val = val + 1) {
+    print(val);
+    printlines(1);
+    
+    if (val == 5) {
+        val = 8;
+    }
+}

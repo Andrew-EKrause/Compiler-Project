@@ -16,19 +16,42 @@ digit [0-9]
 %%
 
 if					                      {return IF;}
+else                                      {return ELSE;}
+while                                     {return WHILE;}
+for                                       {return FOR;}
 int					                      {return Int;}
+read                                      {return Read;}
+printlines                                {return Printlines;}
+printspaces                               {return Printspaces;}
 print					                  {return Write;}
+
 {letter}({letter}|{digit})*	              {return Ident;}
 {digit}{digit}*		                      {return IntLit;}
+
 \=\=					                  {return EQ;}
+\!\=                                      {return NOT_EQ;}
+\<\=                                      {return LT_OR_EQ;}
+\>\=                                      {return GT_OR_EQ;}
+\<                                        {return LT;}
+\>                                        {return GT;}
+\!                                        {return '!';}
+\|\|                                      {return OR;}
+\&\&                                      {return AND;}
+
 \=					                      {return '=';}
 \+					                      {return '+';}
+\-                                        {return '-';}
 \*					                      {return '*';}
+\/                                        {return '/';}
+\^                                        {return '^';}
+\%                                        {return '%';}
+
 \;					                      {return ';';}
 \{					                      {return '{';}
 \}					                      {return '}';}
 \(					                      {return '(';}
 \)					                      {return ')';}
+\,                                        {return ',';}
 
 [ ]				                          {}
 \t			        	                  {}

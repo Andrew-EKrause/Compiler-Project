@@ -45,51 +45,79 @@ struct BExprRes {
     struct InstrSeq * Instrs;
 };
 
+/*
+    The struct is a linked list of
+    nodes that can contain arguments
+    and expressions.
+*/
+struct Node {
+    void *name;
+    struct Node *next;
+};
+
 /* ================= */
 /* Semantics Actions */
 /* ================= */
 
 /* 
-    The function handles the case where there is an int literal.
+    The functions handle the cases where there is an int literal.
 */
 extern struct ExprRes *doIntLit(char *digits);
-
-/* 
-    The function handles the case where there is an R-value. 
-*/
+extern struct ExprRes *doIntLitNeg(char *digits);
 extern struct ExprRes *doRval(char *name);
-
-/* 
-    The function completes an assignment to a variable. 
-*/
 extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
 
 /* 
-    The function performs the addition operation. 
+    The functions handle the cases for basic arithmetic operations.
 */
 extern struct ExprRes *doAdd(struct ExprRes *Res1, struct ExprRes *Res2);
-
-/* 
-    The function performs the multiplication operation. 
-*/
+extern struct ExprRes *doSubtraction(struct ExprRes *Res1, struct ExprRes *Res2);
 extern struct ExprRes *doMult(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doDiv(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2);
 
-/* 
-    The function completes a print operation. Whenever values need 
-    to be printed out to a console, the function changes the C-like
-    code to assembly code.
+/*
+    The functions handle the cases for printing out values.
 */
 extern struct InstrSeq *doPrint(struct ExprRes *Expr);
+extern struct InstrSeq *doPrintlines(struct ExprRes *Res);
+extern struct InstrSeq *doPrintspaces(struct ExprRes *Res);
+extern struct InstrSeq *doRead(struct Node *node);
 
 /*  
-    The function completes a B-expression operation.
+    The functions complete branch expression operations.
 */
-extern struct BExprRes *doBExpr (struct ExprRes *Res1, struct ExprRes *Res2);
+// extern struct BExprRes *doBExpr(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doBExprEq(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doBExprNotEq(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doBExprLtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doBExprGtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
+
+/*
+    The functions handle control flow and conditonal operations.
+*/
+extern struct ExprRes *doBExprLt(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doBExprGt(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doNegate(struct ExprRes *Res1);
+extern struct ExprRes *doOr(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doAnd(struct ExprRes *Res1, struct ExprRes *Res2);
 
 /* 
-    The function completes a do-if expression operation.
+    The functions handle cases where there are conditionals and loops.
+    In other words, additional control flow.
 */
-extern struct InstrSeq *doIf(struct BExprRes *bRes, struct InstrSeq *seq);
+extern struct InstrSeq *doIf(struct BExprRes *Res, struct InstrSeq *seq);
+extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, struct InstrSeq *seq2);
+extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq);
+extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *CondRes, struct InstrSeq *Assignment2, struct InstrSeq *seq);
+
+/*
+    The functions enable multiple arguments and expressions to be 
+    handled together by appending them to various lists.
+*/
+extern struct Node *appendToArgList(char *c, struct Node *next);
+extern struct Node *appendToExprList(struct ExprRes *Res1, struct Node *next);
 
 /*
     The function adds the assembly code that appears
