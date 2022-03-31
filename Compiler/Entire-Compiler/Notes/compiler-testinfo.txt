@@ -3,10 +3,10 @@
 TEST 1: Series of Commands to test your Compiler:
 ==================================================
 
-1. bison -d ExprEval.y
+1. bison -d ExprEval.y // --> Include a "-v" flag if you ever want to see the output of the yacc file!
 2. flex lex1.l
 3. gcc -o compiler y.tab.c lex.yy.c Semantics.c SymTab.c IOMngr.c main.c -fsanitize=address
-4. ./compiler source listing.lst asmCode.asm
+4. ./compiler ./Tests/in1 listing.lst asmCode.asm
 
 WILL WANT TO CREATE A bash script FOR ALL THIS!!!
 

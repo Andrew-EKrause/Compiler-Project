@@ -81,6 +81,7 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2);
     The functions handle the cases for printing out values.
 */
 extern struct InstrSeq *doPrint(struct ExprRes *Expr);
+//extern struct InstrSeq *doPrint(struct Node *node);
 extern struct InstrSeq *doPrintlines(struct ExprRes *Res);
 extern struct InstrSeq *doPrintspaces(struct ExprRes *Res);
 extern struct InstrSeq *doRead(struct Node *node);
@@ -107,7 +108,7 @@ extern struct ExprRes *doAnd(struct ExprRes *Res1, struct ExprRes *Res2);
     The functions handle cases where there are conditionals and loops.
     In other words, additional control flow.
 */
-extern struct InstrSeq *doIf(struct BExprRes *Res, struct InstrSeq *seq);
+extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq);
 extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, struct InstrSeq *seq2);
 extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq);
 extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *CondRes, struct InstrSeq *Assignment2, struct InstrSeq *seq);

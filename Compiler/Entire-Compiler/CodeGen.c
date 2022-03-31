@@ -129,7 +129,9 @@ extern struct InstrSeq *AppendSeq(struct InstrSeq *Seq1, struct InstrSeq *Seq2) 
     // is inserted at the end of the linked list.
     // The loop moves to the next node in the list
     // until the NULL value is reached.
-    while (instr->Next) instr = instr->Next;
+    while(instr->Next) {
+        instr = instr->Next;
+    } 
     instr->Next = Seq2;
 
     // Return the first instruction sequence.

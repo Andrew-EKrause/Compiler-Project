@@ -6,7 +6,7 @@
 #include <strings.h>
 #include <stdlib.h>
 
-#include "CodeGen.h"
+#include "CodeGen.c"
 #include "Semantics.h"
 #include "SymTab.h"
 #include "IOMngr.h"
@@ -123,7 +123,7 @@ extern struct BExprRes * doBExpr(struct ExprRes * Res1,  struct ExprRes * Res2) 
 	AppendSeq(Res1->Instrs, GenInstr(NULL, "bne", TmpRegName(Res1->Reg), TmpRegName(Res2->Reg), bRes->Label));
 	bRes->Instrs = Res1->Instrs;
 	ReleaseTmpReg(Res1->Reg);
-  	ReleaseTmpReg(Res2->Reg);
+  ReleaseTmpReg(Res2->Reg);
 	free(Res1);
 	free(Res2);
 	return bRes;

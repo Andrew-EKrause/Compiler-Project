@@ -428,6 +428,29 @@ struct InstrSeq *doPrint(struct ExprRes *Expr) {
     return code;
 }
 
+// // --> THIS MAY BE THE PRINT THAT YOU WILL ACTUALLY WANT TO USE!!!
+// struct InstrSeq *doPrint(struct Node *node) {
+
+//     struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+//     struct Node *curr = node;
+
+//     while (curr) {
+
+//         struct ExprRes *currInstr = (struct ExprRes *)curr->name;
+
+//         AppendSeq(code, currInstr->Instrs);
+//         AppendSeq(code, GenInstr(NULL, "li", "$v0", "1", NULL));
+//         AppendSeq(code, GenInstr(NULL, "move", "$a0", TmpRegName(currInstr->Reg), NULL));
+//         AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+
+//         ReleaseTmpReg(currInstr->Reg);
+//         free(currInstr);
+//         curr = curr->next;
+//     }
+
+//     return code;
+// }
+
 /**
  * PRINTLINES (series of instructions)
  * 
@@ -848,29 +871,41 @@ extern struct ExprRes *doAnd(struct ExprRes *Res1, struct ExprRes *Res2) {
 /* SECTION FOR CONDITIONALS AND LOOPS: IF, IF-ELSE, WHILE, AND FOR. */
 /* ================================================================== */
 
-/**
- * IF (series of instructions)
- * 
- * The function returns a struct that contains a new
- * instruction generated within the function. The
- * function handles cases where there is a conditional
- * statement in the C-like code (if-statement).
- */
-extern struct InstrSeq *doIf(struct BExprRes *Res, struct InstrSeq *seq) {
+// /**
+//  * IF (series of instructions)
+//  * 
+//  * The function returns a struct that contains a new
+//  * instruction generated within the function. The
+//  * function handles cases where there is a conditional
+//  * statement in the C-like code (if-statement).
+//  */
+// extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
     
-    // Create a struct of type InstrSeq to store
-    // the new instruction being created.
-    struct InstrSeq * seq2;
+//     // Create a struct of type InstrSeq to store
+//     // the new instruction being created.
+//     struct InstrSeq * seq2;
 
-    // Call the AppendSeq function in order to
-    // store the instruction data and add it
-    // to the linked list of instructions.
-    seq2 = AppendSeq(Res->Instrs, seq);
-    AppendSeq(seq2, GenInstr(Res->Label, NULL, NULL, NULL, NULL));
+//     // Call the AppendSeq function in order to
+//     // store the instruction data and add it
+//     // to the linked list of instructions.
+//     seq2 = AppendSeq(Res->Instrs, seq);
+//     AppendSeq(seq2, GenInstr(Res->Label, NULL, NULL, NULL, NULL));
     
-    // Free the branch register used to 
-    // free up memory space and return
-    // the variable from the function.
+//     // Free the branch register used to 
+//     // free up memory space and return
+//     // the variable from the function.
+//     free(Res);
+//     return seq2;
+// }
+
+// --> MAY ACTUALLY WANT TO USE THIS FOR YOUR IF CASE!!!
+extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
+
+    struct InstrSeq *seq2;
+    char *label = GenLabel();
+    AppendSeq(Res->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label));
+    seq2 = AppendSeq(Res->Instrs, seq);
+    AppendSeq(seq2, GenInstr(label, NULL, NULL, NULL, NULL));
     free(Res);
     return seq2;
 }
