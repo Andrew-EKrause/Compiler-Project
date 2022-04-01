@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     // Results are printed out to a file that
     // is created by the program called 
     // "listing".
-    if(!openFiles(argv[1], "listing")) {
+    if(!openFiles(argv[1], "listing.lst")) {
         
         // Print file opening failure 
         // message, clean up memory,

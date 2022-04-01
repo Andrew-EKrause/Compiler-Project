@@ -4,7 +4,3 @@
 4. w = x + z;
 5. a = x + y + z + w;
 6. b = ( x + y + z + w) * y;
-7. f = {a,b,c,d};
-8. g = {d,e,f};
-9. h = {a,c,d,g};
-10. i = f * h + g * h;
