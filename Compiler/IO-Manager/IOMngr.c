@@ -29,7 +29,6 @@
 // Create global file variables. 
 FILE *sourceFile;
 FILE *listingFile;
-char *fileSourceName;
 
 // Create another set of global
 // variables for IO Manager.
@@ -55,7 +54,6 @@ int openFiles(char *sourceName, char *listingName) {
     // conflicts. This enables sequential runs.
     sourceFile = NULL;
     listingFile = NULL;
-    fileSourceName = NULL;
 
     // Reset the global variables here.
     onWriteIndicatorLine = 1;
@@ -73,11 +71,6 @@ int openFiles(char *sourceName, char *listingName) {
     if(sourceFile == NULL) {
         return 0;
     }
-
-    // If the source file is not NULL, then 
-    // store the source name in the global 
-    // variable for the file source name.
-    fileSourceName = strdup(sourceName);
 
     // If the listingName parameter is not NULL,
     // open the file with that name and check if
@@ -117,11 +110,6 @@ void closeFiles() {
     if(listingFile) {
         fclose(listingFile);
     }
-
-    // Free the pointer that was allocated
-    // memory space with strdup() for an array 
-    // of characters (a string for a name).
-    free(fileSourceName);
 }
 
 /**
