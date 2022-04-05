@@ -276,7 +276,7 @@ char *getCurrentName(SymTab *table) {
     // in the current (name, attribute) pair.
     // Otherwise, return 0.
     if(hasCurrent(table)) {
-        return table->current->name;;
+        return table->current->name;
     }
     return 0;
 }
