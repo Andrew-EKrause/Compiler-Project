@@ -269,7 +269,7 @@ struct ExprRes *doMult(struct ExprRes *Res1, struct ExprRes *Res2) {
  * 
  * DESCRIPTION...
  */
-struct ExprRes *doDiv(struct ExprRes *Res1, struct ExprRes *Res2) { 
+struct ExprRes *doDivide(struct ExprRes *Res1, struct ExprRes *Res2) { 
 
     // Create an integer variable to represent 
     // the available temporary registers.
@@ -296,6 +296,30 @@ struct ExprRes *doDiv(struct ExprRes *Res1, struct ExprRes *Res2) {
     
     // Free the space in the result variable,
     // and return the other result.
+    free(Res2);
+    return Res1;
+}
+
+/**
+ * MODULUS (series of instructions)
+ * 
+ * DESCRIPTION...
+ */
+extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
+  
+    // Need to do a division, then use mfhi (move from hi) to access the remainder of our operation. This is the modulo.
+
+    int reg;
+    reg = AvailTmpReg();
+
+    AppendSeq(Res1->Instrs, Res2->Instrs);
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg))); // We dont care about the quotient
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "mfhi", TmpRegName(reg), NULL, NULL));
+
+    ReleaseTmpReg(Res1->Reg);
+    ReleaseTmpReg(Res2->Reg);
+
+    Res1->Reg = reg;
     free(Res2);
     return Res1;
 }
@@ -347,30 +371,6 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     ReleaseTmpReg(Res2->Reg);
     ReleaseTmpReg(reg2);
     ReleaseTmpReg(reg3);
-
-    Res1->Reg = reg;
-    free(Res2);
-    return Res1;
-}
-
-/**
- * MODULUS (series of instructions)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
-  
-    // Need to do a division, then use mfhi (move from hi) to access the remainder of our operation. This is the modulo.
-
-    int reg;
-    reg = AvailTmpReg();
-
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg))); // We dont care about the quotient
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "mfhi", TmpRegName(reg), NULL, NULL));
-
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
 
     Res1->Reg = reg;
     free(Res2);
@@ -652,10 +652,13 @@ extern struct ExprRes *doBExprEq(struct ExprRes *Res1, struct ExprRes *Res2) {
 
     Res->Reg = reg;
     Res->Instrs = Res1->Instrs;
+
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
+
     free(Res1);
     free(Res2);
+
     return Res;
 }
 
@@ -681,6 +684,7 @@ extern struct ExprRes *doBExprNotEq(struct ExprRes *Res1, struct ExprRes *Res2) 
 
     free(Res1);
     free(Res2);
+    
     return Res;
 }
 
@@ -799,8 +803,8 @@ extern struct ExprRes *doNegate(struct ExprRes *Res1) {
     Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "not", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
 
-    // This next bit should (ideally) clear all of our garbage bits
-    // I hate mips
+    // This next bit should (ideally) clear all of the garbage bits
+    // --> THIS MAY BE INCORRECT!!!
     AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(reg), TmpRegName(reg), "31"));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "srl", TmpRegName(reg), TmpRegName(reg), "31"));
 

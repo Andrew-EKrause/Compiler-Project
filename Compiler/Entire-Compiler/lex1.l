@@ -17,12 +17,21 @@ digit [0-9]
 if					                    {return IF;}
 int					                    {return Int;}
 print					                {return Write;}
+
 {letter}({letter}|{digit})*	            {return Ident;}
 {digit}{digit}*		                    {return IntLit;}
+
 \=\=					                {return EQ;}
+\!\=                                    {return NOT_EQ;}
+
 \=					                    {return '=';}
 \+					                    {return '+';}
+\-                                      {return '-';}
 \*					                    {return '*';}
+\/					                    {return '/';}
+\%                                      {return '%';}
+\^                                      {return '^';}
+
 \;					                    {return ';';}
 \{					                    {return '{';}
 \}					                    {return '}';}
@@ -33,6 +42,7 @@ print					                {return Write;}
 \t				                        {}
 \r				                        {}
 \n				                        {}
+\0                                      {}
 
 .				                        {
                                             writeIndicator(getCurrentColumnNum());

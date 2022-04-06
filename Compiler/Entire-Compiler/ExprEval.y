@@ -39,6 +39,7 @@
 %token Write
 %token IF
 %token EQ	
+%token NOT_EQ
 
 %%
 
@@ -48,15 +49,21 @@ Declarations	            :											{ };
 Dec			                : Int Ident                                 {enterName(table, yytext); }';'	{};
 StmtSeq 		            : Stmt StmtSeq								{$$ = AppendSeq($1, $2);};
 StmtSeq		                :											{$$ = NULL;};
-Stmt			            : Write Expr ';'							{$$ = doPrint($2);};
+Stmt			            : Write '(' Expr ')' ';'					{$$ = doPrint($3);};
 Stmt			            : Id '=' Expr ';'							{$$ = doAssign($1, $3);};
 Stmt			            : IF '(' BExpr ')' '{' StmtSeq '}'			{$$ = doIf($3, $6);};
 BExpr		                : Expr EQ Expr								{$$ = doBExprEq($1, $3);};
+BExpr                       : Expr NOT_EQ Expr                          {$$ = doBExprNotEq($1, $3);};
 Expr			            : Expr '+' Term								{$$ = doAdd($1, $3);};
+Expr			            : Expr '-' Term								{$$ = doSubtraction($1, $3);};
 Expr			            : Term									    {$$ = $1;};
 Term		                : Term '*' Factor							{$$ = doMult($1, $3);};
+Term		                : Term '/' Factor							{$$ = doDivide($1, $3);};
+Term		                : Term '%' Factor							{$$ = doModulo($1, $3);};
+Term                        : Term '^' Factor                           {$$ = doExponential($1, $3);};
 Term		                : Factor									{$$ = $1;};
 Factor		                : IntLit									{$$ = doIntLit(yytext);};
+Factor                      : '-'IntLit                                 {$$ = doIntLitNeg(yytext);};
 Factor		                : Ident									    {$$ = doRval(yytext);};
 Id			                : Ident									    {$$ = strdup(yytext);}
 

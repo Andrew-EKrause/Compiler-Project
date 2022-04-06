@@ -73,7 +73,7 @@ extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
 extern struct ExprRes *doAdd(struct ExprRes *Res1, struct ExprRes *Res2);
 extern struct ExprRes *doSubtraction(struct ExprRes *Res1, struct ExprRes *Res2);
 extern struct ExprRes *doMult(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doDiv(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doDivide(struct ExprRes *Res1, struct ExprRes *Res2);
 extern struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2);
 extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2);
 

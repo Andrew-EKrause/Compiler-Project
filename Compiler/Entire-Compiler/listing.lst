@@ -1,8 +1,9 @@
 1. int num1;
 2. int num2;
-3. num1 = 10 + 2;
-4. num2 = 20 * 3 + num1;
-5. print num1;
-6. print num2;
-  ^
-Illegal Character in lex
+3. num1 = 555;
+4. if(11 != 4) {
+5.     print(num1 + num2);
+6. }
+7. num2 = 20 * 3 + num1;
+8. print(num1);
+9. print(num2);
