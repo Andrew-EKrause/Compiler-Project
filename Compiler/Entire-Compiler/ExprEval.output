@@ -1,8 +1,7 @@
-State 62 conflicts: 1 shift/reduce
-State 63 conflicts: 2 shift/reduce
-State 79 conflicts: 13 reduce/reduce
-State 90 conflicts: 2 shift/reduce
-State 91 conflicts: 2 shift/reduce
+State 44 conflicts: 1 shift/reduce
+State 45 conflicts: 2 shift/reduce
+State 64 conflicts: 2 shift/reduce
+State 65 conflicts: 2 shift/reduce
 
 
 Grammar
@@ -21,130 +20,104 @@ Grammar
     6 StmtSeq: Stmt StmtSeq
     7        | /* empty */
 
-    8 Stmt: Write '(' ExprList ')' ';'
-    9     | Printlines '(' Expr ')' ';'
-   10     | Printspaces '(' Expr ')' ';'
-   11     | Read '(' ArgList ')' ';'
-   12     | IF '(' BExpr ')' '{' StmtSeq '}'
-   13     | IF '(' BExpr ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'
-   14     | WHILE '(' BExpr ')' '{' StmtSeq '}'
-   15     | FOR '(' AssnmtStmt ';' BExpr ';' AssnmtStmt ')' '{' StmtSeq '}'
-   16     | AssnmtStmt ';'
+    8 Stmt: Write '(' Expr ')' ';'
+    9     | IF '(' BExpr ')' '{' StmtSeq '}'
+   10     | AssnmtStmt ';'
 
-   17 AssnmtStmt: Id '=' Expr
+   11 AssnmtStmt: Id '=' Expr
 
-   18 BExpr: '!' BExpr
-   19      | BExpr OR BExpr
-   20      | BExpr AND BExpr
-   21      | '(' BExpr ')'
-   22      | Expr EQ Expr
-   23      | Expr NOT_EQ Expr
-   24      | Expr LT_OR_EQ Expr
-   25      | Expr GT_OR_EQ Expr
-   26      | Expr LT Expr
-   27      | Expr GT Expr
-   28      | Expr
+   12 BExpr: '!' BExpr
+   13      | BExpr OR BExpr
+   14      | BExpr AND BExpr
+   15      | '(' BExpr ')'
+   16      | Expr EQ Expr
+   17      | Expr NOT_EQ Expr
+   18      | Expr LT_OR_EQ Expr
+   19      | Expr GT_OR_EQ Expr
+   20      | Expr LT Expr
+   21      | Expr GT Expr
+   22      | Expr
 
-   29 ArgList: Id
-   30        | Id ',' ArgList
-   31        | /* empty */
+   23 Expr: '(' Expr ')'
+   24     | Expr '+' Term
+   25     | Expr '-' Term
+   26     | Term
 
-   32 ExprList: Expr
-   33         | Expr ',' ExprList
-   34         | /* empty */
+   27 Term: Term '*' Factor
+   28     | Term '/' Factor
+   29     | Term '%' Factor
+   30     | Term '^' Factor
+   31     | Factor
 
-   35 Expr: '(' Expr ')'
-   36     | Expr '+' Term
-   37     | Expr '-' Term
-   38     | Term
+   32 Factor: IntLit
+   33       | '-' IntLit
+   34       | Ident
 
-   39 Term: Term '*' Factor
-   40     | Term '/' Factor
-   41     | Term '^' Factor
-   42     | Term '%' Factor
-   43     | Factor
-
-   44 Factor: '(' Expr ')'
-   45       | IntLit
-   46       | '-' IntLit
-   47       | Ident
-
-   48 Id: Ident
+   35 Id: Ident
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'!' (33) 18
-'%' (37) 42
-'(' (40) 8 9 10 11 12 13 14 15 21 35 44
-')' (41) 8 9 10 11 12 13 14 15 21 35 44
-'*' (42) 39
-'+' (43) 36
-',' (44) 30 33
-'-' (45) 37 46
-'/' (47) 40
-';' (59) 5 8 9 10 11 15 16
-'=' (61) 17
-'^' (94) 41
-'{' (123) 12 13 14 15
-'}' (125) 12 13 14 15
+'!' (33) 12
+'%' (37) 29
+'(' (40) 8 9 15 23
+')' (41) 8 9 15 23
+'*' (42) 27
+'+' (43) 24
+'-' (45) 25 33
+'/' (47) 28
+';' (59) 5 8 10
+'=' (61) 11
+'^' (94) 30
+'{' (123) 9
+'}' (125) 9
 error (256)
-Ident (258) 5 47 48
-IntLit (259) 45 46
+Ident (258) 5 34 35
+IntLit (259) 32 33
 Int (260) 5
 Write (261) 8
-IF (262) 12 13
-EQ (263) 22
-NOT_EQ (264) 23
-LT (265) 26
-GT (266) 27
-LT_OR_EQ (267) 24
-GT_OR_EQ (268) 25
-OR (269) 19
-AND (270) 20
-Read (271) 11
-Printlines (272) 9
-Printspaces (273) 10
-ELSE (274) 13
-WHILE (275) 14
-FOR (276) 15
+IF (262) 9
+EQ (263) 16
+NOT_EQ (264) 17
+LT_OR_EQ (265) 18
+GT_OR_EQ (266) 19
+LT (267) 20
+GT (268) 21
+OR (269) 13
+AND (270) 14
 
 
 Nonterminals, with rules where they appear
 
-$accept (36)
+$accept (29)
     on left: 0
-Prog (37)
+Prog (30)
     on left: 1, on right: 0
-Declarations (38)
+Declarations (31)
     on left: 2 3, on right: 1 2
-Dec (39)
+Dec (32)
     on left: 5, on right: 2
-@1 (40)
+@1 (33)
     on left: 4, on right: 5
-StmtSeq (41)
-    on left: 6 7, on right: 1 6 12 13 14 15
-Stmt (42)
-    on left: 8 9 10 11 12 13 14 15 16, on right: 6
-AssnmtStmt (43)
-    on left: 17, on right: 15 16
-BExpr (44)
-    on left: 18 19 20 21 22 23 24 25 26 27 28, on right: 12 13 14 15
-    18 19 20 21
-ArgList (45)
-    on left: 29 30 31, on right: 11 30
-ExprList (46)
-    on left: 32 33 34, on right: 8 33
-Expr (47)
-    on left: 35 36 37 38, on right: 9 10 17 22 23 24 25 26 27 28 32
-    33 35 36 37 44
-Term (48)
-    on left: 39 40 41 42 43, on right: 36 37 38 39 40 41 42
-Factor (49)
-    on left: 44 45 46 47, on right: 39 40 41 42 43
-Id (50)
-    on left: 48, on right: 17 29 30
+StmtSeq (34)
+    on left: 6 7, on right: 1 6 9
+Stmt (35)
+    on left: 8 9 10, on right: 6
+AssnmtStmt (36)
+    on left: 11, on right: 10
+BExpr (37)
+    on left: 12 13 14 15 16 17 18 19 20 21 22, on right: 9 12 13 14
+    15
+Expr (38)
+    on left: 23 24 25 26, on right: 8 11 16 17 18 19 20 21 22 23 24
+    25
+Term (39)
+    on left: 27 28 29 30 31, on right: 24 25 26 27 28 29 30
+Factor (40)
+    on left: 32 33 34, on right: 27 28 29 30 31
+Id (41)
+    on left: 35, on right: 11
 
 
 state 0
@@ -178,21 +151,16 @@ state 3
 
     1 Prog: Declarations . StmtSeq
 
-    Ident        shift, and go to state 7
-    Write        shift, and go to state 8
-    IF           shift, and go to state 9
-    Read         shift, and go to state 10
-    Printlines   shift, and go to state 11
-    Printspaces  shift, and go to state 12
-    WHILE        shift, and go to state 13
-    FOR          shift, and go to state 14
+    Ident  shift, and go to state 7
+    Write  shift, and go to state 8
+    IF     shift, and go to state 9
 
     $default  reduce using rule 7 (StmtSeq)
 
-    StmtSeq     go to state 15
-    Stmt        go to state 16
-    AssnmtStmt  go to state 17
-    Id          go to state 18
+    StmtSeq     go to state 10
+    Stmt        go to state 11
+    AssnmtStmt  go to state 12
+    Id          go to state 13
 
 
 state 4
@@ -203,7 +171,7 @@ state 4
 
     $default  reduce using rule 3 (Declarations)
 
-    Declarations  go to state 19
+    Declarations  go to state 14
     Dec           go to state 4
 
 
@@ -213,7 +181,7 @@ state 5
 
     $default  reduce using rule 4 (@1)
 
-    @1  go to state 20
+    @1  go to state 15
 
 
 state 6
@@ -225,1282 +193,764 @@ state 6
 
 state 7
 
-   48 Id: Ident .
+   35 Id: Ident .
 
-    $default  reduce using rule 48 (Id)
+    $default  reduce using rule 35 (Id)
 
 
 state 8
 
-    8 Stmt: Write . '(' ExprList ')' ';'
+    8 Stmt: Write . '(' Expr ')' ';'
 
-    '('  shift, and go to state 21
+    '('  shift, and go to state 16
 
 
 state 9
 
-   12 Stmt: IF . '(' BExpr ')' '{' StmtSeq '}'
-   13     | IF . '(' BExpr ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'
+    9 Stmt: IF . '(' BExpr ')' '{' StmtSeq '}'
 
-    '('  shift, and go to state 22
+    '('  shift, and go to state 17
 
 
 state 10
-
-   11 Stmt: Read . '(' ArgList ')' ';'
-
-    '('  shift, and go to state 23
-
-
-state 11
-
-    9 Stmt: Printlines . '(' Expr ')' ';'
-
-    '('  shift, and go to state 24
-
-
-state 12
-
-   10 Stmt: Printspaces . '(' Expr ')' ';'
-
-    '('  shift, and go to state 25
-
-
-state 13
-
-   14 Stmt: WHILE . '(' BExpr ')' '{' StmtSeq '}'
-
-    '('  shift, and go to state 26
-
-
-state 14
-
-   15 Stmt: FOR . '(' AssnmtStmt ';' BExpr ';' AssnmtStmt ')' '{' StmtSeq '}'
-
-    '('  shift, and go to state 27
-
-
-state 15
 
     1 Prog: Declarations StmtSeq .
 
     $default  reduce using rule 1 (Prog)
 
 
-state 16
+state 11
 
     6 StmtSeq: Stmt . StmtSeq
 
-    Ident        shift, and go to state 7
-    Write        shift, and go to state 8
-    IF           shift, and go to state 9
-    Read         shift, and go to state 10
-    Printlines   shift, and go to state 11
-    Printspaces  shift, and go to state 12
-    WHILE        shift, and go to state 13
-    FOR          shift, and go to state 14
+    Ident  shift, and go to state 7
+    Write  shift, and go to state 8
+    IF     shift, and go to state 9
 
     $default  reduce using rule 7 (StmtSeq)
 
-    StmtSeq     go to state 28
-    Stmt        go to state 16
-    AssnmtStmt  go to state 17
-    Id          go to state 18
+    StmtSeq     go to state 18
+    Stmt        go to state 11
+    AssnmtStmt  go to state 12
+    Id          go to state 13
 
 
-state 17
+state 12
 
-   16 Stmt: AssnmtStmt . ';'
+   10 Stmt: AssnmtStmt . ';'
 
-    ';'  shift, and go to state 29
-
-
-state 18
-
-   17 AssnmtStmt: Id . '=' Expr
-
-    '='  shift, and go to state 30
+    ';'  shift, and go to state 19
 
 
-state 19
+state 13
+
+   11 AssnmtStmt: Id . '=' Expr
+
+    '='  shift, and go to state 20
+
+
+state 14
 
     2 Declarations: Dec Declarations .
 
     $default  reduce using rule 2 (Declarations)
 
 
-state 20
+state 15
 
     5 Dec: Int Ident @1 . ';'
 
-    ';'  shift, and go to state 31
+    ';'  shift, and go to state 21
 
 
-state 21
+state 16
 
-    8 Stmt: Write '(' . ExprList ')' ';'
+    8 Stmt: Write '(' . Expr ')' ';'
 
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
 
-    $default  reduce using rule 34 (ExprList)
-
-    ExprList  go to state 36
-    Expr      go to state 37
-    Term      go to state 38
-    Factor    go to state 39
+    Expr    go to state 26
+    Term    go to state 27
+    Factor  go to state 28
 
 
-state 22
+state 17
 
-   12 Stmt: IF '(' . BExpr ')' '{' StmtSeq '}'
-   13     | IF '(' . BExpr ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'
+    9 Stmt: IF '(' . BExpr ')' '{' StmtSeq '}'
 
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 40
-    '!'     shift, and go to state 41
-    '-'     shift, and go to state 35
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 29
+    '!'     shift, and go to state 30
+    '-'     shift, and go to state 25
 
-    BExpr   go to state 42
-    Expr    go to state 43
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 23
-
-   11 Stmt: Read '(' . ArgList ')' ';'
-
-    Ident  shift, and go to state 7
-
-    $default  reduce using rule 31 (ArgList)
-
-    ArgList  go to state 44
-    Id       go to state 45
+    BExpr   go to state 31
+    Expr    go to state 32
+    Term    go to state 27
+    Factor  go to state 28
 
 
-state 24
-
-    9 Stmt: Printlines '(' . Expr ')' ';'
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 46
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 25
-
-   10 Stmt: Printspaces '(' . Expr ')' ';'
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 47
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 26
-
-   14 Stmt: WHILE '(' . BExpr ')' '{' StmtSeq '}'
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 40
-    '!'     shift, and go to state 41
-    '-'     shift, and go to state 35
-
-    BExpr   go to state 48
-    Expr    go to state 43
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 27
-
-   15 Stmt: FOR '(' . AssnmtStmt ';' BExpr ';' AssnmtStmt ')' '{' StmtSeq '}'
-
-    Ident  shift, and go to state 7
-
-    AssnmtStmt  go to state 49
-    Id          go to state 18
-
-
-state 28
+state 18
 
     6 StmtSeq: Stmt StmtSeq .
 
     $default  reduce using rule 6 (StmtSeq)
 
 
-state 29
+state 19
 
-   16 Stmt: AssnmtStmt ';' .
+   10 Stmt: AssnmtStmt ';' .
 
-    $default  reduce using rule 16 (Stmt)
-
-
-state 30
-
-   17 AssnmtStmt: Id '=' . Expr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 50
-    Term    go to state 38
-    Factor  go to state 39
+    $default  reduce using rule 10 (Stmt)
 
 
-state 31
+state 20
+
+   11 AssnmtStmt: Id '=' . Expr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 33
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 21
 
     5 Dec: Int Ident @1 ';' .
 
     $default  reduce using rule 5 (Dec)
 
 
+state 22
+
+   34 Factor: Ident .
+
+    $default  reduce using rule 34 (Factor)
+
+
+state 23
+
+   32 Factor: IntLit .
+
+    $default  reduce using rule 32 (Factor)
+
+
+state 24
+
+   23 Expr: '(' . Expr ')'
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 34
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 25
+
+   33 Factor: '-' . IntLit
+
+    IntLit  shift, and go to state 35
+
+
+state 26
+
+    8 Stmt: Write '(' Expr . ')' ';'
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
+
+    ')'  shift, and go to state 36
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
+
+
+state 27
+
+   26 Expr: Term .
+   27 Term: Term . '*' Factor
+   28     | Term . '/' Factor
+   29     | Term . '%' Factor
+   30     | Term . '^' Factor
+
+    '*'  shift, and go to state 39
+    '/'  shift, and go to state 40
+    '%'  shift, and go to state 41
+    '^'  shift, and go to state 42
+
+    $default  reduce using rule 26 (Expr)
+
+
+state 28
+
+   31 Term: Factor .
+
+    $default  reduce using rule 31 (Term)
+
+
+state 29
+
+   15 BExpr: '(' . BExpr ')'
+   23 Expr: '(' . Expr ')'
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 29
+    '!'     shift, and go to state 30
+    '-'     shift, and go to state 25
+
+    BExpr   go to state 43
+    Expr    go to state 44
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 30
+
+   12 BExpr: '!' . BExpr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 29
+    '!'     shift, and go to state 30
+    '-'     shift, and go to state 25
+
+    BExpr   go to state 45
+    Expr    go to state 32
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 31
+
+    9 Stmt: IF '(' BExpr . ')' '{' StmtSeq '}'
+   13 BExpr: BExpr . OR BExpr
+   14      | BExpr . AND BExpr
+
+    OR   shift, and go to state 46
+    AND  shift, and go to state 47
+    ')'  shift, and go to state 48
+
+
 state 32
 
-   47 Factor: Ident .
-
-    $default  reduce using rule 47 (Factor)
-
-
-state 33
-
-   45 Factor: IntLit .
-
-    $default  reduce using rule 45 (Factor)
-
-
-state 34
-
-   35 Expr: '(' . Expr ')'
-   44 Factor: '(' . Expr ')'
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 51
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 35
-
-   46 Factor: '-' . IntLit
-
-    IntLit  shift, and go to state 52
-
-
-state 36
-
-    8 Stmt: Write '(' ExprList . ')' ';'
-
-    ')'  shift, and go to state 53
-
-
-state 37
-
-   32 ExprList: Expr .
-   33         | Expr . ',' ExprList
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
-
-    ','  shift, and go to state 54
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
-
-    $default  reduce using rule 32 (ExprList)
-
-
-state 38
-
-   38 Expr: Term .
-   39 Term: Term . '*' Factor
-   40     | Term . '/' Factor
-   41     | Term . '^' Factor
-   42     | Term . '%' Factor
-
-    '*'  shift, and go to state 57
-    '/'  shift, and go to state 58
-    '^'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 38 (Expr)
-
-
-state 39
-
-   43 Term: Factor .
-
-    $default  reduce using rule 43 (Term)
-
-
-state 40
-
-   21 BExpr: '(' . BExpr ')'
-   35 Expr: '(' . Expr ')'
-   44 Factor: '(' . Expr ')'
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 40
-    '!'     shift, and go to state 41
-    '-'     shift, and go to state 35
-
-    BExpr   go to state 61
-    Expr    go to state 62
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 41
-
-   18 BExpr: '!' . BExpr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 40
-    '!'     shift, and go to state 41
-    '-'     shift, and go to state 35
-
-    BExpr   go to state 63
-    Expr    go to state 43
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 42
-
-   12 Stmt: IF '(' BExpr . ')' '{' StmtSeq '}'
-   13     | IF '(' BExpr . ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'
-   19 BExpr: BExpr . OR BExpr
-   20      | BExpr . AND BExpr
-
-    OR   shift, and go to state 64
-    AND  shift, and go to state 65
-    ')'  shift, and go to state 66
-
-
-state 43
-
-   22 BExpr: Expr . EQ Expr
-   23      | Expr . NOT_EQ Expr
-   24      | Expr . LT_OR_EQ Expr
-   25      | Expr . GT_OR_EQ Expr
-   26      | Expr . LT Expr
-   27      | Expr . GT Expr
-   28      | Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
-
-    EQ        shift, and go to state 67
-    NOT_EQ    shift, and go to state 68
-    LT        shift, and go to state 69
-    GT        shift, and go to state 70
-    LT_OR_EQ  shift, and go to state 71
-    GT_OR_EQ  shift, and go to state 72
-    '+'       shift, and go to state 55
-    '-'       shift, and go to state 56
-
-    $default  reduce using rule 28 (BExpr)
-
-
-state 44
-
-   11 Stmt: Read '(' ArgList . ')' ';'
-
-    ')'  shift, and go to state 73
-
-
-state 45
-
-   29 ArgList: Id .
-   30        | Id . ',' ArgList
-
-    ','  shift, and go to state 74
-
-    $default  reduce using rule 29 (ArgList)
-
-
-state 46
-
-    9 Stmt: Printlines '(' Expr . ')' ';'
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
-
-    ')'  shift, and go to state 75
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
-
-
-state 47
-
-   10 Stmt: Printspaces '(' Expr . ')' ';'
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
-
-    ')'  shift, and go to state 76
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
-
-
-state 48
-
-   14 Stmt: WHILE '(' BExpr . ')' '{' StmtSeq '}'
-   19 BExpr: BExpr . OR BExpr
-   20      | BExpr . AND BExpr
-
-    OR   shift, and go to state 64
-    AND  shift, and go to state 65
-    ')'  shift, and go to state 77
-
-
-state 49
-
-   15 Stmt: FOR '(' AssnmtStmt . ';' BExpr ';' AssnmtStmt ')' '{' StmtSeq '}'
-
-    ';'  shift, and go to state 78
-
-
-state 50
-
-   17 AssnmtStmt: Id '=' Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
-
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
-
-    $default  reduce using rule 17 (AssnmtStmt)
-
-
-state 51
-
-   35 Expr: '(' Expr . ')'
-   36     | Expr . '+' Term
-   37     | Expr . '-' Term
-   44 Factor: '(' Expr . ')'
-
-    ')'  shift, and go to state 79
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
-
-
-state 52
-
-   46 Factor: '-' IntLit .
-
-    $default  reduce using rule 46 (Factor)
-
-
-state 53
-
-    8 Stmt: Write '(' ExprList ')' . ';'
-
-    ';'  shift, and go to state 80
-
-
-state 54
-
-   33 ExprList: Expr ',' . ExprList
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    $default  reduce using rule 34 (ExprList)
-
-    ExprList  go to state 81
-    Expr      go to state 37
-    Term      go to state 38
-    Factor    go to state 39
-
-
-state 55
-
-   36 Expr: Expr '+' . Term
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 82
-    '-'     shift, and go to state 35
-
-    Term    go to state 83
-    Factor  go to state 39
-
-
-state 56
-
-   37 Expr: Expr '-' . Term
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 82
-    '-'     shift, and go to state 35
-
-    Term    go to state 84
-    Factor  go to state 39
-
-
-state 57
-
-   39 Term: Term '*' . Factor
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 82
-    '-'     shift, and go to state 35
-
-    Factor  go to state 85
-
-
-state 58
-
-   40 Term: Term '/' . Factor
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 82
-    '-'     shift, and go to state 35
-
-    Factor  go to state 86
-
-
-state 59
-
-   41 Term: Term '^' . Factor
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 82
-    '-'     shift, and go to state 35
-
-    Factor  go to state 87
-
-
-state 60
-
-   42 Term: Term '%' . Factor
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 82
-    '-'     shift, and go to state 35
-
-    Factor  go to state 88
-
-
-state 61
-
-   19 BExpr: BExpr . OR BExpr
-   20      | BExpr . AND BExpr
-   21      | '(' BExpr . ')'
-
-    OR   shift, and go to state 64
-    AND  shift, and go to state 65
-    ')'  shift, and go to state 89
-
-
-state 62
-
-   22 BExpr: Expr . EQ Expr
-   23      | Expr . NOT_EQ Expr
-   24      | Expr . LT_OR_EQ Expr
-   25      | Expr . GT_OR_EQ Expr
-   26      | Expr . LT Expr
-   27      | Expr . GT Expr
-   28      | Expr .
-   35 Expr: '(' Expr . ')'
-   36     | Expr . '+' Term
-   37     | Expr . '-' Term
-   44 Factor: '(' Expr . ')'
-
-    EQ        shift, and go to state 67
-    NOT_EQ    shift, and go to state 68
-    LT        shift, and go to state 69
-    GT        shift, and go to state 70
-    LT_OR_EQ  shift, and go to state 71
-    GT_OR_EQ  shift, and go to state 72
-    ')'       shift, and go to state 79
-    '+'       shift, and go to state 55
-    '-'       shift, and go to state 56
-
-    ')'       [reduce using rule 28 (BExpr)]
-    $default  reduce using rule 28 (BExpr)
-
-
-state 63
-
-   18 BExpr: '!' BExpr .
-   19      | BExpr . OR BExpr
-   20      | BExpr . AND BExpr
-
-    OR   shift, and go to state 64
-    AND  shift, and go to state 65
-
-    OR        [reduce using rule 18 (BExpr)]
-    AND       [reduce using rule 18 (BExpr)]
-    $default  reduce using rule 18 (BExpr)
-
-
-state 64
-
-   19 BExpr: BExpr OR . BExpr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 40
-    '!'     shift, and go to state 41
-    '-'     shift, and go to state 35
-
-    BExpr   go to state 90
-    Expr    go to state 43
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 65
-
-   20 BExpr: BExpr AND . BExpr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 40
-    '!'     shift, and go to state 41
-    '-'     shift, and go to state 35
-
-    BExpr   go to state 91
-    Expr    go to state 43
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 66
-
-   12 Stmt: IF '(' BExpr ')' . '{' StmtSeq '}'
-   13     | IF '(' BExpr ')' . '{' StmtSeq '}' ELSE '{' StmtSeq '}'
-
-    '{'  shift, and go to state 92
-
-
-state 67
-
-   22 BExpr: Expr EQ . Expr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 93
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 68
-
-   23 BExpr: Expr NOT_EQ . Expr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 94
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 69
-
-   26 BExpr: Expr LT . Expr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 95
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 70
-
-   27 BExpr: Expr GT . Expr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 96
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 71
-
-   24 BExpr: Expr LT_OR_EQ . Expr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 97
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 72
-
-   25 BExpr: Expr GT_OR_EQ . Expr
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 98
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 73
-
-   11 Stmt: Read '(' ArgList ')' . ';'
-
-    ';'  shift, and go to state 99
-
-
-state 74
-
-   30 ArgList: Id ',' . ArgList
-
-    Ident  shift, and go to state 7
-
-    $default  reduce using rule 31 (ArgList)
-
-    ArgList  go to state 100
-    Id       go to state 45
-
-
-state 75
-
-    9 Stmt: Printlines '(' Expr ')' . ';'
-
-    ';'  shift, and go to state 101
-
-
-state 76
-
-   10 Stmt: Printspaces '(' Expr ')' . ';'
-
-    ';'  shift, and go to state 102
-
-
-state 77
-
-   14 Stmt: WHILE '(' BExpr ')' . '{' StmtSeq '}'
-
-    '{'  shift, and go to state 103
-
-
-state 78
-
-   15 Stmt: FOR '(' AssnmtStmt ';' . BExpr ';' AssnmtStmt ')' '{' StmtSeq '}'
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 40
-    '!'     shift, and go to state 41
-    '-'     shift, and go to state 35
-
-    BExpr   go to state 104
-    Expr    go to state 43
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 79
-
-   35 Expr: '(' Expr ')' .
-   44 Factor: '(' Expr ')' .
-
-    EQ        reduce using rule 35 (Expr)
-    EQ        [reduce using rule 44 (Factor)]
-    NOT_EQ    reduce using rule 35 (Expr)
-    NOT_EQ    [reduce using rule 44 (Factor)]
-    LT        reduce using rule 35 (Expr)
-    LT        [reduce using rule 44 (Factor)]
-    GT        reduce using rule 35 (Expr)
-    GT        [reduce using rule 44 (Factor)]
-    LT_OR_EQ  reduce using rule 35 (Expr)
-    LT_OR_EQ  [reduce using rule 44 (Factor)]
-    GT_OR_EQ  reduce using rule 35 (Expr)
-    GT_OR_EQ  [reduce using rule 44 (Factor)]
-    OR        reduce using rule 35 (Expr)
-    OR        [reduce using rule 44 (Factor)]
-    AND       reduce using rule 35 (Expr)
-    AND       [reduce using rule 44 (Factor)]
-    ';'       reduce using rule 35 (Expr)
-    ';'       [reduce using rule 44 (Factor)]
-    ')'       reduce using rule 35 (Expr)
-    ')'       [reduce using rule 44 (Factor)]
-    ','       reduce using rule 35 (Expr)
-    ','       [reduce using rule 44 (Factor)]
-    '+'       reduce using rule 35 (Expr)
-    '+'       [reduce using rule 44 (Factor)]
-    '-'       reduce using rule 35 (Expr)
-    '-'       [reduce using rule 44 (Factor)]
-    '*'       reduce using rule 44 (Factor)
-    '/'       reduce using rule 44 (Factor)
-    '^'       reduce using rule 44 (Factor)
-    '%'       reduce using rule 44 (Factor)
-    $default  reduce using rule 35 (Expr)
-
-
-state 80
-
-    8 Stmt: Write '(' ExprList ')' ';' .
-
-    $default  reduce using rule 8 (Stmt)
-
-
-state 81
-
-   33 ExprList: Expr ',' ExprList .
-
-    $default  reduce using rule 33 (ExprList)
-
-
-state 82
-
-   44 Factor: '(' . Expr ')'
-
-    Ident   shift, and go to state 32
-    IntLit  shift, and go to state 33
-    '('     shift, and go to state 34
-    '-'     shift, and go to state 35
-
-    Expr    go to state 105
-    Term    go to state 38
-    Factor  go to state 39
-
-
-state 83
-
-   36 Expr: Expr '+' Term .
-   39 Term: Term . '*' Factor
-   40     | Term . '/' Factor
-   41     | Term . '^' Factor
-   42     | Term . '%' Factor
-
-    '*'  shift, and go to state 57
-    '/'  shift, and go to state 58
-    '^'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 36 (Expr)
-
-
-state 84
-
-   37 Expr: Expr '-' Term .
-   39 Term: Term . '*' Factor
-   40     | Term . '/' Factor
-   41     | Term . '^' Factor
-   42     | Term . '%' Factor
-
-    '*'  shift, and go to state 57
-    '/'  shift, and go to state 58
-    '^'  shift, and go to state 59
-    '%'  shift, and go to state 60
-
-    $default  reduce using rule 37 (Expr)
-
-
-state 85
-
-   39 Term: Term '*' Factor .
-
-    $default  reduce using rule 39 (Term)
-
-
-state 86
-
-   40 Term: Term '/' Factor .
-
-    $default  reduce using rule 40 (Term)
-
-
-state 87
-
-   41 Term: Term '^' Factor .
-
-    $default  reduce using rule 41 (Term)
-
-
-state 88
-
-   42 Term: Term '%' Factor .
-
-    $default  reduce using rule 42 (Term)
-
-
-state 89
-
-   21 BExpr: '(' BExpr ')' .
-
-    $default  reduce using rule 21 (BExpr)
-
-
-state 90
-
-   19 BExpr: BExpr . OR BExpr
-   19      | BExpr OR BExpr .
-   20      | BExpr . AND BExpr
-
-    OR   shift, and go to state 64
-    AND  shift, and go to state 65
-
-    OR        [reduce using rule 19 (BExpr)]
-    AND       [reduce using rule 19 (BExpr)]
-    $default  reduce using rule 19 (BExpr)
-
-
-state 91
-
-   19 BExpr: BExpr . OR BExpr
-   20      | BExpr . AND BExpr
-   20      | BExpr AND BExpr .
-
-    OR   shift, and go to state 64
-    AND  shift, and go to state 65
-
-    OR        [reduce using rule 20 (BExpr)]
-    AND       [reduce using rule 20 (BExpr)]
-    $default  reduce using rule 20 (BExpr)
-
-
-state 92
-
-   12 Stmt: IF '(' BExpr ')' '{' . StmtSeq '}'
-   13     | IF '(' BExpr ')' '{' . StmtSeq '}' ELSE '{' StmtSeq '}'
-
-    Ident        shift, and go to state 7
-    Write        shift, and go to state 8
-    IF           shift, and go to state 9
-    Read         shift, and go to state 10
-    Printlines   shift, and go to state 11
-    Printspaces  shift, and go to state 12
-    WHILE        shift, and go to state 13
-    FOR          shift, and go to state 14
-
-    $default  reduce using rule 7 (StmtSeq)
-
-    StmtSeq     go to state 106
-    Stmt        go to state 16
-    AssnmtStmt  go to state 17
-    Id          go to state 18
-
-
-state 93
-
-   22 BExpr: Expr EQ Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
-
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
+   16 BExpr: Expr . EQ Expr
+   17      | Expr . NOT_EQ Expr
+   18      | Expr . LT_OR_EQ Expr
+   19      | Expr . GT_OR_EQ Expr
+   20      | Expr . LT Expr
+   21      | Expr . GT Expr
+   22      | Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
+
+    EQ        shift, and go to state 49
+    NOT_EQ    shift, and go to state 50
+    LT_OR_EQ  shift, and go to state 51
+    GT_OR_EQ  shift, and go to state 52
+    LT        shift, and go to state 53
+    GT        shift, and go to state 54
+    '+'       shift, and go to state 37
+    '-'       shift, and go to state 38
 
     $default  reduce using rule 22 (BExpr)
 
 
-state 94
+state 33
 
-   23 BExpr: Expr NOT_EQ Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
+   11 AssnmtStmt: Id '=' Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
 
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
 
-    $default  reduce using rule 23 (BExpr)
+    $default  reduce using rule 11 (AssnmtStmt)
 
 
-state 95
+state 34
 
-   26 BExpr: Expr LT Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
+   23 Expr: '(' Expr . ')'
+   24     | Expr . '+' Term
+   25     | Expr . '-' Term
 
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
+    ')'  shift, and go to state 55
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
 
-    $default  reduce using rule 26 (BExpr)
 
+state 35
 
-state 96
+   33 Factor: '-' IntLit .
 
-   27 BExpr: Expr GT Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
+    $default  reduce using rule 33 (Factor)
 
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
 
-    $default  reduce using rule 27 (BExpr)
+state 36
 
+    8 Stmt: Write '(' Expr ')' . ';'
 
-state 97
+    ';'  shift, and go to state 56
 
-   24 BExpr: Expr LT_OR_EQ Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
 
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
+state 37
 
-    $default  reduce using rule 24 (BExpr)
+   24 Expr: Expr '+' . Term
 
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '-'     shift, and go to state 25
 
-state 98
+    Term    go to state 57
+    Factor  go to state 28
 
-   25 BExpr: Expr GT_OR_EQ Expr .
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
 
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
+state 38
 
-    $default  reduce using rule 25 (BExpr)
+   25 Expr: Expr '-' . Term
 
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '-'     shift, and go to state 25
 
-state 99
+    Term    go to state 58
+    Factor  go to state 28
 
-   11 Stmt: Read '(' ArgList ')' ';' .
 
-    $default  reduce using rule 11 (Stmt)
+state 39
 
+   27 Term: Term '*' . Factor
 
-state 100
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '-'     shift, and go to state 25
 
-   30 ArgList: Id ',' ArgList .
+    Factor  go to state 59
 
-    $default  reduce using rule 30 (ArgList)
 
+state 40
 
-state 101
+   28 Term: Term '/' . Factor
 
-    9 Stmt: Printlines '(' Expr ')' ';' .
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '-'     shift, and go to state 25
 
-    $default  reduce using rule 9 (Stmt)
+    Factor  go to state 60
 
 
-state 102
+state 41
 
-   10 Stmt: Printspaces '(' Expr ')' ';' .
+   29 Term: Term '%' . Factor
 
-    $default  reduce using rule 10 (Stmt)
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '-'     shift, and go to state 25
 
+    Factor  go to state 61
 
-state 103
 
-   14 Stmt: WHILE '(' BExpr ')' '{' . StmtSeq '}'
+state 42
 
-    Ident        shift, and go to state 7
-    Write        shift, and go to state 8
-    IF           shift, and go to state 9
-    Read         shift, and go to state 10
-    Printlines   shift, and go to state 11
-    Printspaces  shift, and go to state 12
-    WHILE        shift, and go to state 13
-    FOR          shift, and go to state 14
+   30 Term: Term '^' . Factor
 
-    $default  reduce using rule 7 (StmtSeq)
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '-'     shift, and go to state 25
 
-    StmtSeq     go to state 107
-    Stmt        go to state 16
-    AssnmtStmt  go to state 17
-    Id          go to state 18
+    Factor  go to state 62
 
 
-state 104
+state 43
 
-   15 Stmt: FOR '(' AssnmtStmt ';' BExpr . ';' AssnmtStmt ')' '{' StmtSeq '}'
-   19 BExpr: BExpr . OR BExpr
-   20      | BExpr . AND BExpr
+   13 BExpr: BExpr . OR BExpr
+   14      | BExpr . AND BExpr
+   15      | '(' BExpr . ')'
 
-    OR   shift, and go to state 64
-    AND  shift, and go to state 65
-    ';'  shift, and go to state 108
+    OR   shift, and go to state 46
+    AND  shift, and go to state 47
+    ')'  shift, and go to state 63
 
 
-state 105
+state 44
 
-   36 Expr: Expr . '+' Term
-   37     | Expr . '-' Term
-   44 Factor: '(' Expr . ')'
+   16 BExpr: Expr . EQ Expr
+   17      | Expr . NOT_EQ Expr
+   18      | Expr . LT_OR_EQ Expr
+   19      | Expr . GT_OR_EQ Expr
+   20      | Expr . LT Expr
+   21      | Expr . GT Expr
+   22      | Expr .
+   23 Expr: '(' Expr . ')'
+   24     | Expr . '+' Term
+   25     | Expr . '-' Term
 
-    ')'  shift, and go to state 109
-    '+'  shift, and go to state 55
-    '-'  shift, and go to state 56
+    EQ        shift, and go to state 49
+    NOT_EQ    shift, and go to state 50
+    LT_OR_EQ  shift, and go to state 51
+    GT_OR_EQ  shift, and go to state 52
+    LT        shift, and go to state 53
+    GT        shift, and go to state 54
+    ')'       shift, and go to state 55
+    '+'       shift, and go to state 37
+    '-'       shift, and go to state 38
 
+    ')'       [reduce using rule 22 (BExpr)]
+    $default  reduce using rule 22 (BExpr)
 
-state 106
 
-   12 Stmt: IF '(' BExpr ')' '{' StmtSeq . '}'
-   13     | IF '(' BExpr ')' '{' StmtSeq . '}' ELSE '{' StmtSeq '}'
+state 45
 
-    '}'  shift, and go to state 110
+   12 BExpr: '!' BExpr .
+   13      | BExpr . OR BExpr
+   14      | BExpr . AND BExpr
 
+    OR   shift, and go to state 46
+    AND  shift, and go to state 47
 
-state 107
+    OR        [reduce using rule 12 (BExpr)]
+    AND       [reduce using rule 12 (BExpr)]
+    $default  reduce using rule 12 (BExpr)
 
-   14 Stmt: WHILE '(' BExpr ')' '{' StmtSeq . '}'
 
-    '}'  shift, and go to state 111
+state 46
 
+   13 BExpr: BExpr OR . BExpr
 
-state 108
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 29
+    '!'     shift, and go to state 30
+    '-'     shift, and go to state 25
 
-   15 Stmt: FOR '(' AssnmtStmt ';' BExpr ';' . AssnmtStmt ')' '{' StmtSeq '}'
+    BExpr   go to state 64
+    Expr    go to state 32
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 47
+
+   14 BExpr: BExpr AND . BExpr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 29
+    '!'     shift, and go to state 30
+    '-'     shift, and go to state 25
+
+    BExpr   go to state 65
+    Expr    go to state 32
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 48
+
+    9 Stmt: IF '(' BExpr ')' . '{' StmtSeq '}'
+
+    '{'  shift, and go to state 66
+
+
+state 49
+
+   16 BExpr: Expr EQ . Expr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 67
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 50
+
+   17 BExpr: Expr NOT_EQ . Expr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 68
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 51
+
+   18 BExpr: Expr LT_OR_EQ . Expr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 69
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 52
+
+   19 BExpr: Expr GT_OR_EQ . Expr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 70
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 53
+
+   20 BExpr: Expr LT . Expr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 71
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 54
+
+   21 BExpr: Expr GT . Expr
+
+    Ident   shift, and go to state 22
+    IntLit  shift, and go to state 23
+    '('     shift, and go to state 24
+    '-'     shift, and go to state 25
+
+    Expr    go to state 72
+    Term    go to state 27
+    Factor  go to state 28
+
+
+state 55
+
+   23 Expr: '(' Expr ')' .
+
+    $default  reduce using rule 23 (Expr)
+
+
+state 56
+
+    8 Stmt: Write '(' Expr ')' ';' .
+
+    $default  reduce using rule 8 (Stmt)
+
+
+state 57
+
+   24 Expr: Expr '+' Term .
+   27 Term: Term . '*' Factor
+   28     | Term . '/' Factor
+   29     | Term . '%' Factor
+   30     | Term . '^' Factor
+
+    '*'  shift, and go to state 39
+    '/'  shift, and go to state 40
+    '%'  shift, and go to state 41
+    '^'  shift, and go to state 42
+
+    $default  reduce using rule 24 (Expr)
+
+
+state 58
+
+   25 Expr: Expr '-' Term .
+   27 Term: Term . '*' Factor
+   28     | Term . '/' Factor
+   29     | Term . '%' Factor
+   30     | Term . '^' Factor
+
+    '*'  shift, and go to state 39
+    '/'  shift, and go to state 40
+    '%'  shift, and go to state 41
+    '^'  shift, and go to state 42
+
+    $default  reduce using rule 25 (Expr)
+
+
+state 59
+
+   27 Term: Term '*' Factor .
+
+    $default  reduce using rule 27 (Term)
+
+
+state 60
+
+   28 Term: Term '/' Factor .
+
+    $default  reduce using rule 28 (Term)
+
+
+state 61
+
+   29 Term: Term '%' Factor .
+
+    $default  reduce using rule 29 (Term)
+
+
+state 62
+
+   30 Term: Term '^' Factor .
+
+    $default  reduce using rule 30 (Term)
+
+
+state 63
+
+   15 BExpr: '(' BExpr ')' .
+
+    $default  reduce using rule 15 (BExpr)
+
+
+state 64
+
+   13 BExpr: BExpr . OR BExpr
+   13      | BExpr OR BExpr .
+   14      | BExpr . AND BExpr
+
+    OR   shift, and go to state 46
+    AND  shift, and go to state 47
+
+    OR        [reduce using rule 13 (BExpr)]
+    AND       [reduce using rule 13 (BExpr)]
+    $default  reduce using rule 13 (BExpr)
+
+
+state 65
+
+   13 BExpr: BExpr . OR BExpr
+   14      | BExpr . AND BExpr
+   14      | BExpr AND BExpr .
+
+    OR   shift, and go to state 46
+    AND  shift, and go to state 47
+
+    OR        [reduce using rule 14 (BExpr)]
+    AND       [reduce using rule 14 (BExpr)]
+    $default  reduce using rule 14 (BExpr)
+
+
+state 66
+
+    9 Stmt: IF '(' BExpr ')' '{' . StmtSeq '}'
 
     Ident  shift, and go to state 7
-
-    AssnmtStmt  go to state 112
-    Id          go to state 18
-
-
-state 109
-
-   44 Factor: '(' Expr ')' .
-
-    $default  reduce using rule 44 (Factor)
-
-
-state 110
-
-   12 Stmt: IF '(' BExpr ')' '{' StmtSeq '}' .
-   13     | IF '(' BExpr ')' '{' StmtSeq '}' . ELSE '{' StmtSeq '}'
-
-    ELSE  shift, and go to state 113
-
-    $default  reduce using rule 12 (Stmt)
-
-
-state 111
-
-   14 Stmt: WHILE '(' BExpr ')' '{' StmtSeq '}' .
-
-    $default  reduce using rule 14 (Stmt)
-
-
-state 112
-
-   15 Stmt: FOR '(' AssnmtStmt ';' BExpr ';' AssnmtStmt . ')' '{' StmtSeq '}'
-
-    ')'  shift, and go to state 114
-
-
-state 113
-
-   13 Stmt: IF '(' BExpr ')' '{' StmtSeq '}' ELSE . '{' StmtSeq '}'
-
-    '{'  shift, and go to state 115
-
-
-state 114
-
-   15 Stmt: FOR '(' AssnmtStmt ';' BExpr ';' AssnmtStmt ')' . '{' StmtSeq '}'
-
-    '{'  shift, and go to state 116
-
-
-state 115
-
-   13 Stmt: IF '(' BExpr ')' '{' StmtSeq '}' ELSE '{' . StmtSeq '}'
-
-    Ident        shift, and go to state 7
-    Write        shift, and go to state 8
-    IF           shift, and go to state 9
-    Read         shift, and go to state 10
-    Printlines   shift, and go to state 11
-    Printspaces  shift, and go to state 12
-    WHILE        shift, and go to state 13
-    FOR          shift, and go to state 14
+    Write  shift, and go to state 8
+    IF     shift, and go to state 9
 
     $default  reduce using rule 7 (StmtSeq)
 
-    StmtSeq     go to state 117
-    Stmt        go to state 16
-    AssnmtStmt  go to state 17
-    Id          go to state 18
+    StmtSeq     go to state 73
+    Stmt        go to state 11
+    AssnmtStmt  go to state 12
+    Id          go to state 13
 
 
-state 116
+state 67
 
-   15 Stmt: FOR '(' AssnmtStmt ';' BExpr ';' AssnmtStmt ')' '{' . StmtSeq '}'
+   16 BExpr: Expr EQ Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
 
-    Ident        shift, and go to state 7
-    Write        shift, and go to state 8
-    IF           shift, and go to state 9
-    Read         shift, and go to state 10
-    Printlines   shift, and go to state 11
-    Printspaces  shift, and go to state 12
-    WHILE        shift, and go to state 13
-    FOR          shift, and go to state 14
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
 
-    $default  reduce using rule 7 (StmtSeq)
-
-    StmtSeq     go to state 118
-    Stmt        go to state 16
-    AssnmtStmt  go to state 17
-    Id          go to state 18
+    $default  reduce using rule 16 (BExpr)
 
 
-state 117
+state 68
 
-   13 Stmt: IF '(' BExpr ')' '{' StmtSeq '}' ELSE '{' StmtSeq . '}'
+   17 BExpr: Expr NOT_EQ Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
 
-    '}'  shift, and go to state 119
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
 
-
-state 118
-
-   15 Stmt: FOR '(' AssnmtStmt ';' BExpr ';' AssnmtStmt ')' '{' StmtSeq . '}'
-
-    '}'  shift, and go to state 120
+    $default  reduce using rule 17 (BExpr)
 
 
-state 119
+state 69
 
-   13 Stmt: IF '(' BExpr ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}' .
+   18 BExpr: Expr LT_OR_EQ Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
 
-    $default  reduce using rule 13 (Stmt)
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
+
+    $default  reduce using rule 18 (BExpr)
 
 
-state 120
+state 70
 
-   15 Stmt: FOR '(' AssnmtStmt ';' BExpr ';' AssnmtStmt ')' '{' StmtSeq '}' .
+   19 BExpr: Expr GT_OR_EQ Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
 
-    $default  reduce using rule 15 (Stmt)
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
+
+    $default  reduce using rule 19 (BExpr)
+
+
+state 71
+
+   20 BExpr: Expr LT Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
+
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
+
+    $default  reduce using rule 20 (BExpr)
+
+
+state 72
+
+   21 BExpr: Expr GT Expr .
+   24 Expr: Expr . '+' Term
+   25     | Expr . '-' Term
+
+    '+'  shift, and go to state 37
+    '-'  shift, and go to state 38
+
+    $default  reduce using rule 21 (BExpr)
+
+
+state 73
+
+    9 Stmt: IF '(' BExpr ')' '{' StmtSeq . '}'
+
+    '}'  shift, and go to state 74
+
+
+state 74
+
+    9 Stmt: IF '(' BExpr ')' '{' StmtSeq '}' .
+
+    $default  reduce using rule 9 (Stmt)

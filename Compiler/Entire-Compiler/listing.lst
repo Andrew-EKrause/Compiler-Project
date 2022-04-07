@@ -1,8 +1,8 @@
 1. int num1;
 2. int num2;
 3. num1 = 555;
-4. if(11 != 4) {
-5.     print(num1 + num2);
+4. if((6 < 4) && (4 < 8)) {
+5.     print(num1 + 2);
 6. }
 7. num2 = 20 * 3 + num1;
 8. print(num1);

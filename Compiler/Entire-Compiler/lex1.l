@@ -23,6 +23,13 @@ print					                {return Write;}
 
 \=\=					                {return EQ;}
 \!\=                                    {return NOT_EQ;}
+\<\=                                    {return LT_OR_EQ;}
+\>\=                                    {return GT_OR_EQ;}
+\<                                      {return LT;}
+\>                                      {return GT;}
+\!                                      {return '!';}
+\|\|                                    {return OR;}
+\&\&                                    {return AND;}
 
 \=					                    {return '=';}
 \+					                    {return '+';}

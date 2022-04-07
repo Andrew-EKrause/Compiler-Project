@@ -684,7 +684,7 @@ extern struct ExprRes *doBExprNotEq(struct ExprRes *Res1, struct ExprRes *Res2) 
 
     free(Res1);
     free(Res2);
-    
+
     return Res;
 }
 
@@ -704,10 +704,13 @@ extern struct ExprRes *doBExprLtOrEq(struct ExprRes *Res1, struct ExprRes *Res2)
 
     Res->Reg = reg;
     Res->Instrs = Res1->Instrs;
+
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
+
     free(Res1);
     free(Res2);
+    
     return Res;
 }
 

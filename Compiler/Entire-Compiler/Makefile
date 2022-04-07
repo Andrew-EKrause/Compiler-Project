@@ -33,7 +33,7 @@ MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan
 # files needed to compile the programs.
 # ===============================================
 main:
-	bison -d $(BISON)
+	bison -d -v $(BISON)
 	flex $(LEX)
 	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(MEMCHECK)
 

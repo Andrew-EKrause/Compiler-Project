@@ -31,7 +31,8 @@
 %type <ExprRes> Expr
 %type <InstrSeq> StmtSeq
 %type <InstrSeq> Stmt
-%type <BExprRes> BExpr
+%type <InstrSeq> AssnmtStmt
+%type <ExprRes> BExpr
 
 %token Ident 		
 %token IntLit 	
@@ -40,6 +41,12 @@
 %token IF
 %token EQ	
 %token NOT_EQ
+%token LT_OR_EQ
+%token GT_OR_EQ
+%token LT
+%token GT
+%token OR
+%token AND
 
 %%
 
@@ -50,10 +57,21 @@ Dec			                : Int Ident                                 {enterName(tab
 StmtSeq 		            : Stmt StmtSeq								{$$ = AppendSeq($1, $2);};
 StmtSeq		                :											{$$ = NULL;};
 Stmt			            : Write '(' Expr ')' ';'					{$$ = doPrint($3);};
-Stmt			            : Id '=' Expr ';'							{$$ = doAssign($1, $3);};
 Stmt			            : IF '(' BExpr ')' '{' StmtSeq '}'			{$$ = doIf($3, $6);};
+Stmt                        : AssnmtStmt ';'                            {$$ = $1;};
+AssnmtStmt			        : Id '=' Expr							    {$$ = doAssign($1, $3);};
+BExpr                       : '!' BExpr                                 {$$ = doNegate($2);};
+BExpr                       : BExpr OR BExpr                            {$$ = doOr($1, $3);};
+BExpr                       : BExpr AND BExpr                           {$$ = doAnd($1, $3);};
+BExpr                       : '(' BExpr ')'                             {$$ = $2;};
 BExpr		                : Expr EQ Expr								{$$ = doBExprEq($1, $3);};
 BExpr                       : Expr NOT_EQ Expr                          {$$ = doBExprNotEq($1, $3);};
+BExpr                       : Expr LT_OR_EQ Expr                        {$$ = doBExprLtOrEq($1, $3);};
+BExpr                       : Expr GT_OR_EQ Expr                        {$$ = doBExprGtOrEq($1, $3);};
+BExpr                       : Expr LT Expr                              {$$ = doBExprLt($1, $3);};
+BExpr                       : Expr GT Expr                              {$$ = doBExprGt($1, $3);};
+BExpr                       : Expr                                      {$$ = $1;};
+Expr                        : '(' Expr ')'                              {$$ = $2; };
 Expr			            : Expr '+' Term								{$$ = doAdd($1, $3);};
 Expr			            : Expr '-' Term								{$$ = doSubtraction($1, $3);};
 Expr			            : Term									    {$$ = $1;};
