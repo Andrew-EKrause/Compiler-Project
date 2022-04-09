@@ -16,6 +16,8 @@
  * assembly code.
  * 
  * C-like program is compiled into assembly code,
+ * (also called MIPS code) which can be run in a 
+ * simulator like the Mars simulator.
  * 
  * @file Semantics.c
  * @author Andrew Krause
@@ -336,42 +338,50 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     // exponent and create instructions where we multiply
     // the base by itself.
 
+    // Create three register variables to allocate
+    // space for the exponential operation.
     int reg = AvailTmpReg();
     int reg2 = AvailTmpReg();
     int reg3 = AvailTmpReg();
 
+    // Create three new labels using the GenLabel()
+    // function. They should be a string (char*).
     char *label = GenLabel();
     char *label2 = GenLabel();
     char *label3 = GenLabel();
 
+    // Call the function to add the two registers representing
+    // the expressions to the linked list of instructions.
     AppendSeq(Res1->Instrs, Res2->Instrs);
 
+    // Call the functions to complete the exponentiation operation.
     AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg2), TmpRegName(Res2->Reg), NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg3), TmpRegName(Res2->Reg), NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "sub", TmpRegName(reg3), TmpRegName(reg3), "1"));
 
+    // Create a branch instruction and subtract one from the counter variable 
+    // stored in the register. This helps complete the process of looping and
+    // multiplying repeatedly.
     AppendSeq(Res1->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(reg3), label3));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "sub", TmpRegName(reg2), TmpRegName(reg2), "1"));
-
     AppendSeq(Res1->Instrs, GenInstr(label, NULL, NULL, NULL, NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(reg2), label2));
-
     AppendSeq(Res1->Instrs, GenInstr(NULL, "mul", TmpRegName(reg), TmpRegName(reg), TmpRegName(Res1->Reg)));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "sub", TmpRegName(reg2), TmpRegName(reg2), "1"));
-
     AppendSeq(Res1->Instrs, GenInstr(NULL, "j", label, NULL, NULL));
-
     AppendSeq(Res1->Instrs, GenInstr(label3, NULL, NULL, NULL, NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
-
     AppendSeq(Res1->Instrs, GenInstr(label2, NULL, NULL, NULL, NULL));
 
+    // Release all of the registers after use.
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
     ReleaseTmpReg(reg2);
     ReleaseTmpReg(reg3);
 
+    // Set the first register equal to the first reg variable, free
+    // the second register struct, and return from the function.
     Res1->Reg = reg;
     free(Res2);
     return Res1;
@@ -860,9 +870,9 @@ extern struct ExprRes *doAnd(struct ExprRes *Res1, struct ExprRes *Res2) {
     AppendSeq(Res1->Instrs, Res2->Instrs);
     AppendSeq(Res1->Instrs, GenInstr(NULL, "and", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
 
-    // I'm leaving this here in case I find out I need to do this in the future
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(reg), TmpRegName(reg), "31"));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "srl", TmpRegName(reg), TmpRegName(reg), "31"));
+    // I'm leaving this here in case I find out I need to do this in the future...
+    // AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(reg), TmpRegName(reg), "31"));
+    // AppendSeq(Res1->Instrs, GenInstr(NULL, "srl", TmpRegName(reg), TmpRegName(reg), "31"));
 
     Res->Reg = reg;
     Res->Instrs = Res1->Instrs;
