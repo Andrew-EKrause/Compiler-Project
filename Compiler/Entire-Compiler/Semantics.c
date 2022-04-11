@@ -110,7 +110,7 @@ extern struct ExprRes *doIntLitNeg(char *digits) {
 }
 
 /**
- * LOAD THE WORD (lw)
+ * LOAD THE WORD
  *
  * The function returns a struct that contains a new
  * instruction generated within the function. The
@@ -151,7 +151,12 @@ struct ExprRes *doRval(char *name) {
 /**
  * ADD, SUBTRACT, MULTIPLY, DIVIDE
  * 
- * DESCRIPTION...
+ * The function completes basic arithmetic operations. The operations
+ * inlcude addition, subtraction, multiplication, and division. Given
+ * that each of these operations follows a similar configuration pattern
+ * in the generation of assembly instructions, an additional parameter
+ * is used (char *inst) to allow for different instructions to be
+ * generated.
  */
 extern struct ExprRes *doArithmeticOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst) { 
 
@@ -186,7 +191,7 @@ extern struct ExprRes *doArithmeticOps(struct ExprRes *Res1, struct ExprRes *Res
 
 
 /**
- * MODULUS (series of instructions)
+ * MODULUS
  * 
  * The function returns a struct that contains a new
  * instruction generated within the function. The
@@ -197,8 +202,6 @@ extern struct ExprRes *doArithmeticOps(struct ExprRes *Res1, struct ExprRes *Res
  */
 extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
   
-    // Need to do a division, then use mfhi (move from hi) to access the remainder of our operation. This is the modulo.
-
     // Create an integer variable to represent
     // the available temporary registers.
     int reg;
@@ -233,7 +236,7 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
 }
 
 /**
- * EXPONENTIATION (series of instructions)
+ * EXPONENTIATION
  * 
  * The function returns a struct that contains a new
  * instruction generated within the function. The
@@ -377,7 +380,7 @@ struct InstrSeq *doPrint(struct ExprRes *Expr) {
 // ============================== --> LEFT OFF COMMENTING HERE!!! <-- ==============================
 
 /**
- * PRINTLINES (series of instructions)
+ * PRINTLINES
  * 
  * DESCRIPTION...
  */
@@ -411,7 +414,7 @@ extern struct InstrSeq *doPrintlines(struct ExprRes *Res) {
 }
 
 /**
- * PRINTSPACES (series of instructions)
+ * PRINTSPACES
  * 
  * DESCRIPTION...
  */
@@ -445,7 +448,7 @@ extern struct InstrSeq *doPrintspaces(struct ExprRes *Res) {
 }
 
 /**
- * READ (series of instructions)
+ * READ
  * 
  * DESCRIPTION...
  */
@@ -467,7 +470,7 @@ extern struct InstrSeq *doRead(struct Node *node) {
 }
 
 /**
- * ASSIGNMENT (sw)
+ * ASSIGNMENT
  * 
  * The function returns a struct that contains a new
  * instruction generated within the function. The
@@ -517,23 +520,44 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
  * GREATER THAN OR EQUAL TO, LESS THAN, and
  * GREATER THAN
  * 
- * DESCRIPTION...
+ * The function generates assembly instructions
+ * for equality operators such as: !=, ==, <=,
+ * >=, <, and >. The function follows a similar
+ * instruction generation process for all equality
+ * operators. Therefore, an additional parameter
+ * in the function (char *inst) is used to ensure
+ * that any equality instruction can be created 
+ * for the C-like language.
  */
 extern struct ExprRes *doEqualityOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst) {
     
+    // Create a new struct of type ExprRes, and
+    // set the reg variable equal to the function
+    // to obtain an available register.
     struct ExprRes *Res;
     int reg = AvailTmpReg();
 
+    // Create a new instruction based on the information passed through
+    // the parameters of the function. The instruction is then appended
+    // to a linked list of instructions upon being generated.
     AppendSeq(Res1->Instrs, Res2->Instrs);
     Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
     AppendSeq(Res1->Instrs, GenInstr(NULL, inst, TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
 
+    // Set the Reg attribute to the created
+    // integer variable and the Instrs attribute
+    // to the generated instruction.
     Res->Reg = reg;
     Res->Instrs = Res1->Instrs;
     
+    // Call the functions to release 
+    // the temporary registers.
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
 
+    // Free the registers and
+    // return the instruction
+    // from the function.
     free(Res1);
     free(Res2);
     return Res;
@@ -544,19 +568,39 @@ extern struct ExprRes *doEqualityOps(struct ExprRes *Res1, struct ExprRes *Res2,
 /* ================================================================== */
 
 /**
- * AND, OR, and NOT (series of instructions)
+ * AND, OR, and NOT
  * 
- * DESCRIPTION...
+ * The function generates assembly instructions
+ * for the following boolean operators: and, or, not.
+ * The function follows a similar instruction creation
+ * process for all boolean operators. Therefore, an 
+ * additional parameter (an enum) is used to enable
+ * different instructions to be generated based on 
+ * the various boolean values being parsed in the 
+ * C-like language.
  */
 extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator) {
    
+    // Create a struct of type ExprRes for
+    // storing the instruction that will be
+    // generated in. Also create a variable
+    // for the available registers.
     struct ExprRes *Res;
     int reg = AvailTmpReg();
 
+    // Allocate space for the Res variable declared above.
     Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
 
+    // The conditionals determine which grammar is being 
+    // utilized. In other words, they determine which 
+    // case is being invoked and generates the corresponding
+    // instruction.
     if(boolOperator == and) {
 
+        // If the case is an "and" boolean operation, generate an
+        // "and" instruction in assembly code. This is completed
+        // by checking various bits of data using the "sne" and
+        // $zero registers.
         AppendSeq(Res1->Instrs, Res2->Instrs);
         AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "$zero"));
         AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), "$zero"));
@@ -564,6 +608,10 @@ extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, 
 
     } else if(boolOperator == or) {
 
+        // If the case is an "or" boolean operation, generate an 
+        // "or" instruction in assembly code. This is also done
+        // by checking various bits of data using the "sne" and
+        // $zero registers.
         AppendSeq(Res1->Instrs, Res2->Instrs);
         AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "$zero"));
         AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), "$zero"));
@@ -571,18 +619,32 @@ extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, 
 
     } else {
 
-        AppendSeq(Res1->Instrs, Res2->Instrs);
-        AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "$zero"));
-        AppendSeq(Res1->Instrs, GenInstr(NULL, "not", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
+        // If neither of the two above cases are true, then the 
+        // case must be a "not" boolean operation. Generate a
+        // "not" instruction by using the "seq" sudo instruction
+        // in combination with the $zero register.
+        AppendSeq(Res1->Instrs, NULL);
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "seq", TmpRegName(reg), TmpRegName(Res1->Reg), "$zero"));
     }
 
+    // Set the attributes of the Res structure,
+    // release the first temporary register, and
+    // free Res1.
     Res->Reg = reg;
     Res->Instrs = Res1->Instrs;
     ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-
     free(Res1);
-    free(Res2);
+
+    // If the second register is not
+    // NULL, release the second temporary 
+    // register and free Res2.
+    if(Res2) {
+        ReleaseTmpReg(Res2->Reg);
+        free(Res2);
+    }
+
+    // Return the register
+    // from the function.
     return Res;
 }
 

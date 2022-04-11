@@ -22,7 +22,7 @@
     char * string;
     struct ExprRes * ExprRes;
     struct InstrSeq * InstrSeq;
-    struct BExprRes * BExprRes;
+    struct Node * Node;
 }
 
 %type <string> Id
@@ -38,12 +38,12 @@
 %type <ExprRes> ExprL6
 %type <ExprRes> ExprL7
 
-%token Ident 		
-%token IntLit 	
+%token Ident		
+%token IntLit	
 %token Int
 %token Write
 %token IF
-%token EQ	
+%token EQ
 %token NOT_EQ
 %token LT_OR_EQ
 %token GT_OR_EQ
