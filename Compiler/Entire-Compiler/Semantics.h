@@ -7,7 +7,8 @@
     In summary, the Semantics.h file contains the action and
     supporting routines for performing semantics processing.  
 */
-//#pragma once
+#pragma once
+#include "CodeGen.h"
 
 /* 
     The struct contains the semantic 
@@ -56,6 +57,15 @@ struct Node {
 };
 
 /* ================= */
+/* Enumerations */
+/* ================= */
+
+/*
+    Create an enumeration for boolean operators.
+*/
+enum BExprOps {and, or, not};
+
+/* ================= */
 /* Semantics Actions */
 /* ================= */
 
@@ -70,10 +80,7 @@ extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
 /* 
     The functions handle the cases for basic arithmetic operations.
 */
-extern struct ExprRes *doAdd(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doSubtraction(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doMult(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doDivide(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doArithmeticOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst);
 extern struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2);
 extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2);
 
@@ -90,19 +97,26 @@ extern struct InstrSeq *doRead(struct Node *node);
     The functions complete branch expression operations.
 */
 // extern struct BExprRes *doBExpr(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doBExprEq(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doBExprNotEq(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doBExprLtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doBExprGtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
+// extern struct ExprRes *doBExprEq(struct ExprRes *Res1, struct ExprRes *Res2);
+// extern struct ExprRes *doBExprNotEq(struct ExprRes *Res1, struct ExprRes *Res2);
+// extern struct ExprRes *doBExprLtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
+// extern struct ExprRes *doBExprGtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
 
 /*
     The functions handle control flow and conditonal operations.
 */
-extern struct ExprRes *doBExprLt(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doBExprGt(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doNegate(struct ExprRes *Res1);
-extern struct ExprRes *doOr(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doAnd(struct ExprRes *Res1, struct ExprRes *Res2);
+// extern struct ExprRes *doBExprLt(struct ExprRes *Res1, struct ExprRes *Res2);
+// extern struct ExprRes *doBExprGt(struct ExprRes *Res1, struct ExprRes *Res2);
+
+/*
+    The function handles equality operations.
+*/
+extern struct ExprRes *doEqualityOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst);
+
+/*
+    The function handles boolean operations.
+*/
+extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator);
 
 /* 
     The functions handle cases where there are conditionals and loops.

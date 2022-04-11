@@ -33,6 +33,10 @@
 %type <ExprRes> ExprL1
 %type <ExprRes> ExprL2
 %type <ExprRes> ExprL3
+%type <ExprRes> ExprL4
+%type <ExprRes> ExprL5
+%type <ExprRes> ExprL6
+%type <ExprRes> ExprL7
 
 %token Ident 		
 %token IntLit 	
@@ -53,36 +57,51 @@
 Prog			            : Declarations StmtSeq						                           { Finish($2); };
 Declarations	            : Dec Declarations							                           { };
             	            |											                           { };
+                            
 Dec			                : Int Ident                                                            { enterName(table, yytext); }';' {};
 StmtSeq 		            : Stmt StmtSeq								                           { $$ = AppendSeq($1, $2); };
     		                |											                           { $$ = NULL; };
+
 Stmt			            : Write '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); };
     			            | IF '(' ExprL0 ')' '{' StmtSeq '}'			                           { $$ = doIf($3, $6); };
                             | AssnmtStmt ';'                                                       { $$ = $1; };
+
 AssnmtStmt			        : Id '=' ExprL0							                               { $$ = doAssign($1, $3); };
-ExprL0                      : '!' ExprL1                                                           { $$ = doNegate($2); };
-                            | ExprL0 OR ExprL1                                                     { $$ = doOr($1, $3); };
-                            | ExprL0 AND ExprL1                                                    { $$ = doAnd($1, $3); };
-      		                | ExprL0 EQ ExprL1						                               { $$ = doBExprEq($1, $3); };
-                            | ExprL0 NOT_EQ ExprL1                                                 { $$ = doBExprNotEq($1, $3); };
-                            | ExprL0 LT_OR_EQ ExprL1                                               { $$ = doBExprLtOrEq($1, $3); };
-                            | ExprL0 GT_OR_EQ ExprL1                                               { $$ = doBExprGtOrEq($1, $3); };
-                            | ExprL0 LT ExprL1                                                     { $$ = doBExprLt($1, $3); };
-                            | ExprL0 GT ExprL1                                                     { $$ = doBExprGt($1, $3); };
+
+ExprL0                      : ExprL0 OR ExprL1                                                     { $$ = doBooleanOPs($1, $3, or); };
+                            | ExprL0 AND ExprL1                                                    { $$ = doBooleanOPs($1, $3, and); };
                             | ExprL1                                                               { $$ = $1; };
-ExprL1                      : ExprL1 '+' ExprL2						                               { $$ = doAdd($1, $3); };
-    			            | ExprL1 '-' ExprL2							                           { $$ = doSubtraction($1, $3); };
-    			            | ExprL2									                           { $$ = $1; };
-ExprL2                      : ExprL2 '*' ExprL3							                           { $$ = doMult($1, $3); };
-    		                | ExprL2 '/' ExprL3							                           { $$ = doDivide($1, $3); };
-    		                | ExprL2 '%' ExprL3							                           { $$ = doModulo($1, $3); };
-                            | ExprL2 '^' ExprL3                                                    { $$ = doExponential($1, $3); };
-    		                | ExprL3									                           { $$ = $1; };
-ExprL3                      : '(' ExprL3 ')'                                                       { $$ = $2; };
-    		                | IntLit									                           { $$ = doIntLit(yytext); };
-                            | '-'IntLit                                                            { $$ = doIntLitNeg(yytext); };
+
+ExprL1                      : '!' ExprL2                                                           { $$ = doBooleanOPs($2, NULL, not); };
+                            | ExprL2                                                               { $$ = $1; };
+
+ExprL2                      : ExprL2 NOT_EQ ExprL3                                                 { $$ = doEqualityOps($1, $3, "sne"); };
+      		                | ExprL2 EQ ExprL3					                                   { $$ = doEqualityOps($1, $3, "seq"); };
+                            | ExprL2 LT_OR_EQ ExprL3                                               { $$ = doEqualityOps($1, $3, "sle"); };
+                            | ExprL2 GT_OR_EQ ExprL3                                               { $$ = doEqualityOps($1, $3, "sge"); };
+                            | ExprL2 LT ExprL3                                                     { $$ = doEqualityOps($1, $3, "slt"); };
+                            | ExprL2 GT ExprL3                                                     { $$ = doEqualityOps($1, $3, "sgt"); };
+                            | ExprL3                                                               { $$ = $1; };
+
+ExprL3                      : ExprL3 '+' ExprL4						                               { $$ = doArithmeticOps($1, $3, "add"); };
+    			            | ExprL3 '-' ExprL4							                           { $$ = doArithmeticOps($1, $3, "sub"); };
+    			            | ExprL4									                           { $$ = $1; };
+
+ExprL4                      : ExprL4 '*' ExprL5							                           { $$ = doArithmeticOps($1, $3, "mul"); };
+    		                | ExprL4 '/' ExprL5							                           { $$ = doArithmeticOps($1, $3, "div"); };
+    		                | ExprL4 '%' ExprL5							                           { $$ = doModulo($1, $3); };
+                            | ExprL5                                                               { $$ = $1; };
+
+ExprL5                      : ExprL6 '^' ExprL5                                                    { $$ = doExponential($1, $3); };
+    		                | ExprL6									                           { $$ = $1; };
+
+ExprL6                      : '(' ExprL0 ')'                                                       { $$ = $2; };
+                            | ExprL7                                                               { $$ = $1; };
+
+ExprL7    		            : '-'ExprL6                                                            { $$ = doIntLitNeg(yytext); };
+                            | IntLit									                           { $$ = doIntLit(yytext); };
     		                | Ident									                               { $$ = doRval(yytext); };
-Id			                : Ident									                               { $$ = strdup(yytext); }
+Id			                : Ident									                               { $$ = strdup(yytext); };
 
 %%
 

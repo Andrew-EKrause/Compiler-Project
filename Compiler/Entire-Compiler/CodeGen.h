@@ -4,7 +4,7 @@
     produces the assembly code equivalent to the C-like language that 
     will be compiled (translated to the assembly code).
 */
-//#pragma once
+#pragma once
 
 /* Include the standard I/O package. */
 #include <stdio.h>

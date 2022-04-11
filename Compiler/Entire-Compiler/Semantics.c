@@ -82,9 +82,17 @@ struct ExprRes *doIntLit(char *digits) {
 /**
  * INTEGER LITERAL: NEGATIVE
  * 
- *  DESCRIPTION...
+ * The function returns a struct that contains a new 
+ * instruction generated within the function. The 
+ * function handles cases where a negative int literal
+ * is being evaluated. The function ensures that the 
+ * negative int literal is added into a register via
+ * the "li" label (It loads an immediate value into
+ * a register). The value is then multiplied by negative
+ * one to ensure that it is read as negative in MIPS
+ * assembly.
  */
-extern struct ExprRes *doIntLitNeg(char *digits) { 
+extern struct ExprRes *doIntLitNeg(char *digits) {
 
     // Create a struct of type ExprRes to store 
     // the new instruction being created.
@@ -141,71 +149,26 @@ struct ExprRes *doRval(char *name) {
 /* ================================================================== */
 
 /**
- * ADDITION (add)
- *
- * The function returns a struct that contains a new
- * instruction generated within the function. The
- * function handles cases where data is being added
- * together. Two integer values are combined in the
- * process of addition. The function ensures that
- * the values are added together in a process that 
- * stores the result in a third register. The label
- * for this process is the "add" label (It stores 
- * the data added together via register2 and register3
- * in register1).
- */
-struct ExprRes *doAdd(struct ExprRes *Res1, struct ExprRes *Res2) { 
-
-    // Create an integer variable to represent 
-    // the available temporary registers.
-    int reg;
-    reg = AvailTmpReg();
-
-    // Call the AppendSeq function to determine what
-    // registers are open as well as add the instrutions
-    // to the linked list of instructions.
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "add", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-    
-    // Call the functions below to indicate 
-    // that the registers used in the "add" 
-    // operation are now free to use again. 
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-    
-    // Set the register number of the result
-    // equal to the "reg" variable that was used
-    // to determine what register number to use
-    // for the operation.
-    Res1->Reg = reg;
-    
-    // Free the space in the result variable,
-    // and return the other result.
-    free(Res2);
-    return Res1;
-}
-
-/**
- * SUBTRACTION (sub)
+ * ADD, SUBTRACT, MULTIPLY, DIVIDE
  * 
  * DESCRIPTION...
  */
-struct ExprRes *doSubtraction(struct ExprRes *Res1, struct ExprRes *Res2) { 
+extern struct ExprRes *doArithmeticOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst) { 
 
     // Create an integer variable to represent 
     // the available temporary registers.
     int reg;
     reg = AvailTmpReg();
-
+    
     // Call the AppendSeq function to determine what
-    // registers are open as well as add the instrutions
+    // registers are open as well as add the instructions
     // to the linked list of instructions.
     AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sub", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-    
+    AppendSeq(Res1->Instrs, GenInstr(NULL, inst, TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
+
     // Call the functions below to indicate 
-    // that the registers used in the "sub" 
-    // operation are now free to use again. 
+    // that the registers used in the operation 
+    // are now free to use again. 
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
     
@@ -221,107 +184,50 @@ struct ExprRes *doSubtraction(struct ExprRes *Res1, struct ExprRes *Res2) {
     return Res1;
 }
 
-/**
- * MULTIPLICATION (mul)
- * 
- * The function returns a struct that contains a new
- * instruction generated within the function. The
- * function handles cases where data is being multiplied
- * together. Two integer values are combined in the
- * process of multiplication. The function ensures that
- * the values are multiplied together in a process that 
- * stores the result in a third register. The label
- * for this process is the "mul" label (It stores the
- * data multiplied together via register2 and register3
- * in register1).
- */
-struct ExprRes *doMult(struct ExprRes *Res1, struct ExprRes *Res2) { 
-
-    // Create an integer variable to represent 
-    // the available temporary registers.
-    int reg;
-    reg = AvailTmpReg();
-    
-    // Call the AppendSeq function to determine what
-    // registers are open as well as add the instrutions
-    // to the linked list of instructions.
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "mul", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-    
-    // Call the functions below to indicate 
-    // that the registers used in the "mul" 
-    // operation are now free to use again. 
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-    
-    // Set the register number of the result
-    // equal to the "reg" variable that was used
-    // to determine what register number to use
-    // for the operation.
-    Res1->Reg = reg;
-    
-    // Free the space in the result variable,
-    // and return the other result.
-    free(Res2);
-    return Res1;
-}
-
-/**
- * DIVISION (div)
- * 
- * DESCRIPTION...
- */
-struct ExprRes *doDivide(struct ExprRes *Res1, struct ExprRes *Res2) { 
-
-    // Create an integer variable to represent 
-    // the available temporary registers.
-    int reg;
-    reg = AvailTmpReg();
-    
-    // Call the AppendSeq function to determine what
-    // registers are open as well as add the instrutions
-    // to the linked list of instructions.
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-    
-    // Call the functions below to indicate 
-    // that the registers used in the "mul" 
-    // operation are now free to use again. 
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-    
-    // Set the register number of the result
-    // equal to the "reg" variable that was used
-    // to determine what register number to use
-    // for the operation.
-    Res1->Reg = reg;
-    
-    // Free the space in the result variable,
-    // and return the other result.
-    free(Res2);
-    return Res1;
-}
 
 /**
  * MODULUS (series of instructions)
  * 
- * DESCRIPTION...
+ * The function returns a struct that contains a new
+ * instruction generated within the function. The
+ * function handles cases where the modulus operator
+ * is used. Two MIPS assembly instruction labels are
+ * used to complete the modulus operation: The "div"
+ * label (divide) and the "mfhi" label (move from hi).
  */
 extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
   
     // Need to do a division, then use mfhi (move from hi) to access the remainder of our operation. This is the modulo.
 
+    // Create an integer variable to represent
+    // the available temporary registers.
     int reg;
     reg = AvailTmpReg();
 
+    // Call the AppendSeq function to determine what 
+    // registers are open as well as add the instructions
+    // to the linked list of instructions.
+    // In this case, we perform division and then utilize
+    // the "mfhi" MIPS assembly instruction (move from hi)
+    // to complete the modulus operation.
     AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg))); // We dont care about the quotient
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg))); // We dont care about the quotient???
     AppendSeq(Res1->Instrs, GenInstr(NULL, "mfhi", TmpRegName(reg), NULL, NULL));
 
+    // Call the functions below to indicate 
+    // that the registers used in the modulus 
+    // operation are now free to use again. 
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
 
+    // Set the register number of the result
+    // equal to the "reg" variable that was used
+    // to determine what register number to use
+    // for the operation.
     Res1->Reg = reg;
+
+    // Free the space in the result variable,
+    // and return the other result.
     free(Res2);
     return Res1;
 }
@@ -329,7 +235,14 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
 /**
  * EXPONENTIATION (series of instructions)
  * 
- * DESCRIPTION...
+ * The function returns a struct that contains a new
+ * instruction generated within the function. The
+ * function handles cases where the exponentiation 
+ * operator is used. Multiple MIPS instructions are 
+ * used to complete the process of exponentiation. In 
+ * essence, the instructions used equate to repeated
+ * multiplication in order to raise the value to a 
+ * given power.
  */
 struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
 
@@ -461,6 +374,8 @@ struct InstrSeq *doPrint(struct ExprRes *Expr) {
 //     return code;
 // }
 
+// ============================== --> LEFT OFF COMMENTING HERE!!! <-- ==============================
+
 /**
  * PRINTLINES (series of instructions)
  * 
@@ -508,18 +423,18 @@ extern struct InstrSeq *doPrintspaces(struct ExprRes *Res) {
     AppendSeq(code, Res->Instrs);
     AppendSeq(code, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res->Reg), NULL));
 
-    char *label = GenLabel();
+    char *label1 = GenLabel();
     char *label2 = GenLabel();
 
     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(reg), label2));
-    AppendSeq(code, GenInstr(label, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines desired;
+    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines desired;
 
     AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
     AppendSeq(code, GenInstr(NULL, "la", "$a0", "_space", NULL));
     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
     AppendSeq(code, GenInstr(NULL, "sub", TmpRegName(reg), TmpRegName(reg), "1"));
-    AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(reg), label));
+    AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(reg), label1));
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
     ReleaseTmpReg(reg);
@@ -597,196 +512,21 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
 /* EQUAL TO, GREATER THAN OR EQUAL TO, LESS THAN, AND GREATER THAN. */
 /* ================================================================== */
 
-// /**
-//  * The function returns a struct that contains a new
-//  * instruction generated within the function. The
-//  * function handles cases where there is a branch in
-//  * the code. In this particular case, the branch occurs
-//  * when there are two values that are not equal. The 
-//  * label for this process is the "bne" label (branch
-//  * if not equal).
-//  */
-// extern struct BExprRes *doBExpr(struct ExprRes *Res1, struct ExprRes *Res2) {
-
-//     // Create a variable of type BExprRes.
-//     // This stores the branch instruction.
-//     struct BExprRes *bRes;
-	
-//     // Using the AppendSeq function, add the 
-//     // Res1 and Res2 instructions to the main
-//     // linked list of instructions.
-//     AppendSeq(Res1->Instrs, Res2->Instrs);
-    
-//     // Create space for the instruction that will be
-//     // generated. Create a label for the instruction.
-//     bRes = (struct BExprRes *) malloc(sizeof(struct BExprRes));
-//     bRes->Label = GenLabel();
-    
-//     // Call the AppendSeq function again to add the 
-//     // newly formed instruction to the linked list
-//     // of instructions. Set the instruction part 
-//     // of the bRes variable to the instruction 
-//     // component of Res1.
-//     AppendSeq(Res1->Instrs, GenInstr(NULL, "bne", TmpRegName(Res1->Reg), TmpRegName(Res2->Reg), bRes->Label));
-//     bRes->Instrs = Res1->Instrs;
-    
-//     // Release the temporary registers 
-//     // for reuse after the instruction 
-//     // is created with the registers.
-//     ReleaseTmpReg(Res1->Reg);
-//   	ReleaseTmpReg(Res2->Reg);
-    
-//     // Free the structs used for the 
-//     // registers to free up memory. 
-//     free(Res1);
-//     free(Res2);
-
-//     // Return the bRes variable 
-//     // from the function.
-//     return bRes;
-// }
-
 /**
- * EQUAL (seq)
+ * NOT EQUAL, EQUAL, LESS THAN OR EQUAL TO,
+ * GREATER THAN OR EQUAL TO, LESS THAN, and
+ * GREATER THAN
  * 
  * DESCRIPTION...
  */
-extern struct ExprRes *doBExprEq(struct ExprRes *Res1, struct ExprRes *Res2) {
+extern struct ExprRes *doEqualityOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst) {
     
     struct ExprRes *Res;
     int reg = AvailTmpReg();
 
     AppendSeq(Res1->Instrs, Res2->Instrs);
     Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "seq", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
-
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-
-    free(Res1);
-    free(Res2);
-
-    return Res;
-}
-
-/**
- * NOT EQUAL (sne)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doBExprNotEq(struct ExprRes *Res1, struct ExprRes *Res2) {
-    
-    struct ExprRes *Res;
-    int reg = AvailTmpReg();
-
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
-
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-
-    free(Res1);
-    free(Res2);
-
-    return Res;
-}
-
-/**
- * LESS THAN OR EQUAL TO (sle)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doBExprLtOrEq(struct ExprRes *Res1, struct ExprRes *Res2) {
-    
-    struct ExprRes *Res;
-    int reg = AvailTmpReg();
-
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sle", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
-
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-
-    free(Res1);
-    free(Res2);
-    
-    return Res;
-}
-
-/**
- * GREATER THAN OR EQUAL TO (sge)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doBExprGtOrEq(struct ExprRes *Res1, struct ExprRes *Res2) {
-
-    struct ExprRes *Res;
-    int reg = AvailTmpReg();
-
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sge", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
-
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-
-    free(Res1);
-    free(Res2);
-    return Res;
-}
-
-/**
- * LESS THAN (slt)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doBExprLt(struct ExprRes *Res1, struct ExprRes *Res2) {
-   
-    struct ExprRes *Res;
-    int reg = AvailTmpReg();
-
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "slt", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
-
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-
-    free(Res1);
-    free(Res2);
-    return Res;
-}
-
-/**
- * GREATER THAN (sgt)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doBExprGt(struct ExprRes *Res1, struct ExprRes *Res2) {
-    
-    struct ExprRes *Res;
-    int reg = AvailTmpReg();
-
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sgt", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
+    AppendSeq(Res1->Instrs, GenInstr(NULL, inst, TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
 
     Res->Reg = reg;
     Res->Instrs = Res1->Instrs;
@@ -804,75 +544,37 @@ extern struct ExprRes *doBExprGt(struct ExprRes *Res1, struct ExprRes *Res2) {
 /* ================================================================== */
 
 /**
- * NEGATION (series of instructions)
+ * AND, OR, and NOT (series of instructions)
  * 
  * DESCRIPTION...
  */
-extern struct ExprRes *doNegate(struct ExprRes *Res1) {
-  
-    struct ExprRes *Res;
-    int reg = AvailTmpReg();
-
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "not", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
-
-    // This next bit should (ideally) clear all of the garbage bits
-    // --> THIS MAY BE INCORRECT!!!
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(reg), TmpRegName(reg), "31"));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "srl", TmpRegName(reg), TmpRegName(reg), "31"));
-
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
-    ReleaseTmpReg(Res1->Reg);
-
-    free(Res1);
-    return Res;
-}
-
-/**
- * OR (series of instructions)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doOr(struct ExprRes *Res1, struct ExprRes *Res2) {
-    
-    struct ExprRes *Res;
-    int reg = AvailTmpReg();
-
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "or", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(reg), TmpRegName(reg), "31"));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "srl", TmpRegName(reg), TmpRegName(reg), "31"));
-
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
-    ReleaseTmpReg(Res1->Reg);
-    ReleaseTmpReg(Res2->Reg);
-
-    free(Res1);
-    free(Res2);
-    return Res;
-}
-
-/**
- * AND (series of instructions)
- * 
- * DESCRIPTION...
- */
-extern struct ExprRes *doAnd(struct ExprRes *Res1, struct ExprRes *Res2) {
+extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator) {
    
     struct ExprRes *Res;
     int reg = AvailTmpReg();
 
     Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
-    AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "and", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
 
-    // I'm leaving this here in case I find out I need to do this in the future...
-    // AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(reg), TmpRegName(reg), "31"));
-    // AppendSeq(Res1->Instrs, GenInstr(NULL, "srl", TmpRegName(reg), TmpRegName(reg), "31"));
+    if(boolOperator == and) {
+
+        AppendSeq(Res1->Instrs, Res2->Instrs);
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "$zero"));
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), "$zero"));
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "and", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
+
+    } else if(boolOperator == or) {
+
+        AppendSeq(Res1->Instrs, Res2->Instrs);
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "$zero"));
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), "$zero"));
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "or", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
+
+    } else {
+
+        AppendSeq(Res1->Instrs, Res2->Instrs);
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "sne", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "$zero"));
+        AppendSeq(Res1->Instrs, GenInstr(NULL, "not", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
+    }
 
     Res->Reg = reg;
     Res->Instrs = Res1->Instrs;
@@ -926,22 +628,6 @@ extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
     free(Res);
     return seq2;
 }
-
-// // --> NOT SURE WHAT THIS IS YET...LEAVE COMMENTED OUT FOR NOW!!!
-// extern struct InstrSeq *doIf(struct ExprRes *res1, struct ExprRes *res2, struct InstrSeq *seq) {
-//     struct InstrSeq *seq2;
-//     char * label;
-//     label = GenLabel();
-//     AppendSeq(res1->Instrs, res2->Instrs);
-//     AppendSeq(res1->Instrs, GenInstr(NULL, "bne", TmpRegName(res1->Reg), TmpRegName(res2->Reg), label));
-//     seq2 = AppendSeq(res1->Instrs, seq);
-//     AppendSeq(seq2, GenInstr(label, NULL, NULL, NULL, NULL));
-//     ReleaseTmpReg(res1->Reg);
-//     ReleaseTmpReg(res2->Reg);
-//     free(res1);
-//     free(res2);
-//     return seq2;
-// }
 
 /**
  * IF-ELSE (series of instructions)

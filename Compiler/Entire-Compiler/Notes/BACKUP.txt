@@ -94,3 +94,101 @@ int yyerror(char *s) {
     writeMessage("Illegal Character in YACC");
     return 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /**
+//  * The function returns a struct that contains a new
+//  * instruction generated within the function. The
+//  * function handles cases where there is a branch in
+//  * the code. In this particular case, the branch occurs
+//  * when there are two values that are not equal. The 
+//  * label for this process is the "bne" label (branch
+//  * if not equal).
+//  */
+// extern struct BExprRes *doBExpr(struct ExprRes *Res1, struct ExprRes *Res2) {
+
+//     // Create a variable of type BExprRes.
+//     // This stores the branch instruction.
+//     struct BExprRes *bRes;
+	
+//     // Using the AppendSeq function, add the 
+//     // Res1 and Res2 instructions to the main
+//     // linked list of instructions.
+//     AppendSeq(Res1->Instrs, Res2->Instrs);
+    
+//     // Create space for the instruction that will be
+//     // generated. Create a label for the instruction.
+//     bRes = (struct BExprRes *) malloc(sizeof(struct BExprRes));
+//     bRes->Label = GenLabel();
+    
+//     // Call the AppendSeq function again to add the 
+//     // newly formed instruction to the linked list
+//     // of instructions. Set the instruction part 
+//     // of the bRes variable to the instruction 
+//     // component of Res1.
+//     AppendSeq(Res1->Instrs, GenInstr(NULL, "bne", TmpRegName(Res1->Reg), TmpRegName(Res2->Reg), bRes->Label));
+//     bRes->Instrs = Res1->Instrs;
+    
+//     // Release the temporary registers 
+//     // for reuse after the instruction 
+//     // is created with the registers.
+//     ReleaseTmpReg(Res1->Reg);
+//   	ReleaseTmpReg(Res2->Reg);
+    
+//     // Free the structs used for the 
+//     // registers to free up memory. 
+//     free(Res1);
+//     free(Res2);
+
+//     // Return the bRes variable 
+//     // from the function.
+//     return bRes;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // --> NOT SURE WHAT THIS IS YET...LEAVE COMMENTED OUT FOR NOW!!!
+// extern struct InstrSeq *doIf(struct ExprRes *res1, struct ExprRes *res2, struct InstrSeq *seq) {
+//     struct InstrSeq *seq2;
+//     char * label;
+//     label = GenLabel();
+//     AppendSeq(res1->Instrs, res2->Instrs);
+//     AppendSeq(res1->Instrs, GenInstr(NULL, "bne", TmpRegName(res1->Reg), TmpRegName(res2->Reg), label));
+//     seq2 = AppendSeq(res1->Instrs, seq);
+//     AppendSeq(seq2, GenInstr(label, NULL, NULL, NULL, NULL));
+//     ReleaseTmpReg(res1->Reg);
+//     ReleaseTmpReg(res2->Reg);
+//     free(res1);
+//     free(res2);
+//     return seq2;
+// }
