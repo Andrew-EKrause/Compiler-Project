@@ -31,11 +31,12 @@
 // Include the strings library as 
 // well as the standard C library.
 #include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 
 // Include the .h files needed to 
 // complete the compilation process.
-#include "CodeGen.c" // --> ASK QUINN OR GENDREAU; WHY .c? WHY IS .h NOT WORKING???
+#include "CodeGen.h"
 #include "Semantics.h"
 #include "SymTab.h"
 #include "IOMngr.h"
@@ -354,6 +355,18 @@ struct InstrSeq *doPrint(struct ExprRes *Expr) {
     return code;
 }
 
+/**
+ * The function is used to help complete the 
+ * READ functionality of the compiler. ADD MORE...
+ * 
+ */
+extern struct ExprResList *createExprList(char *idName, struct ExprResList *list) {
+
+    return 0;
+
+}
+
+
 // // --> THIS MAY BE THE PRINT THAT YOU WILL ACTUALLY WANT TO USE!!!
 // struct InstrSeq *doPrint(struct Node *node) {
 
@@ -448,25 +461,49 @@ extern struct InstrSeq *doPrintspaces(struct ExprRes *Res) {
 }
 
 /**
- * READ
+ * READ (IN PROGRESS...)
  * 
  * DESCRIPTION...
  */
-extern struct InstrSeq *doRead(struct Node *node) {
+extern struct InstrSeq *doRead(struct IdList *entry) {
   
-    struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
-    struct Node *curr = node;
+    struct InstrSeq *code = malloc(sizeof(struct InstrSeq));
+    struct IdList *curr = entry;
 
     while (curr) {
 
         AppendSeq(code, GenInstr(NULL, "li", "$v0", "5", NULL));
         AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
-        AppendSeq(code, GenInstr(NULL, "sw", "$v0", (char *)curr->name, NULL));
+        AppendSeq(code, GenInstr(NULL, "sw", "$v0", curr->TheEntry->name, NULL));
 
-        curr = curr->next;
+        free(curr->TheEntry->name); 
+        free(curr->TheEntry); 
+
+        entry = curr;
+        curr = curr->Next;
+
+        free(entry);
     }
 
     return code;
+}
+
+/**
+ * The function is used to help complete the 
+ * READ functionality of the compiler. 
+ * 
+ * ADD MORE...
+ */
+extern struct IdList *createIdentList(char *idName, struct IdList *list) {
+
+    // Create a new IdList to return from the function.
+    struct IdList *newList = malloc(sizeof(struct IdList));
+
+    newList->Next = list;
+    newList->TheEntry = malloc(sizeof(SymEntry));
+    newList->TheEntry->name = strdup(idName);
+
+    return newList;
 }
 
 /**
@@ -833,6 +870,9 @@ void Finish(struct InstrSeq *Code) {
 
     // --> NOT SURE WHY THE CODE BELOW IS COMMENTED OUT. CHECK LATER!!!
     // AppendSeq(code,GenInstr(NULL,".align","2",NULL,NULL));
+
+    // --> WHEN YOU GET TO THE READ STRING FUNCTION, YOU WILL NEED TO DO THE FOLLOWING:
+    // --> READ THE STRING AT COMPILE TIME AND STORE IN STATIC DATA; MUST WRITE THAT INTO THIS FINISH FUNCTION.
     
     // Call the AppendSeq functions to display the heading
     // content at the top of each assembly file created at

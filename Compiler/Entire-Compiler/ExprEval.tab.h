@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_H3_TAB_H_INCLUDED
-# define YY_YY_H3_TAB_H_INCLUDED
+#ifndef YY_YY_EXPREVAL_TAB_H_INCLUDED
+# define YY_YY_EXPREVAL_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -55,9 +55,19 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     Ident = 258,                   /* Ident  */
-    SetLit = 259,                  /* SetLit  */
-    UNION = 260,                   /* UNION  */
-    INTERSECT = 261                /* INTERSECT  */
+    IntLit = 259,                  /* IntLit  */
+    Int = 260,                     /* Int  */
+    Write = 261,                   /* Write  */
+    IF = 262,                      /* IF  */
+    EQ = 263,                      /* EQ  */
+    NOT_EQ = 264,                  /* NOT_EQ  */
+    LT_OR_EQ = 265,                /* LT_OR_EQ  */
+    GT_OR_EQ = 266,                /* GT_OR_EQ  */
+    LT = 267,                      /* LT  */
+    GT = 268,                      /* GT  */
+    OR = 269,                      /* OR  */
+    AND = 270,                     /* AND  */
+    Read = 271                     /* Read  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -66,12 +76,16 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "h3.y"
+#line 20 "ExprEval.y"
 
-    SymTab* set;
-    char* string;
+    long val;
+    char * string;
+    struct ExprRes * ExprRes;
+    struct InstrSeq * InstrSeq;
+    struct IdList * IdList;
+    struct Node * Node;
 
-#line 75 "h3.tab.h"
+#line 89 "ExprEval.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -86,4 +100,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_H3_TAB_H_INCLUDED  */
+#endif /* !YY_YY_EXPREVAL_TAB_H_INCLUDED  */

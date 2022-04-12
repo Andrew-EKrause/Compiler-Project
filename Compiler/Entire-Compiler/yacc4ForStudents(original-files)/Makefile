@@ -35,7 +35,7 @@ MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan
 main:
 	bison -d $(BISON)
 	flex $(LEX)
-	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(MEMCHECK)
+	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c CodeGen.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(MEMCHECK)
 
 # ===============================================
 # Group of cleaning protocols after execution.
@@ -43,5 +43,5 @@ main:
 
 # Remove any object files as well as the executable files.
 clean:
-	rm -r compiler.dSYM
 	rm ExprEval.tab.h ExprEval.tab.c lex.yy.c compiler
+	rm -r compiler.dSYM

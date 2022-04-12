@@ -17,6 +17,7 @@ digit [0-9]
 if					                    {return IF;}
 int					                    {return Int;}
 print					                {return Write;}
+read                                    {return Read;}
 
 {letter}({letter}|{digit})*	            {return Ident;}
 {digit}{digit}*		                    {return IntLit;}
@@ -45,6 +46,7 @@ print					                {return Write;}
 \}					                    {return '}';}
 \(					                    {return '(';}
 \)					                    {return ')';}
+\,                                      {return ',';}
 
 [ ]				                        {}
 \t				                        {}

@@ -22,6 +22,7 @@
     char * string;
     struct ExprRes * ExprRes;
     struct InstrSeq * InstrSeq;
+    struct IdList * IdList;
     struct Node * Node;
 }
 
@@ -29,6 +30,7 @@
 %type <InstrSeq> StmtSeq
 %type <InstrSeq> Stmt
 %type <InstrSeq> AssnmtStmt
+%type <IdList> IdentList
 %type <ExprRes> ExprL0
 %type <ExprRes> ExprL1
 %type <ExprRes> ExprL2
@@ -51,6 +53,7 @@
 %token GT
 %token OR
 %token AND
+%token Read
 
 %%
 
@@ -63,6 +66,7 @@ StmtSeq 		            : Stmt StmtSeq								                           { $$ = Ap
     		                |											                           { $$ = NULL; };
 
 Stmt			            : Write '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); };
+                            | Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
     			            | IF '(' ExprL0 ')' '{' StmtSeq '}'			                           { $$ = doIf($3, $6); };
                             | AssnmtStmt ';'                                                       { $$ = $1; };
 
@@ -101,6 +105,10 @@ ExprL6                      : '(' ExprL0 ')'                                    
 ExprL7    		            : '-'ExprL6                                                            { $$ = doIntLitNeg(yytext); };
                             | IntLit									                           { $$ = doIntLit(yytext); };
     		                | Ident									                               { $$ = doRval(yytext); };
+
+IdentList                   : Id ',' IdentList                                                     { $$ = createIdentList($1, $3); };
+                            | Id                                                                   { $$ = createIdentList($1, NULL); };
+
 Id			                : Ident									                               { $$ = strdup(yytext); };
 
 %%

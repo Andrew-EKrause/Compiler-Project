@@ -16,7 +16,7 @@ PART 1: Integer Expressions (30 Points)
 [ x ] All operators except ^ use the precedence and associativity rules of C. ^ is right 
       associative and has lower precedence than unary minus and higher precedence than all 
       the other operators. Parentheses are used to change order of operations.
-[ x ] ANYTHING ELSE???
+[ x ] ANYTHING ELSE??? --> MAYBE LOOK AT THE CASE WHERE YOU HAVE -(5 + 1). SEE IF THAT WORKS!!!
 
 
 PART 2: Integer I/O (30 Points) 
@@ -42,7 +42,7 @@ PART 3: Control Structures (30 Points)
 [   ] if statements including optional else
 [   ] while loops
 [   ] for loops --> I THINK THESE ARE OPTIONAL???
-[   ] Use C syntax and the C definition of true (non-zero) and false (zero).
+[ x ] Use C syntax and the C definition of true (non-zero) and false (zero).
 [   ] ANYTHING ELSE???
 
 

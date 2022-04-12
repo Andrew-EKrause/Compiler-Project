@@ -1,15 +1,2 @@
 1. int num1;
-2. int num2;
-3. int num3;
-4. num1 = 555;
-5. if(!(4 < 8) || (5 < 10)) {
-6.     print(20);
-7. }
-8. if(4 < 2) {
-9.     print(40);
-10. }
-11. num2 = 20 * 3 + num1;
-12. num3 = 20 % 6;
-13. print(num1);
-14. print(num2);
-15. print(num3);
+2. read(num1);

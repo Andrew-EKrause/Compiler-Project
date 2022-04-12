@@ -8,8 +8,8 @@
 # and yacc files are used to help properly 
 # process the rules of the language being
 # processed. The program itself consists 
-# of the Semantics.c, SymTab.c, IOMngr.c,
-# and main.c files.
+# of the CodeGen.c, Semantics.c, SymTab.c,
+# IOMngr.c, and main.c files.
 #
 # Author: Andrew Krause
 # Date: 2022-04-29
@@ -35,7 +35,7 @@ MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan
 main:
 	bison -d -v $(BISON)
 	flex $(LEX)
-	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(MEMCHECK)
+	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c CodeGen.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(MEMCHECK)
 
 # ===============================================
 # Group of cleaning protocols after execution.
@@ -43,5 +43,5 @@ main:
 
 # Remove any object files as well as the executable files.
 clean:
-	rm -r compiler.dSYM
 	rm ExprEval.tab.h ExprEval.tab.c lex.yy.c compiler
+	rm -r compiler.dSYM

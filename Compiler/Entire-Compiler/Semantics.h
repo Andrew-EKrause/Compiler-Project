@@ -8,15 +8,14 @@
     supporting routines for performing semantics processing.  
 */
 #pragma once
-#include "CodeGen.h"
 
 /* 
     The struct contains the semantic 
     records for identifiers. 
 */
 struct IdList {
-    struct SymEntry * TheEntry;
-    struct IdList * Next;
+    struct SymEntry *TheEntry;
+    struct IdList *Next;
 };
 
 /* 
@@ -34,7 +33,7 @@ struct ExprRes {
 */
 struct ExprResList {
 	  struct ExprRes *Expr;
-	  struct ExprResList * Next;
+	  struct ExprResList *Next;
 };
 
 /*
@@ -88,10 +87,12 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2);
     The functions handle the cases for printing out values.
 */
 extern struct InstrSeq *doPrint(struct ExprRes *Expr);
+extern struct ExprResList *createExprList(char *idName, struct ExprResList *list);
 //extern struct InstrSeq *doPrint(struct Node *node);
 extern struct InstrSeq *doPrintlines(struct ExprRes *Res);
 extern struct InstrSeq *doPrintspaces(struct ExprRes *Res);
-extern struct InstrSeq *doRead(struct Node *node);
+extern struct InstrSeq *doRead(struct IdList *entry);
+extern struct IdList *createIdentList(char *idName, struct IdList *list);
 
 /*  
     The functions complete branch expression operations.
