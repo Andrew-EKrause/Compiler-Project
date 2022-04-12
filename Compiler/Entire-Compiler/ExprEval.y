@@ -10,7 +10,7 @@
     extern int yylex(); /* The next token function. */
     extern char *yytext; /* The matched token text.  */
     extern int yyleng; /* The token text length.   */
-    extern int yyparse();
+    extern int yyparse(); /* IMPORTANT; WHEN YOU CREATE THE EXPRESSION LIST, YOU WILL MAYBE WANT TO TAKE OUT THE PARANTHESES FOR THE REGULAR PRINT! */
     extern int yyerror(char *);
     void dumpTable();
 

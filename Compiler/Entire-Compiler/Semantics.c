@@ -461,7 +461,7 @@ extern struct InstrSeq *doPrintspaces(struct ExprRes *Res) {
 }
 
 /**
- * READ (IN PROGRESS...)
+ * READ
  * 
  * DESCRIPTION...
  */
@@ -721,6 +721,7 @@ extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
 
     struct InstrSeq *seq2;
     char *label = GenLabel();
+    AppendSeq(Res->Instrs, GenInstr(NULL, "sne", TmpRegName(Res->Reg), TmpRegName(Res->Reg), "$zero"));
     AppendSeq(Res->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label));
     seq2 = AppendSeq(Res->Instrs, seq);
     AppendSeq(seq2, GenInstr(label, NULL, NULL, NULL, NULL));

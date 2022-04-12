@@ -21,7 +21,7 @@ PART 1: Integer Expressions (30 Points)
 
 PART 2: Integer I/O (30 Points) 
 ===================================================
-[   ] read(comma delimited list of variables): read(x, y, z)
+[ x ] read(comma delimited list of variables): read(x, y, z)
 [   ] print(comma delimited list of expressions) --> MORE BELOW:
 [   ] print results on the current line
 [   ] print a space between values
