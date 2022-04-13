@@ -9,18 +9,21 @@
 
     extern int yylex(); /* The next token function. */
     extern char *yytext; /* The matched token text.  */
-    extern int yyleng; /* The token text length.   */
+    extern int yyleng; /* The token text length. */
     extern int yyparse();
     extern int yyerror(char *);
     void dumpTable();
 
-    // BACKUP...
+    // BACKUP...MAY DELETE LATER
+    // =====================================================================================================================================
     // Stmt			            : Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
-    //                             | Write '(' ExprList ')' ';'                                           { $$ = doPrintExpressions($3); };
+    //                          | Write '(' ExprList ')' ';'                                           { $$ = doPrintExpressions($3); };
     // 			                | IF '(' ExprL0 ')' '{' StmtSeq '}'			                           { $$ = doIf($3, $6); };
-    //                             | AssnmtStmt ';'                                                       { $$ = $1; };
+    //                          | AssnmtStmt ';'                                                       { $$ = $1; };
     
     // %token Write
+    // Print '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); }; // --> DO NOT THINK YOU NEED THIS NOW GIVEN THAT YOU HAVE EXPR LIST WORK WITH SINGLE PRINTS.
+    // =====================================================================================================================================
 
     extern SymTab *table;
 %}
@@ -52,7 +55,6 @@
 %token Int
 %token Ident		
 %token Print
-%token Printexprs
 %token Printlines
 %token Printspaces
 %token Read
@@ -80,8 +82,7 @@ Dec			                : Int Ident                                               
 StmtSeq 		            : Stmt StmtSeq								                           { $$ = AppendSeq($1, $2); };
     		                |											                           { $$ = NULL; };
 
-Stmt			            : Print '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); };
-                            | Printexprs '(' ExprList ')' ';'                                      { $$ = doPrintExpressions($3); };
+Stmt			            : Print '(' ExprList ')' ';'                                           { $$ = doPrintExpressions($3); };
                             | Printlines '(' ExprL0 ')' ';'                                        { $$ = doPrintlines($3); };
                             | Printspaces '(' ExprL0 ')' ';'                                       { $$ = doPrintspaces($3); };
                             | Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };

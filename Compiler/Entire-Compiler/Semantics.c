@@ -192,6 +192,12 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
 
     struct InstrSeq *resultInstruction = malloc(sizeof(struct InstrSeq));
     struct ExprResList *listOfExprs = list;
+    int includeNewline = 1;
+
+    // Include a check to determine if a newline should be printed.
+    if(listOfExprs->Next) {
+        includeNewline = 0;
+    }
 
     while(listOfExprs) {
 
@@ -227,9 +233,16 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
         listOfExprs = listOfExprs->Next;
     }
 
-    // AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "4", NULL)); // --> 4 is the ASCII character for a newline.
-    // AppendSeq(resultInstruction, GenInstr(NULL, "la", "$a0", "_nl", NULL)); // --> I DO NOT THINK WE CAN HAVE A NEWLINE! TALK TO BEN!!!
-    // AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+    // If the newline variable is equal to 1, print a newline.
+    // This indicates that we do not have more than one item in
+    // the expression list and therefore do want a newline in
+    // this case.
+    if(includeNewline) {
+
+        AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "4", NULL)); // --> 4 is the ASCII character for a newline.
+        AppendSeq(resultInstruction, GenInstr(NULL, "la", "$a0", "_nl", NULL)); // --> Include the newline character.
+        AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+    }
 
     return resultInstruction;
 }
@@ -369,48 +382,29 @@ extern struct IdList *createIdentList(char *idName, struct IdList *list) {
 /* ASSIGNMENT. */
 /* ================================================================== */
 
-// /**
-//  * IF (series of instructions)
-//  * 
-//  * The function returns a struct that contains a new
-//  * instruction generated within the function. The
-//  * function handles cases where there is a conditional
-//  * statement in the C-like code (if-statement).
-//  */
-// extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
-    
-//     // Create a struct of type InstrSeq to store
-//     // the new instruction being created.
-//     struct InstrSeq * seq2;
-
-//     // Call the AppendSeq function in order to
-//     // store the instruction data and add it
-//     // to the linked list of instructions.
-//     seq2 = AppendSeq(Res->Instrs, seq);
-//     AppendSeq(seq2, GenInstr(Res->Label, NULL, NULL, NULL, NULL));
-    
-//     // Free the branch register used to 
-//     // free up memory space and return
-//     // the variable from the function.
-//     free(Res);
-//     return seq2;
-// }
-
-// --> MAY ACTUALLY WANT TO USE THIS FOR YOUR IF CASE!!!
+/**
+ * IF
+ * 
+ * The function returns a struct that contains a new
+ * instruction generated within the function. The
+ * function handles cases where there is a conditional
+ * statement in the C-like code (if-statement).
+ */
 extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
 
     struct InstrSeq *seq2;
     char *label = GenLabel();
-    // AppendSeq(Res->Instrs, GenInstr(NULL, "sne", TmpRegName(Res->Reg), TmpRegName(Res->Reg), "$zero"));
+
     AppendSeq(Res->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label));
     seq2 = AppendSeq(Res->Instrs, seq);
     AppendSeq(seq2, GenInstr(label, NULL, NULL, NULL, NULL));
+
     free(Res);
     return seq2;
 }
 
 /**
- * IF-ELSE (series of instructions)
+ * IF-ELSE 
  * 
  * DESCRIPTION...
  */
@@ -433,7 +427,7 @@ extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, str
 }
 
 /**
- * WHILE (series of instructions)
+ * WHILE 
  * 
  * DESCRIPTION...
  */
@@ -455,7 +449,7 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
 }
 
 /**
- * FOR (series of instructions)
+ * FOR 
  * 
  * DESCRIPTION...
  */

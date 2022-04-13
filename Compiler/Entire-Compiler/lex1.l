@@ -1,5 +1,5 @@
 %{
-    //#include "yaccExample.h"
+    // #include "yaccExample.h"
     #include "IOMngr.h"
     #include "ExprEval.tab.h"
 
@@ -7,6 +7,8 @@
     { int c = getNextSourceChar(); \
     result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
     }
+
+    // --> MAYBE ENABLE YOUR CODE TO RECOGNIZE COMMENTS AND IGNORE THAT LINE OF CODE!
 %}
 
 letter [A-Za-z]
@@ -16,7 +18,6 @@ digit [0-9]
 
 int					                    {return Int;}
 print					                {return Print;}
-printexprs                              {return Printexprs;}
 printlines                              {return Printlines;}
 printspaces                             {return Printspaces;}
 read                                    {return Read;}
