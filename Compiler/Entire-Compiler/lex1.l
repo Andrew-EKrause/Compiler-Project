@@ -14,24 +14,30 @@ digit [0-9]
 
 %%
 
-if					                    {return IF;}
 int					                    {return Int;}
-print					                {return Write;}
+print					                {return Print;}
+printexprs                              {return Printexprs;}
+printlines                              {return Printlines;}
+printspaces                             {return Printspaces;}
 read                                    {return Read;}
+if					                    {return IF;}
+else                                    {return ELSE;}
+while                                   {return WHILE;}
+for                                     {return FOR;}
 
 {letter}({letter}|{digit})*	            {return Ident;}
 {digit}{digit}*		                    {return IntLit;}
 
-\=\=					                {return EQ;}
+\|\|                                    {return OR;}
+\&\&                                    {return AND;}
+\!                                      {return '!';}
+
 \!\=                                    {return NOT_EQ;}
+\=\=					                {return EQ;}
 \<\=                                    {return LT_OR_EQ;}
 \>\=                                    {return GT_OR_EQ;}
 \<                                      {return LT;}
 \>                                      {return GT;}
-
-\!                                      {return '!';}
-\|\|                                    {return OR;}
-\&\&                                    {return AND;}
 
 \=					                    {return '=';}
 \+					                    {return '+';}

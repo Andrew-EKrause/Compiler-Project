@@ -192,3 +192,105 @@ int yyerror(char *s) {
 //     free(res2);
 //     return seq2;
 // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================================================================== */
+/* SECTION FOR ADDING ARGUMENTS AND EXPRESSIONS TO LISTS: APPEND TO */
+/* ARGUMENT LIST, AND APPEND TO EXPRESSION LIST. */
+/* ================================================================== */
+
+// --> MAY NOT NEED THIS!!!
+// /**
+//  * APPEND TO ARGUMENT LIST
+//  * 
+//  * DESCRIPTION...
+//  */
+// extern struct Node *appendToArgList(char *c, struct Node *next) {
+    
+//     struct Node *curr = (struct Node *)malloc(sizeof(struct Node));
+
+//     curr->name = strdup(c);
+//     curr->next = next;
+
+//     return curr;
+// }
+
+// /**
+//  * APPEND TO EXPRESSION LIST
+//  * 
+//  * DESCRIPTION...
+//  */
+// extern struct Node *appendToExprList(struct ExprRes *Res1, struct Node *next) {
+   
+//     struct Node *curr = (struct Node *)malloc(sizeof(struct Node));
+
+//     curr->name = Res1;
+//     curr->next = next;
+
+//     return curr;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // --> THIS MAY BE THE PRINT THAT YOU WILL ACTUALLY WANT TO USE!!!
+// struct InstrSeq *doPrint(struct Node *node) {
+
+//     struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+//     struct Node *curr = node;
+
+//     while (curr) {
+
+//         struct ExprRes *currInstr = (struct ExprRes *)curr->name;
+
+//         AppendSeq(code, currInstr->Instrs);
+//         AppendSeq(code, GenInstr(NULL, "li", "$v0", "1", NULL));
+//         AppendSeq(code, GenInstr(NULL, "move", "$a0", TmpRegName(currInstr->Reg), NULL));
+//         AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+
+//         ReleaseTmpReg(currInstr->Reg);
+//         free(currInstr);
+//         curr = curr->next;
+//     }
+
+//     return code;
+// }
+
+// ============================== --> LEFT OFF COMMENTING HERE!!! <-- ==============================

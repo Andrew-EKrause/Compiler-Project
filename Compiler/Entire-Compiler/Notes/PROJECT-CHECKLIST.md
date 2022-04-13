@@ -22,27 +22,27 @@ PART 1: Integer Expressions (30 Points)
 PART 2: Integer I/O (30 Points) 
 ===================================================
 [ x ] read(comma delimited list of variables): read(x, y, z)
-[   ] print(comma delimited list of expressions) --> MORE BELOW:
-[   ] print results on the current line
-[   ] print a space between values
-[   ] a newline is not printed
-[   ] print(2*x, x^3*(z*w), abc/xyz, c)
-[   ] printlines(expression) --> MORE BELOW:
-[   ] print expression number of newlines    
-[   ] printlines(2)
-[   ] printspaces(expression) --> MORE BELOW:
-[   ] printspaces(3*n)
-[   ] printString(“Literal String”)
+[ x ] print(comma delimited list of expressions) --> MORE BELOW:
+[ x ] print results on the current line
+[ x ] print a space between values
+[ x ] a newline is not printed
+[ x ] print(2*x, x^3*(z*w), abc/xyz, c)
+[ x ] printlines(expression) --> MORE BELOW:
+[ x ] print expression number of newlines    
+[ x ] printlines(2)
+[ x ] printspaces(expression) --> MORE BELOW:
+[ x ] printspaces(3*n)
+[   ] printString(“Literal String”) // --> FINISH THIS!!!
 [   ] printString(“Enter one integer”); --> MORE BELOW:
 [   ] ANYTHING ELSE???
 
 
 PART 3: Control Structures (30 Points) 
 ===================================================
-[   ] if statements including optional else
-[   ] while loops
-[   ] for loops --> I THINK THESE ARE OPTIONAL???
-[ x ] Use C syntax and the C definition of true (non-zero) and false (zero).
+[ x ] if statements including optional else
+[ x ] while loops
+[ x ] for loops --> I THINK THESE ARE OPTIONAL???
+[   ] Use C syntax and the C definition of true (non-zero) and false (zero). // --> CHECK THIS!!!
 [   ] ANYTHING ELSE???
 
 

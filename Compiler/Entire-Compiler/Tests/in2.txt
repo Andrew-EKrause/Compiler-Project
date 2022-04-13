@@ -6,6 +6,6 @@ if (num2+10+10 == 2*num2) {
 	print(num1);
 	print(num2);
 }
-print(num1);
+printexprs(num1, num2);
+printlines(1);
 print(num2);
-

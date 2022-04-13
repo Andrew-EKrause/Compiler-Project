@@ -10,9 +10,17 @@
     extern int yylex(); /* The next token function. */
     extern char *yytext; /* The matched token text.  */
     extern int yyleng; /* The token text length.   */
-    extern int yyparse(); /* IMPORTANT; WHEN YOU CREATE THE EXPRESSION LIST, YOU WILL MAYBE WANT TO TAKE OUT THE PARANTHESES FOR THE REGULAR PRINT! */
+    extern int yyparse();
     extern int yyerror(char *);
     void dumpTable();
+
+    // BACKUP...
+    // Stmt			            : Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
+    //                             | Write '(' ExprList ')' ';'                                           { $$ = doPrintExpressions($3); };
+    // 			                | IF '(' ExprL0 ')' '{' StmtSeq '}'			                           { $$ = doIf($3, $6); };
+    //                             | AssnmtStmt ';'                                                       { $$ = $1; };
+    
+    // %token Write
 
     extern SymTab *table;
 %}
@@ -23,14 +31,13 @@
     struct ExprRes * ExprRes;
     struct InstrSeq * InstrSeq;
     struct IdList * IdList;
-    struct Node * Node;
+    struct ExprResList * ExprResList;
 }
 
-%type <string> Id
 %type <InstrSeq> StmtSeq
 %type <InstrSeq> Stmt
 %type <InstrSeq> AssnmtStmt
-%type <IdList> IdentList
+%type <ExprResList> ExprList
 %type <ExprRes> ExprL0
 %type <ExprRes> ExprL1
 %type <ExprRes> ExprL2
@@ -39,21 +46,29 @@
 %type <ExprRes> ExprL5
 %type <ExprRes> ExprL6
 %type <ExprRes> ExprL7
+%type <IdList> IdentList
+%type <string> Id
 
-%token Ident		
-%token IntLit	
 %token Int
-%token Write
+%token Ident		
+%token Print
+%token Printexprs
+%token Printlines
+%token Printspaces
+%token Read
 %token IF
-%token EQ
+%token ELSE
+%token WHILE
+%token FOR
+%token OR
+%token AND
 %token NOT_EQ
+%token EQ
 %token LT_OR_EQ
 %token GT_OR_EQ
 %token LT
 %token GT
-%token OR
-%token AND
-%token Read
+%token IntLit	
 
 %%
 
@@ -65,12 +80,22 @@ Dec			                : Int Ident                                               
 StmtSeq 		            : Stmt StmtSeq								                           { $$ = AppendSeq($1, $2); };
     		                |											                           { $$ = NULL; };
 
-Stmt			            : Write '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); };
+Stmt			            : Print '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); };
+                            | Printexprs '(' ExprList ')' ';'                                      { $$ = doPrintExpressions($3); };
+                            | Printlines '(' ExprL0 ')' ';'                                        { $$ = doPrintlines($3); };
+                            | Printspaces '(' ExprL0 ')' ';'                                       { $$ = doPrintspaces($3); };
                             | Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
-    			            | IF '(' ExprL0 ')' '{' StmtSeq '}'			                           { $$ = doIf($3, $6); };
+                            
+                            | IF '(' ExprL0 ')' '{' StmtSeq '}'                                    { $$ = doIf($3, $6); };
+                            | IF '(' ExprL0 ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'               { $$ = doIfElse($3, $6, $10); };
+                            | WHILE '(' ExprL0 ')' '{' StmtSeq '}'                                 { $$ = doWhile($3, $6); };
+                            | FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}'     { $$ = doFor($3, $5, $7, $10); };
                             | AssnmtStmt ';'                                                       { $$ = $1; };
 
 AssnmtStmt			        : Id '=' ExprL0							                               { $$ = doAssign($1, $3); };
+
+ExprList                    : ExprL0 ',' ExprList                                                  { $$ = createExprList($1, $3); };
+                            | ExprL0                                                               { $$ = createExprList($1, NULL); };
 
 ExprL0                      : ExprL0 OR ExprL1                                                     { $$ = doBooleanOPs($1, $3, or); };
                             | ExprL0 AND ExprL1                                                    { $$ = doBooleanOPs($1, $3, and); };

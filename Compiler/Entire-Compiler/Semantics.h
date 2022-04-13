@@ -68,56 +68,22 @@ enum BExprOps {and, or, not};
 /* Semantics Actions */
 /* ================= */
 
-/* 
-    The functions handle the cases where there is an int literal.
+/*
+    The function adds the assembly code that appears
+    at the top of all MIPS assembly program files.
 */
-extern struct ExprRes *doIntLit(char *digits);
-extern struct ExprRes *doIntLitNeg(char *digits);
-extern struct ExprRes *doRval(char *name);
-extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
-
-/* 
-    The functions handle the cases for basic arithmetic operations.
-*/
-extern struct ExprRes *doArithmeticOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst);
-extern struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2);
-extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2);
+extern void	Finish(struct InstrSeq *Code);
 
 /*
     The functions handle the cases for printing out values.
 */
 extern struct InstrSeq *doPrint(struct ExprRes *Expr);
-extern struct ExprResList *createExprList(char *idName, struct ExprResList *list);
-//extern struct InstrSeq *doPrint(struct Node *node);
+extern struct InstrSeq *doPrintExpressions(struct ExprResList *list);
+extern struct ExprResList *createExprList(struct ExprRes *res, struct ExprResList *list);
 extern struct InstrSeq *doPrintlines(struct ExprRes *Res);
 extern struct InstrSeq *doPrintspaces(struct ExprRes *Res);
 extern struct InstrSeq *doRead(struct IdList *entry);
 extern struct IdList *createIdentList(char *idName, struct IdList *list);
-
-/*  
-    The functions complete branch expression operations.
-*/
-// extern struct BExprRes *doBExpr(struct ExprRes *Res1, struct ExprRes *Res2);
-// extern struct ExprRes *doBExprEq(struct ExprRes *Res1, struct ExprRes *Res2);
-// extern struct ExprRes *doBExprNotEq(struct ExprRes *Res1, struct ExprRes *Res2);
-// extern struct ExprRes *doBExprLtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
-// extern struct ExprRes *doBExprGtOrEq(struct ExprRes *Res1, struct ExprRes *Res2);
-
-/*
-    The functions handle control flow and conditonal operations.
-*/
-// extern struct ExprRes *doBExprLt(struct ExprRes *Res1, struct ExprRes *Res2);
-// extern struct ExprRes *doBExprGt(struct ExprRes *Res1, struct ExprRes *Res2);
-
-/*
-    The function handles equality operations.
-*/
-extern struct ExprRes *doEqualityOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst);
-
-/*
-    The function handles boolean operations.
-*/
-extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator);
 
 /* 
     The functions handle cases where there are conditionals and loops.
@@ -127,16 +93,28 @@ extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq);
 extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, struct InstrSeq *seq2);
 extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq);
 extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *CondRes, struct InstrSeq *Assignment2, struct InstrSeq *seq);
+extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
 
 /*
-    The functions enable multiple arguments and expressions to be 
-    handled together by appending them to various lists.
+    The function handles boolean operations.
 */
-extern struct Node *appendToArgList(char *c, struct Node *next);
-extern struct Node *appendToExprList(struct ExprRes *Res1, struct Node *next);
+extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator);
 
 /*
-    The function adds the assembly code that appears
-    at the top of all MIPS assembly program files.
+    The function handles equality operations.
 */
-extern void	Finish(struct InstrSeq *Code);
+extern struct ExprRes *doEqualityOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst);
+
+/* 
+    The functions handle the cases for basic arithmetic operations.
+*/
+extern struct ExprRes *doArithmeticOps(struct ExprRes *Res1, struct ExprRes *Res2, char *inst);
+extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2);
+extern struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2);
+
+/* 
+    The functions handle the cases where there is an int literal.
+*/
+extern struct ExprRes *doIntLitNeg(char *digits);
+extern struct ExprRes *doIntLit(char *digits);
+extern struct ExprRes *doRval(char *name);

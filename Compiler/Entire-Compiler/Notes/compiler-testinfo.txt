@@ -10,17 +10,14 @@ TEST 1: Series of Commands to test your Compiler:
 4. ./compiler ./Tests/in1.txt listing.lst asmCode.asm
 
 WILL WANT TO CREATE A bash script FOR ALL THIS!!!
-%type <BExprRes> BExpr // --> THIS MAY BE THE ONE YOU ACTUALLY WANT TO USE.
-BExpr : Expr {$$ = $1;}; // --> THIS MAY BE THE ONE YOU ACTUALLY WANT TO USE.
-
 ==================================================
+
 NOTES:
 
 // COMPILING WITH gdb WILL HELP YOU DEBUG YOUR CODE EASIER.
 
 // There is some memory management that you will have to worry about 
 // for the main compiler project.
-
 ==================================================
 
 BACKUP:
