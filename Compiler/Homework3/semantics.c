@@ -76,7 +76,7 @@ void printSymTab() {
 
     // Call the add table function to store a
     // reference to the table created in this 
-    // function in order to destroy it later. --> CHECK THIS LATER!!!
+    // function in order to destroy it later.
     addTableReference(table);
 }
 
@@ -130,7 +130,6 @@ void storeVar(char *name, SymTab *set) {
     // and set the current attribute.
     enterName(table, name);
     setCurrentAttr(table, (void*)set);
-    // --> SUPPOSED TO DO ONE OTHER THING HERE???
 }
 
 /**
@@ -155,6 +154,10 @@ SymTab* getVal(char *name) {
         writeIndicator(getCurrentColumnNum());
         writeMessage("Initialize variable to empty");
         setCurrentAttr(table, (void*)emptyTable);
+
+        // Add the symbol table that was created in 
+        // this function to the main reference table.
+        addTableReference(emptyTable);
     }
 
     // Return the current attribute in the table
