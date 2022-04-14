@@ -8,7 +8,7 @@
     result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
     }
 
-    // --> MAYBE ENABLE YOUR CODE TO RECOGNIZE COMMENTS AND IGNORE THAT LINE OF CODE!
+    // --> MAYBE ENABLE YOUR CODE TO RECOGNIZE COMMENTS LATER ON!!!
 %}
 
 letter [A-Za-z]
@@ -18,8 +18,9 @@ digit [0-9]
 
 int					                    {return Int;}
 print					                {return Print;}
-printlines                              {return Printlines;}
-printspaces                             {return Printspaces;}
+printString                             {return Printstrings;}
+printLines                              {return Printlines;}
+printSpaces                             {return Printspaces;}
 read                                    {return Read;}
 if					                    {return IF;}
 else                                    {return ELSE;}
@@ -28,6 +29,7 @@ for                                     {return FOR;}
 
 {letter}({letter}|{digit})*	            {return Ident;}
 {digit}{digit}*		                    {return IntLit;}
+\".*\"                                  {return StrLit;}
 
 \|\|                                    {return OR;}
 \&\&                                    {return AND;}

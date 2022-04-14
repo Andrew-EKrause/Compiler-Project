@@ -36,6 +36,11 @@ extern FILE *aFile;
 // to move to the next instruction label.
 int NextLabel = 1;
 
+// --> MAYBE DELETE!!!
+// Create a global variable to indicate when
+// to move to the next string label.
+int NextStringLabel = 1;
+
 // Create a struct with temporary ('t'-registers)
 // to store values that are obtained throughout the
 // execution and translation process.
@@ -216,6 +221,32 @@ char *GenLabel() {
     // Return the label from the function.
     return label;
 }
+
+
+
+
+
+
+/**
+ * DESCRIPTION...
+ */
+char *GenerateStringLabel() {
+
+    //
+    char *stringLabel;
+
+    //
+    stringLabel = (char *)malloc(8);
+    sprintf(stringLabel, "String%d", NextStringLabel++);
+
+    // 
+    return stringLabel;
+}
+
+
+
+
+
 
 /**
  * The function searches for and finds

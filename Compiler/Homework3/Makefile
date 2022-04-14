@@ -42,5 +42,5 @@ main:
 
 # Remove any object files as well as the executable files.
 clean:
-	rm -r h3.dSYM
 	rm h3.tab.c lex.yy.c h3
+	rm -r h3.dSYM

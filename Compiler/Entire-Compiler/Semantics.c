@@ -58,6 +58,10 @@
 // memory management of the variable values.
 extern SymTab *table;
 
+// Create a global list of strings in order
+// to print strings out in the C-like language.
+struct StringItem *listOfStrings;
+
 /* ========================== */
 /* Semantics support routines */
 /* ========================== */
@@ -84,7 +88,7 @@ void Finish(struct InstrSeq *Code) {
     // the new instruction being created.
     struct InstrSeq *code;
 
-    // --> NOT SURE WHY THE CODE BELOW IS COMMENTED OUT. CHECK LATER!!!
+    // --> NOT SURE WHY I PUT THE CODE BELOW. USE FOR FUNCTIONS MAYBE LATER!!!
     // struct SymEntry *entry;
     
     // Create a variable to track iteration through the
@@ -99,9 +103,6 @@ void Finish(struct InstrSeq *Code) {
 
     // --> NOT SURE WHY THE CODE BELOW IS COMMENTED OUT. CHECK LATER!!!
     // AppendSeq(code,GenInstr(NULL,".align","2",NULL,NULL));
-
-    // --> WHEN YOU GET TO THE READ STRING FUNCTION, YOU WILL NEED TO DO THE FOLLOWING:
-    // --> READ THE STRING AT COMPILE TIME AND STORE IN STATIC DATA; MUST WRITE THAT INTO THIS FINISH FUNCTION.
     
     // Call the AppendSeq functions to display the heading
     // content at the top of each assembly file created at
@@ -113,7 +114,42 @@ void Finish(struct InstrSeq *Code) {
     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
     AppendSeq(code, GenInstr(NULL, ".data", NULL, NULL, NULL));
     AppendSeq(code, GenInstr(NULL, ".align", "4", NULL, NULL));
-    AppendSeq(code, GenInstr("_nl", ".asciiz", "\"\\n\"", NULL, NULL));
+    AppendSeq(code, GenInstr("_nl", ".asciiz", "\"\\n\"", NULL, NULL)); // --> Load a newline into the data section.
+    AppendSeq(code, GenInstr("_spc", ".asciiz", "\" \"", NULL, NULL)); // --> Load a space into the data section.
+
+    // Create two struct variables for traversing through the
+    // global list of strings in the "listOfStrings" variable.
+    struct StringItem *stringItem;
+    struct StringItem *nextString;
+
+    // Assign the "stringItem" struct to the global variable
+    // to begin the process of traversing though the list of
+    // string values.
+    stringItem = listOfStrings;
+
+    // Loop through the list of strings and put each string 
+    // literal in the global/data section of the MIPS assembly
+    // code in the file. Essentially, you are adding each string
+    // value in the linked list of strings to the global/data
+    // section of the assembly code.
+    while(stringItem) {
+
+        // Call the function to store the list of string values in the 
+        // global/data section of the MIPS assembly code. These values
+        // are loaded and ready to use at compile time.
+        AppendSeq(code, GenInstr(stringItem->StringLabel, ".asciiz", stringItem->String, NULL, NULL));
+        
+        // Move to the next string value
+        // in the list of strings.
+        nextString = stringItem;
+        stringItem = stringItem->Next;
+
+        // Free the different attributes in the 
+        // StringItem struct in each iteration.
+        free(nextString->String);
+        free(nextString->StringLabel);
+        free(nextString);
+    }
 
     // Start traversing the symbol table by
     // calling the startIterator() function.
@@ -143,7 +179,7 @@ void Finish(struct InstrSeq *Code) {
 /* ================================================================== */
 
 /**
- * PRINT (series of instructions)
+ * PRINT and PRINT EXPRESSIONS
  * 
  * The function returns a struct that contains a new
  * instruction generated within the function. The
@@ -152,83 +188,52 @@ void Finish(struct InstrSeq *Code) {
  * There are a series of instructions that are used
  * to print out values in assembly. Labels like "li",
  * "la", "move", and "syscall" are used for this process.
- */
-extern struct InstrSeq *doPrint(struct ExprRes *Expr) { 
-
-    // Create a struct of type ExprRes to store
-    // the new instruction being created.
-    struct InstrSeq *code;
-    
-    // Store the instruction in the expression result
-    // within the code variable that was created.
-    code = Expr->Instrs;
-  
-    // Add the MIPS assembly code to the linked list of instructions.
-    AppendSeq(code, GenInstr(NULL, "li", "$v0", "1", NULL));
-    AppendSeq(code, GenInstr(NULL, "move", "$a0", TmpRegName(Expr->Reg), NULL));
-    AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
-
-    // Add more MIPS assembly code to complete the process of adding
-    // the proper procedures to enable printing out to the screen.
-    AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
-    AppendSeq(code, GenInstr(NULL, "la", "$a0", "_nl", NULL));
-    AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
-
-    // Call the functions below to indicate 
-    // that the registers used in the print 
-    // operation are now free to use again. 
-    ReleaseTmpReg(Expr->Reg);
-    free(Expr);
-
-    // Return the code variable with the instruction data.
-    return code;
-}
-
-/**
- * DESCRIPTION...
- * 
+ * The function handles cases when users want to print 
+ * out a single item or multiple items. 
  */
 extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
 
-    struct InstrSeq *resultInstruction = malloc(sizeof(struct InstrSeq));
+    // Create a variable of type instruction sequence, an expression
+    // list variable, and a variable to represent a boolean.
+    struct InstrSeq *resultInstruction = NULL;
     struct ExprResList *listOfExprs = list;
     int includeNewline = 1;
 
     // Include a check to determine if a newline should be printed.
+    // If there is more than one item in the list of expressions.
+    // This check is performed to determine whether or not a newline
+    // needs to be printed (newlines are printed after single-item 
+    // expressions, and not after multiple-item expressions).
     if(listOfExprs->Next) {
         includeNewline = 0;
     }
 
+    // Loop through the list of expressions and add assembly code to 
+    // the linked list of instructions to print out each item in the
+    // expression.
     while(listOfExprs) {
 
-        AppendSeq(resultInstruction, listOfExprs->Expr->Instrs);
+        // Set the variable equal to the call for adding the instructions to the 
+        resultInstruction = AppendSeq(resultInstruction, listOfExprs->Expr->Instrs);
+
+        // Call the function multiple times to print out a given item in the expression.
         AppendSeq(resultInstruction, GenInstr(NULL, "add", "$a0", TmpRegName(listOfExprs->Expr->Reg), "$zero"));
         AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "1", NULL)); // --> 1 is the syscall number for printing an integer.
         AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
-        AppendSeq(resultInstruction, GenInstr(NULL, "li", "$a0", "32", NULL)); // --> 32 is the ASCII character for a space.
+        // Call the function multiple times to print out a space in
+        // order to separate item being printed out in the expression.
         AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "11", NULL)); // --> 11 is the syscall number for printing a character.
+        AppendSeq(resultInstruction, GenInstr(NULL, "la", "$a0", "_spc", NULL)); // --> 32 is the ASCII character for a space. I use "_spc" here instead.
         AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
-        // --> NOTES FROM ONLINE; DELETE LATER!!!
-        // # print number 1
-        // li $a0, 1   # number to print
-        // li $v0, 1   # syscall number for printing integer
-        // syscall
-
-        // # print space, 32 is ASCII code for space
-        // li $a0, 32
-        // li $v0, 11  # syscall number for printing character
-        // syscall
-
-        // # print number 2
-        // li $a0, 2
-        // li $v0, 1
-        // syscall
-
+        // Release the temporary registers so that they
+        // can be used again, and free the list of 
+        // expressions struct.
         ReleaseTmpReg(listOfExprs->Expr->Reg);
         free(listOfExprs->Expr);
 
+        // Move to the next item in the list of expressions.
         list = listOfExprs;
         listOfExprs = listOfExprs->Next;
     }
@@ -239,141 +244,237 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
     // this case.
     if(includeNewline) {
 
+        // Append assembly instructions to the linked list of instructions to 
+        // print out a newline. This is done only when there is a single item
+        // in the print statement.
         AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "4", NULL)); // --> 4 is the ASCII character for a newline.
         AppendSeq(resultInstruction, GenInstr(NULL, "la", "$a0", "_nl", NULL)); // --> Include the newline character.
         AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
     }
 
+    // Return the resulting instructions.
     return resultInstruction;
 }
 
 /**
- * The function is used to help complete the 
- * PRINT EXPRESSION functionality of the compiler. 
- * ADD MORE...
+ * {PRINT and PRINT EXPRESSIONS} - HELPER FUNCTION
  * 
+ * The function is used to help complete the 
+ * PRINT and PRINT EXPRESSION functionalities
+ * of the compiler. The function creates a 
+ * list of items that can then be passed into
+ * the doPrintExpression() function to be
+ * printed out.
  */
 extern struct ExprResList *createExprList(struct ExprRes *res, struct ExprResList *list) {
 
+    // Create a struct of type ExprResList. Allocate space for the struct.
     struct ExprResList *resultExpr = malloc(sizeof(struct ExprResList));
 
+    // Add the item, an expression, to the list of expressions
+    // that will be read in by the doPrintExpressions function.
     resultExpr->Expr = res;
     resultExpr->Next = list;
 
+    // Return the resulting list of expressions
+    // from the function.
     return resultExpr;
 }
 
 /**
- * PRINTLINES
+ * PRINT STRINGS
  * 
- * DESCRIPTION...
+ * The function is used to enable the functionality
+ * of printing out a string literal using a function
+ * in the C-like language. The function uses a global
+ * variable of type StringItem to store the string
+ * values along with assembly instructions that are
+ * generated. The variable of StringItem will be used
+ * later on in the Finish() function. 
  */
-extern struct InstrSeq *doPrintlines(struct ExprRes *Res) {
+extern struct InstrSeq *doPrintStrings(char *stringValue) {
 
-    struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
-    int reg = AvailTmpReg();
-    AppendSeq(code, Res->Instrs);
-    AppendSeq(code, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res->Reg), NULL));
+    // --> ASK BEN ABOUT THIS!!! YOUR $(MEMCHECK) FLAG DOES NOT WORK RIGHT NOW AND I THINK IT IS BECAUSE OF THIS!!!
+    // --> I THINK YOU HAVE TO SET SOME OTHER THINGS FIRST!!!
 
-    char *label = GenLabel();
-    char *label2 = GenLabel();
+    // Create a struct of type StringItem and allocate space for it. The
+    // struct is used to store each string literal that the user wants to
+    // print out.
+    struct StringItem *resultString = malloc(sizeof(struct StringItem));
 
-    AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(reg), label2));
-    AppendSeq(code, GenInstr(label, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines desired;
+    // Set each attribute of the StringItem struct.
+    // Each attribute ensures that a given string 
+    // literal is properly processed and prepared 
+    // to be converted to the MIPS assembly code.
+    resultString->String = stringValue;
+    resultString->Next = listOfStrings;
+    resultString->StringLabel = GenerateStringLabel();
+    listOfStrings = resultString;
 
+    struct InstrSeq *code = malloc(sizeof(struct InstrSeq));
     AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
-    AppendSeq(code, GenInstr(NULL, "la", "$a0", "_nl", NULL));
+    AppendSeq(code, GenInstr(NULL, "la", "$a0", resultString->StringLabel, NULL));
     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
-    AppendSeq(code, GenInstr(NULL, "sub", TmpRegName(reg), TmpRegName(reg), "1"));
-    AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(reg), label));
-    AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
-
-    ReleaseTmpReg(reg);
-    ReleaseTmpReg(Res->Reg);
-
-    free(Res);
-
+    // Return the resulting list of strings 
+    // from the function. The list of strings 
+    // will be visited in the Finish() function
+    // and placed in the global/data section 
+    // of the MIPS assembly file.
     return code;
 }
 
 /**
- * PRINTSPACES
+ * PRINT LINES and PRINT SPACES
  * 
- * DESCRIPTION...
+ * The function handles cases when the user wants to
+ * print a newline or a space in the C-like language
+ * via the printlines() and printspaces() functions
+ * specified in the ExprEval.y file grammar. The 
+ * function can print out a newline or a space given
+ * the use of an enum, PrintExprOps, which is included 
+ * in the parameters of the function.
  */
-extern struct InstrSeq *doPrintspaces(struct ExprRes *Res) {
-    
-    struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+extern struct InstrSeq *doPrintformat(struct ExprRes *Res, enum PrintExprOps printType) {
+
+    // Create a struct of type InstrSeq to store
+    // the assembly instructions that are being
+    // generated by the function. Also create
+    // a variable to use the available registers.
+    struct InstrSeq *code = Res->Instrs;
     int reg = AvailTmpReg();
-    
-    AppendSeq(code, Res->Instrs);
+
+    // AppendSeq(code, Res->Instrs); // --> DO NOT NEED THIS???
+
+    // Call the function to move the value passed in as a parameter 
+    // into an available register. These instructions are then added
+    // to the linked list of instructions that will be returned.
     AppendSeq(code, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res->Reg), NULL));
 
+    // Create two labels using the GenLabel() function.
+    // This helps to print out the correct number of 
+    // newlines or spaces.
     char *label1 = GenLabel();
     char *label2 = GenLabel();
 
+    // Call the function multiple times to create a branch
+    // instruction to help loop through and print out the
+    // correct number of specified newlines or spaces.
     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(reg), label2));
-    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines desired;
+    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines or spaces desired.
+    AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
 
-    AppendSeq(code, GenInstr(NULL, "li", "$v0", "11", NULL));
-    AppendSeq(code, GenInstr(NULL, "la", "$a0", "32", NULL));
+    // If the enum value is equal to "newline", then
+    // ensure that a newline is printed out in the 
+    // instruction. Otherwise, print out a space.
+    if(printType == newline) {
+        AppendSeq(code, GenInstr(NULL, "la", "$a0", "_nl", NULL));
+    } else {
+        AppendSeq(code, GenInstr(NULL, "la", "$a0", "_spc", NULL));
+    }
+
+    // Add the syscall instruction to the linked list of 
+    // instructions to finalize the printing process.
     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
-    AppendSeq(code, GenInstr(NULL, "subi", TmpRegName(reg), TmpRegName(reg), "1"));
+    // Subtract one from the counter register and include a check to
+    // ensure that there is no overlap in the loop (for example, if
+    // the value is less than zero).
+    AppendSeq(code, GenInstr(NULL, "subi", TmpRegName(reg), TmpRegName(reg), "1")); // --> KEEP AN EYE ON...MAY BE "sub" INSTEAD!!!
     AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(reg), label1));
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
+    // Release the temporary registers using
+    // the ReleaseTmpReg() function and free
+    // the ExprRes variable. 
     ReleaseTmpReg(reg);
     ReleaseTmpReg(Res->Reg);
-
     free(Res);
+
+    // Return the resulting instructions
+    // from the function.
     return code;
 }
 
 /**
  * READ
  * 
- * The read funct
+ * The read function takes in a value that 
+ * is entered by the user and stores it in
+ * a declared variable. This function is 
+ * useful in cases where user input needs
+ * to be read in to a program. The function
+ * loops through a list of identifiers to 
+ * complete the read functionality. 
  */
 extern struct InstrSeq *doRead(struct IdList *entry) {
   
+    // Create a struct of type InstrSeq and reserve
+    // space for it. This will store the instructions
+    // generated in this function. Also create another 
+    // struct of type IdList to represent the number 
+    // of values that can be entered.
     struct InstrSeq *code = malloc(sizeof(struct InstrSeq));
     struct IdList *curr = entry;
 
+    // There is another entry for a value that will 
+    // be entered by the user, generate a series of
+    // instructions to store the values that will be
+    // entered.
     while (curr) {
 
+        // Call the functions multiple times to generate
+        // assembly instructions to store the values that
+        // will be entered into the read function.
         AppendSeq(code, GenInstr(NULL, "li", "$v0", "5", NULL));
         AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
         AppendSeq(code, GenInstr(NULL, "sw", "$v0", curr->TheEntry->name, NULL));
 
+        // Free the entry name and current
+        // entry after it is entered into
+        // the assembly code being generated.
         free(curr->TheEntry->name); 
         free(curr->TheEntry); 
 
+        // Move to the next entry in
+        // the list of identifiers.
         entry = curr;
         curr = curr->Next;
 
+        // Lastly, free the entry
+        // struct itself.
         free(entry);
     }
 
+    // Return the linked list of
+    // instructions that were
+    // generated in the function.
     return code;
 }
 
 /**
- * The function is used to help complete the 
- * READ functionality of the compiler. 
+ * {READ} - HELPER FUNCTION
  * 
- * ADD MORE...
+ * The function is used to help complete the 
+ * READ functionality of the compiler. The
+ * function helps to create a list of identifers
+ * that is used to run the read function of the
+ * C-like language.
  */
 extern struct IdList *createIdentList(char *idName, struct IdList *list) {
 
-    // Create a new IdList to return from the function.
+    // Create a new IdList to return from the
+    // function and reserve space for the list.
     struct IdList *newList = malloc(sizeof(struct IdList));
 
+    // Set the attributes of the list, and reserve
+    // space for the SymEntry and string of characters.
     newList->Next = list;
     newList->TheEntry = malloc(sizeof(SymEntry));
     newList->TheEntry->name = strdup(idName);
 
+    // Return the list of identifiers
+    // from the function.
     return newList;
 }
 
@@ -392,13 +493,21 @@ extern struct IdList *createIdentList(char *idName, struct IdList *list) {
  */
 extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
 
+    // Create a new struct of type InstrSeq to add the 
+    // assembly instructions to as they are generated
+    // in this function.
     struct InstrSeq *seq2;
     char *label = GenLabel();
 
+    // Call the function to add the generated assembly instructions to 
+    // the linked list of instructions that will be returned from the 
+    // function.
     AppendSeq(Res->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label));
     seq2 = AppendSeq(Res->Instrs, seq);
     AppendSeq(seq2, GenInstr(label, NULL, NULL, NULL, NULL));
 
+    // Free the ExprRes struct and
+    // return the instruction sequence.
     free(Res);
     return seq2;
 }
@@ -406,22 +515,41 @@ extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
 /**
  * IF-ELSE 
  * 
- * DESCRIPTION...
+ * The function returns a struct that contains a new
+ * instruction generated within the function. The 
+ * function handles cases where there is an if-else 
+ * conditional statement in the C-like code.
  */
 extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, struct InstrSeq *seq2) {
    
+    // Create a variable of type InstrSeq to store
+    // the assembly instructions that will be 
+    // generated from the function. Also create
+    // two labels that will be used in the process
+    // of generating the code.
     struct InstrSeq *code;
     char *label1 = GenLabel();
     char *label2 = GenLabel();
 
+    // Call the function to add the branch instruction to the linked list
+    // of instructions. The branch instruction is used to capture the "if"
+    // part of the if-else statement.
     AppendSeq(Res->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label1));
     code = AppendSeq(Res->Instrs, seq1);
 
+    // Call the function multiple times to generate the "else" part 
+    // of the if-else statement. In this process of assembly code
+    // generation, labels are also added to move from what section
+    // of the assembly code to another (this helps capture the 
+    // behavior of the if-else statement).
     AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // --> KEEP IN MIND THAT YOU MAY TO USE A JUMP IF THIS DOES NOT WORK!!!
     AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(Res->Reg), label2));
     AppendSeq(code, seq2);
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
+    // Free the ExprRes struct and
+    // return the generated assembly
+    // code from the function.
     free(Res);
     return code;
 }
@@ -429,14 +557,29 @@ extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, str
 /**
  * WHILE 
  * 
- * DESCRIPTION...
+ * The function is used to help complete the 
+ * process of generating assembly code for 
+ * a while-loop in the C-like language that
+ * the compiler processes. A struct is returned
+ * from the function that contains the assembly
+ * code instructions that are produced.
  */
 extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
    
+    // Create a new variable of type InstrSeq and allocate
+    // space for it. The variable is used to store the 
+    // assembly code instructions that are generated by the
+    // function. 
     struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+
+    // Create two new labels for proper jumps 
+    // in the assembly code for the while loop.
     char *label1 = GenLabel();
     char *label2 = GenLabel();
 
+    // Call the function multiple times to generate assembly code
+    // for the while loop and put it in the linked list of instructions
+    // that will be returned from this function.
     AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL));
     AppendSeq(code, Res->Instrs);
     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label2));
@@ -444,6 +587,9 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
     AppendSeq(code, GenInstr(NULL, "j", label1, NULL, NULL));
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
+    // Free the ExprRes struct and return 
+    // the linked list of generated assembly
+    // instructions 
     free(Res);
     return code;
 }
@@ -451,14 +597,30 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
 /**
  * FOR 
  * 
- * DESCRIPTION...
+ * The function is used to complete the process 
+ * of generating assembly code for a for-loop in
+ * the C-like language that the compiler processes.
+ * A struct is returned from the function that 
+ * contains the assembly code instructions that
+ * are produced.
  */
 extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *CondRes, struct InstrSeq *Assignment2, struct InstrSeq *seq) {
     
+    // Create a variable of type InstrSeq and reserve space for it. The 
+    // variable will be used to store the assembly instructions generated
+    // by this function. 
     struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+    
+    // Also create two labels through the GenLabel() function
+    // in order to capture the loop and jump behavior of for
+    // loops in the C-like language.
     char *label1 = GenLabel();
     char *label2 = GenLabel();
 
+    // Call the function multiple times to generate the assembly
+    // code for the for loop. The assembly code that is created
+    // is stored in the linked list of instructions, the "code"
+    // variable.
     AppendSeq(code, Assignment1);
     AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL));
     AppendSeq(code, CondRes->Instrs);
@@ -468,7 +630,14 @@ extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *Cond
     AppendSeq(code, GenInstr(NULL, "j", label1, NULL, NULL));
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
+    // Call the function to release the temporary
+    // registers so that they can be used again
+    // by future processes.
     ReleaseTmpReg(CondRes->Reg);
+    
+    // Free the ExprRes struct and return the
+    // InstrSeq variable that contains the assembly
+    // code generated from this function.
     free(CondRes);
     return code;
 }
@@ -508,6 +677,7 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
     // Free up the register used and free 
     // the Expr struct that was used. 
     ReleaseTmpReg(Expr->Reg);
+    // --> CONSIDER ADDING A DESTROY EXPRESSION FUNCTION HERE!!!
     free(Expr);
   
     // Return the code variable with the instruction data.
@@ -722,7 +892,7 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
     // the "mfhi" MIPS assembly instruction (move from hi)
     // to complete the modulus operation.
     AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg))); // DO WE CARE ABOUT THE QUOTIENT???
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg))); // --> DO WE CARE ABOUT THE QUOTIENT???
     AppendSeq(Res1->Instrs, GenInstr(NULL, "mfhi", TmpRegName(reg), NULL, NULL));
 
     // Call the functions below to indicate 

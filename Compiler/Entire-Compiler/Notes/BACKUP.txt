@@ -342,3 +342,164 @@ int yyerror(char *s) {
 
 // --> THIS WAS IN THE DOIF FUNCTION THAT YOU CURRENTLY HAVE IN YOUR SEMANTICS FILE!!!
 // AppendSeq(Res->Instrs, GenInstr(NULL, "sne", TmpRegName(Res->Reg), TmpRegName(Res->Reg), "$zero"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /**
+//  * PRINT (series of instructions)
+//  * 
+//  * The function returns a struct that contains a new
+//  * instruction generated within the function. The
+//  * function handles cases where the data needs to be
+//  * printed out to the console (usually in an editor).
+//  * There are a series of instructions that are used
+//  * to print out values in assembly. Labels like "li",
+//  * "la", "move", and "syscall" are used for this process.
+//  */
+// extern struct InstrSeq *doPrint(struct ExprRes *Expr) { 
+
+//     // Create a struct of type ExprRes to store
+//     // the new instruction being created.
+//     struct InstrSeq *code;
+    
+//     // Store the instruction in the expression result
+//     // within the code variable that was created.
+//     code = Expr->Instrs;
+  
+//     // Add the MIPS assembly code to the linked list of instructions.
+//     AppendSeq(code, GenInstr(NULL, "li", "$v0", "1", NULL));
+//     AppendSeq(code, GenInstr(NULL, "move", "$a0", TmpRegName(Expr->Reg), NULL));
+//     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+
+//     // Add more MIPS assembly code to complete the process of adding
+//     // the proper procedures to enable printing out to the screen.
+//     AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
+//     AppendSeq(code, GenInstr(NULL, "la", "$a0", "_nl", NULL));
+//     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+
+//     // Call the functions below to indicate 
+//     // that the registers used in the print 
+//     // operation are now free to use again. 
+//     ReleaseTmpReg(Expr->Reg);
+//     free(Expr);
+
+//     // Return the code variable with the instruction data.
+//     return code;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /**
+//  * PRINTLINES
+//  * 
+//  * DESCRIPTION...
+//  */
+// extern struct InstrSeq *doPrintlines(struct ExprRes *Res) {
+
+//     struct InstrSeq *code = NULL; // (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+//     // struct InstrSeq *code = NULL;
+//     int reg = AvailTmpReg();
+//     AppendSeq(code, Res->Instrs);
+//     AppendSeq(code, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res->Reg), NULL));
+
+//     char *label = GenLabel();
+//     char *label2 = GenLabel();
+
+//     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(reg), label2));
+//     AppendSeq(code, GenInstr(label, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines desired;
+
+//     AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
+//     AppendSeq(code, GenInstr(NULL, "la", "$a0", "_nl", NULL));
+//     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+
+//     AppendSeq(code, GenInstr(NULL, "subi", TmpRegName(reg), TmpRegName(reg), "1"));
+//     AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(reg), label));
+//     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
+
+//     ReleaseTmpReg(reg);
+//     ReleaseTmpReg(Res->Reg);
+//     free(Res);
+
+//     return code;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /**
+//  * PRINTSPACES
+//  * 
+//  * DESCRIPTION...
+//  */
+// extern struct InstrSeq *doPrintspaces(struct ExprRes *Res) {
+    
+//     // struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+//     struct InstrSeq *code = NULL;
+//     int reg = AvailTmpReg();
+    
+//     AppendSeq(code, Res->Instrs);
+//     AppendSeq(code, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res->Reg), NULL));
+
+//     char *label1 = GenLabel();
+//     char *label2 = GenLabel();
+
+//     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(reg), label2));
+//     AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines desired;
+
+//     AppendSeq(code, GenInstr(NULL, "li", "$v0", "11", NULL));
+//     AppendSeq(code, GenInstr(NULL, "la", "$a0", "32", NULL));
+//     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+
+//     AppendSeq(code, GenInstr(NULL, "subi", TmpRegName(reg), TmpRegName(reg), "1"));
+//     AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(reg), label1));
+//     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
+
+//     ReleaseTmpReg(reg);
+//     ReleaseTmpReg(Res->Reg);
+
+//     free(Res);
+//     return code;
+// }

@@ -24,7 +24,7 @@ struct IdList {
 */
 struct ExprRes {
     int Reg;
-    struct InstrSeq * Instrs;
+    struct InstrSeq *Instrs;
 };
 
 /* 
@@ -41,18 +41,19 @@ struct ExprResList {
     result.
 */
 struct BExprRes {
-    char * Label;
-    struct InstrSeq * Instrs;
+    char *Label;
+    struct InstrSeq *Instrs;
 };
 
 /*
     The struct is a linked list of
-    nodes that can contain arguments
-    and expressions.
+    strings created for printing out
+    strings in the C-like language.
 */
-struct Node {
-    void *name;
-    struct Node *next;
+struct StringItem {
+    char *String;
+    struct StringItem *Next;
+    char *StringLabel;
 };
 
 /* ================= */
@@ -61,8 +62,11 @@ struct Node {
 
 /*
     Create an enumeration for boolean operators.
+    Create another enumeration for printing lines
+    and spaces.
 */
 enum BExprOps {and, or, not};
+enum PrintExprOps {newline, space};
 
 /* ================= */
 /* Semantics Actions */
@@ -75,13 +79,14 @@ enum BExprOps {and, or, not};
 extern void	Finish(struct InstrSeq *Code);
 
 /*
-    The functions handle the cases for printing out values.
+    The functions handle the cases for printing out values
+    and reading values.
 */
 extern struct InstrSeq *doPrint(struct ExprRes *Expr);
+extern struct InstrSeq *doPrintStrings(char *stringValue);
 extern struct InstrSeq *doPrintExpressions(struct ExprResList *list);
 extern struct ExprResList *createExprList(struct ExprRes *res, struct ExprResList *list);
-extern struct InstrSeq *doPrintlines(struct ExprRes *Res);
-extern struct InstrSeq *doPrintspaces(struct ExprRes *Res);
+extern struct InstrSeq *doPrintformat(struct ExprRes *Res, enum PrintExprOps printType);
 extern struct InstrSeq *doRead(struct IdList *entry);
 extern struct IdList *createIdentList(char *idName, struct IdList *list);
 

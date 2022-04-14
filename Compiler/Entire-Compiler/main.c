@@ -82,8 +82,14 @@ int main(int argc, char * argv[]) {
 	// begin the compiling process.
 	yyparse();
 
-	// Close all the files at the end of the program
-    // and call yylex_destroy() to free up memory.
-    closeFiles();
+	// At the end of the program, call yylex_destroy() 
+	// to free up memory and call a symbol table function
+	//  to destroy all symbol tables.
     yylex_destroy();
+	// --> CALL THE DESTROY SYMBOL TABLES FUNCTION THAT YOU WILL CREATE HERE!!!
+
+	// Call the destroy symbol table function to destroy
+	// the main symbol table, and close all of the files.
+	// destroySymTab(table); // --> DESTROY THE MAIN SYMBOL TABLE AFTER YOU COMPLETE THE OTHER FUNCTION THAT YOU WILL ADD ABOVE!!!
+	closeFiles();
 }

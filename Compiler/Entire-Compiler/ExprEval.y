@@ -8,7 +8,7 @@
     #include "CodeGen.h"
 
     extern int yylex(); /* The next token function. */
-    extern char *yytext; /* The matched token text.  */
+    extern char *yytext; /* The matched token text. */
     extern int yyleng; /* The token text length. */
     extern int yyparse();
     extern int yyerror(char *);
@@ -41,6 +41,7 @@
 %type <InstrSeq> Stmt
 %type <InstrSeq> AssnmtStmt
 %type <ExprResList> ExprList
+%type <string> StrList
 %type <ExprRes> ExprL0
 %type <ExprRes> ExprL1
 %type <ExprRes> ExprL2
@@ -53,8 +54,10 @@
 %type <string> Id
 
 %token Int
-%token Ident		
+%token Ident	
+%token StrLit	
 %token Print
+%token Printstrings
 %token Printlines
 %token Printspaces
 %token Read
@@ -83,8 +86,9 @@ StmtSeq 		            : Stmt StmtSeq								                           { $$ = Ap
     		                |											                           { $$ = NULL; };
 
 Stmt			            : Print '(' ExprList ')' ';'                                           { $$ = doPrintExpressions($3); };
-                            | Printlines '(' ExprL0 ')' ';'                                        { $$ = doPrintlines($3); };
-                            | Printspaces '(' ExprL0 ')' ';'                                       { $$ = doPrintspaces($3); };
+                            | Printstrings '(' StrList ')' ';'                                     { $$ = doPrintStrings($3); };
+                            | Printlines '(' ExprL0 ')' ';'                                        { $$ = doPrintformat($3, newline); };
+                            | Printspaces '(' ExprL0 ')' ';'                                       { $$ = doPrintformat($3, space); };
                             | Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
                             
                             | IF '(' ExprL0 ')' '{' StmtSeq '}'                                    { $$ = doIf($3, $6); };
@@ -135,6 +139,7 @@ ExprL7    		            : '-'ExprL6                                             
 IdentList                   : Id ',' IdentList                                                     { $$ = createIdentList($1, $3); };
                             | Id                                                                   { $$ = createIdentList($1, NULL); };
 
+StrList                     : StrLit                                                               { $$ = strdup(yytext); };
 Id			                : Ident									                               { $$ = strdup(yytext); };
 
 %%

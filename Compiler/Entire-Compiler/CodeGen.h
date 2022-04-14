@@ -49,6 +49,25 @@ extern void WriteSeq(struct InstrSeq *ASeq);
 */
 extern char *GenLabel();
 
+
+
+
+
+
+
+
+/*
+    The function generates a label for a string.
+*/
+extern char *GenerateStringLabel();
+
+
+
+
+
+
+
+
 /*
     The function determines how many temporary
     registers are available for use.

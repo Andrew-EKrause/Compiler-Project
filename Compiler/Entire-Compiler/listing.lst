@@ -1,25 +1,13 @@
-1. 
-2. int val;
-3. read(val);
-4. 
-5. if (val % 2 == 0) {
-6.     print(1);
-7. } else {
-8.     print(2);
+1. int num1;
+2. int num2;
+3. num1 = 10;
+4. num2 = 20;
+5. if (num2+10+10 == 2*num2) {
+6. 	print(num1, num1);
+7. 	printSpaces(10);
+8. 	print(num2, num2);
 9. }
-10. 
-11. while(val > 0) {
-12.     print(val);
-13.     val = val - 1;
-14. }
-15. 
-16. printlines(1);
-17. 
-18. for (val = 0; val <= 10; val = val + 1) {
-19.     print(val);
-20.     printlines(1);
-21.     
-22.     if (val == 5) {
-23.         val = 8;
-24.     }
-25. }
+10. printLines(5);
+11. print(num1);
+12. print(num2);
+13. printString("Hello there!");
