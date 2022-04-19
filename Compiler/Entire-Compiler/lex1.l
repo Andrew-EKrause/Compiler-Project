@@ -56,8 +56,10 @@ for                                     {return FOR;}
 \(					                    {return '(';}
 \)					                    {return ')';}
 \,                                      {return ',';}
+\[				                        {return '[';}
+\]                                      {return ']';}
 
-[ ]				                        {}
+[ ]                                     {}
 \t				                        {}
 \r				                        {}
 \n				                        {}

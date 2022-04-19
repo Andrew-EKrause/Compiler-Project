@@ -4,6 +4,7 @@
     produces the assembly code equivalent to the C-like language that 
     will be compiled (translated to the assembly code).
 */
+#pragma once
 
 /* Include the standard I/O package. */
 #include <stdio.h>
@@ -49,24 +50,15 @@ extern void WriteSeq(struct InstrSeq *ASeq);
 */
 extern char *GenLabel();
 
-
-
-
-
-
-
-
 /*
     The function generates a label for a string.
 */
 extern char *GenerateStringLabel();
 
-
-
-
-
-
-
+/*
+    The function generates a label for an array.
+*/
+extern char *GenerateArrayLabel();
 
 /*
     The function determines how many temporary

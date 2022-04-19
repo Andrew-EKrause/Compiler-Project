@@ -26,73 +26,77 @@ Grammar
    17     | AssnmtStmt ';'
 
    18 AssnmtStmt: Id '=' ExprL0
+   19           | Id '[' ExprL0 ']' '=' ExprL0
+   20           | Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
 
-   19 ExprList: ExprL0 ',' ExprList
-   20         | ExprL0
+   21 ExprList: ExprL0 ',' ExprList
+   22         | ExprL0
 
-   21 ExprL0: ExprL0 OR ExprL1
-   22       | ExprL0 AND ExprL1
-   23       | ExprL1
+   23 ExprL0: ExprL0 OR ExprL1
+   24       | ExprL0 AND ExprL1
+   25       | ExprL1
 
-   24 ExprL1: '!' ExprL2
-   25       | ExprL2
+   26 ExprL1: '!' ExprL2
+   27       | ExprL2
 
-   26 ExprL2: ExprL2 NOT_EQ ExprL3
-   27       | ExprL2 EQ ExprL3
-   28       | ExprL2 LT_OR_EQ ExprL3
-   29       | ExprL2 GT_OR_EQ ExprL3
-   30       | ExprL2 LT ExprL3
-   31       | ExprL2 GT ExprL3
-   32       | ExprL3
+   28 ExprL2: ExprL2 NOT_EQ ExprL3
+   29       | ExprL2 EQ ExprL3
+   30       | ExprL2 LT_OR_EQ ExprL3
+   31       | ExprL2 GT_OR_EQ ExprL3
+   32       | ExprL2 LT ExprL3
+   33       | ExprL2 GT ExprL3
+   34       | ExprL3
 
-   33 ExprL3: ExprL3 '+' ExprL4
-   34       | ExprL3 '-' ExprL4
-   35       | ExprL4
+   35 ExprL3: ExprL3 '+' ExprL4
+   36       | ExprL3 '-' ExprL4
+   37       | ExprL4
 
-   36 ExprL4: ExprL4 '*' ExprL5
-   37       | ExprL4 '/' ExprL5
-   38       | ExprL4 '%' ExprL5
-   39       | ExprL5
+   38 ExprL4: ExprL4 '*' ExprL5
+   39       | ExprL4 '/' ExprL5
+   40       | ExprL4 '%' ExprL5
+   41       | ExprL5
 
-   40 ExprL5: ExprL6 '^' ExprL5
-   41       | ExprL6
+   42 ExprL5: ExprL6 '^' ExprL5
+   43       | ExprL6
 
-   42 ExprL6: '(' ExprL0 ')'
-   43       | ExprL7
+   44 ExprL6: '(' ExprL0 ')'
+   45       | ExprL7
 
-   44 ExprL7: '-' ExprL6
-   45       | IntLit
-   46       | Ident
+   46 ExprL7: '-' ExprL6
+   47       | IntLit
+   48       | Ident
 
-   47 IdentList: Id ',' IdentList
-   48          | Id
+   49 IdentList: Id ',' IdentList
+   50          | Id
 
-   49 StrList: StrLit
+   51 StrList: StrLit
 
-   50 Id: Ident
+   52 Id: Ident
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    '!' (33) 24
-    '%' (37) 38
-    '(' (40) 8 9 10 11 12 13 14 15 16 42
-    ')' (41) 8 9 10 11 12 13 14 15 16 42
-    '*' (42) 36
-    '+' (43) 33
-    ',' (44) 19 47
-    '-' (45) 34 44
-    '/' (47) 37
+    '!' (33) 26
+    '%' (37) 40
+    '(' (40) 8 9 10 11 12 13 14 15 16 44
+    ')' (41) 8 9 10 11 12 13 14 15 16 44
+    '*' (42) 38
+    '+' (43) 35
+    ',' (44) 21 49
+    '-' (45) 36 46
+    '/' (47) 39
     ';' (59) 5 8 9 10 11 12 16 17
-    '=' (61) 18
-    '^' (94) 40
+    '=' (61) 18 19 20
+    '[' (91) 19 20
+    ']' (93) 19 20
+    '^' (94) 42
     '{' (123) 13 14 15 16
     '}' (125) 13 14 15 16
     error (256)
     Int (258) 5
-    Ident (259) 5 46 50
-    StrLit (260) 49
+    Ident (259) 5 48 52
+    StrLit (260) 51
     Print (261) 8
     Printstrings (262) 9
     Printlines (263) 10
@@ -102,78 +106,78 @@ Terminals, with rules where they appear
     ELSE (267) 14
     WHILE (268) 15
     FOR (269) 16
-    OR (270) 21
-    AND (271) 22
-    NOT_EQ (272) 26
-    EQ (273) 27
-    LT_OR_EQ (274) 28
-    GT_OR_EQ (275) 29
-    LT (276) 30
-    GT (277) 31
-    IntLit (278) 45
+    OR (270) 23
+    AND (271) 24
+    NOT_EQ (272) 28
+    EQ (273) 29
+    LT_OR_EQ (274) 30
+    GT_OR_EQ (275) 31
+    LT (276) 32
+    GT (277) 33
+    IntLit (278) 47
 
 
 Nonterminals, with rules where they appear
 
-    $accept (38)
+    $accept (40)
         on left: 0
-    Prog (39)
+    Prog (41)
         on left: 1
         on right: 0
-    Declarations (40)
+    Declarations (42)
         on left: 2 3
         on right: 1 2
-    Dec (41)
+    Dec (43)
         on left: 5
         on right: 2
-    $@1 (42)
+    $@1 (44)
         on left: 4
         on right: 5
-    StmtSeq <InstrSeq> (43)
+    StmtSeq <InstrSeq> (45)
         on left: 6 7
         on right: 1 6 13 14 15 16
-    Stmt <InstrSeq> (44)
+    Stmt <InstrSeq> (46)
         on left: 8 9 10 11 12 13 14 15 16 17
         on right: 6
-    AssnmtStmt <InstrSeq> (45)
-        on left: 18
+    AssnmtStmt <InstrSeq> (47)
+        on left: 18 19 20
         on right: 16 17
-    ExprList <ExprResList> (46)
-        on left: 19 20
-        on right: 8 19
-    ExprL0 <ExprRes> (47)
-        on left: 21 22 23
-        on right: 10 11 13 14 15 16 18 19 20 21 22 42
-    ExprL1 <ExprRes> (48)
-        on left: 24 25
-        on right: 21 22 23
-    ExprL2 <ExprRes> (49)
-        on left: 26 27 28 29 30 31 32
-        on right: 24 25 26 27 28 29 30 31
-    ExprL3 <ExprRes> (50)
-        on left: 33 34 35
-        on right: 26 27 28 29 30 31 32 33 34
-    ExprL4 <ExprRes> (51)
-        on left: 36 37 38 39
-        on right: 33 34 35 36 37 38
-    ExprL5 <ExprRes> (52)
-        on left: 40 41
-        on right: 36 37 38 39 40
-    ExprL6 <ExprRes> (53)
+    ExprList <ExprResList> (48)
+        on left: 21 22
+        on right: 8 21
+    ExprL0 <ExprRes> (49)
+        on left: 23 24 25
+        on right: 10 11 13 14 15 16 18 19 20 21 22 23 24 44
+    ExprL1 <ExprRes> (50)
+        on left: 26 27
+        on right: 23 24 25
+    ExprL2 <ExprRes> (51)
+        on left: 28 29 30 31 32 33 34
+        on right: 26 27 28 29 30 31 32 33
+    ExprL3 <ExprRes> (52)
+        on left: 35 36 37
+        on right: 28 29 30 31 32 33 34 35 36
+    ExprL4 <ExprRes> (53)
+        on left: 38 39 40 41
+        on right: 35 36 37 38 39 40
+    ExprL5 <ExprRes> (54)
         on left: 42 43
-        on right: 40 41 44
-    ExprL7 <ExprRes> (54)
-        on left: 44 45 46
-        on right: 43
-    IdentList <IdList> (55)
-        on left: 47 48
-        on right: 12 47
-    StrList <string> (56)
-        on left: 49
+        on right: 38 39 40 41 42
+    ExprL6 <ExprRes> (55)
+        on left: 44 45
+        on right: 42 43 46
+    ExprL7 <ExprRes> (56)
+        on left: 46 47 48
+        on right: 45
+    IdentList <IdList> (57)
+        on left: 49 50
+        on right: 12 49
+    StrList <string> (58)
+        on left: 51
         on right: 9
-    Id <string> (57)
-        on left: 50
-        on right: 18 47 48
+    Id <string> (59)
+        on left: 52
+        on right: 18 19 20 49 50
 
 
 State 0
@@ -255,9 +259,9 @@ State 6
 
 State 7
 
-   50 Id: Ident •
+   52 Id: Ident •
 
-    $default  reduce using rule 50 (Id)
+    $default  reduce using rule 52 (Id)
 
 
 State 8
@@ -356,8 +360,11 @@ State 18
 State 19
 
    18 AssnmtStmt: Id • '=' ExprL0
+   19           | Id • '[' ExprL0 ']' '=' ExprL0
+   20           | Id • '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
 
     '='  shift, and go to state 32
+    '['  shift, and go to state 33
 
 
 State 20
@@ -371,77 +378,77 @@ State 21
 
     5 Dec: Int Ident $@1 • ';'
 
-    ';'  shift, and go to state 33
+    ';'  shift, and go to state 34
 
 
 State 22
 
     8 Stmt: Print '(' • ExprList ')' ';'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprList  go to state 39
-    ExprL0    go to state 40
-    ExprL1    go to state 41
-    ExprL2    go to state 42
-    ExprL3    go to state 43
-    ExprL4    go to state 44
-    ExprL5    go to state 45
-    ExprL6    go to state 46
-    ExprL7    go to state 47
+    ExprList  go to state 40
+    ExprL0    go to state 41
+    ExprL1    go to state 42
+    ExprL2    go to state 43
+    ExprL3    go to state 44
+    ExprL4    go to state 45
+    ExprL5    go to state 46
+    ExprL6    go to state 47
+    ExprL7    go to state 48
 
 
 State 23
 
     9 Stmt: Printstrings '(' • StrList ')' ';'
 
-    StrLit  shift, and go to state 48
+    StrLit  shift, and go to state 49
 
-    StrList  go to state 49
+    StrList  go to state 50
 
 
 State 24
 
    10 Stmt: Printlines '(' • ExprL0 ')' ';'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL0  go to state 50
-    ExprL1  go to state 41
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL0  go to state 51
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 25
 
    11 Stmt: Printspaces '(' • ExprL0 ')' ';'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL0  go to state 51
-    ExprL1  go to state 41
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL0  go to state 52
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 26
@@ -450,8 +457,8 @@ State 26
 
     Ident  shift, and go to state 7
 
-    IdentList  go to state 52
-    Id         go to state 53
+    IdentList  go to state 53
+    Id         go to state 54
 
 
 State 27
@@ -459,40 +466,40 @@ State 27
    13 Stmt: IF '(' • ExprL0 ')' '{' StmtSeq '}'
    14     | IF '(' • ExprL0 ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL0  go to state 54
-    ExprL1  go to state 41
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL0  go to state 55
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 28
 
    15 Stmt: WHILE '(' • ExprL0 ')' '{' StmtSeq '}'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL0  go to state 55
-    ExprL1  go to state 41
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL0  go to state 56
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 29
@@ -501,7 +508,7 @@ State 29
 
     Ident  shift, and go to state 7
 
-    AssnmtStmt  go to state 56
+    AssnmtStmt  go to state 57
     Id          go to state 19
 
 
@@ -523,844 +530,886 @@ State 32
 
    18 AssnmtStmt: Id '=' • ExprL0
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL0  go to state 57
-    ExprL1  go to state 41
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL0  go to state 58
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 33
+
+   19 AssnmtStmt: Id '[' • ExprL0 ']' '=' ExprL0
+   20           | Id '[' • ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
+
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
+
+    ExprL0  go to state 59
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
+
+
+State 34
 
     5 Dec: Int Ident $@1 ';' •
 
     $default  reduce using rule 5 (Dec)
 
 
-State 34
-
-   46 ExprL7: Ident •
-
-    $default  reduce using rule 46 (ExprL7)
-
-
 State 35
 
-   45 ExprL7: IntLit •
+   48 ExprL7: Ident •
 
-    $default  reduce using rule 45 (ExprL7)
+    $default  reduce using rule 48 (ExprL7)
 
 
 State 36
 
-   42 ExprL6: '(' • ExprL0 ')'
+   47 ExprL7: IntLit •
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
-
-    ExprL0  go to state 58
-    ExprL1  go to state 41
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    $default  reduce using rule 47 (ExprL7)
 
 
 State 37
 
-   24 ExprL1: '!' • ExprL2
+   44 ExprL6: '(' • ExprL0 ')'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL2  go to state 59
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL0  go to state 60
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 38
 
-   44 ExprL7: '-' • ExprL6
+   26 ExprL1: '!' • ExprL2
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL6  go to state 60
-    ExprL7  go to state 47
+    ExprL2  go to state 61
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 39
 
-    8 Stmt: Print '(' ExprList • ')' ';'
+   46 ExprL7: '-' • ExprL6
 
-    ')'  shift, and go to state 61
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
+
+    ExprL6  go to state 62
+    ExprL7  go to state 48
 
 
 State 40
 
-   19 ExprList: ExprL0 • ',' ExprList
-   20         | ExprL0 •
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
+    8 Stmt: Print '(' ExprList • ')' ';'
 
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-    ','  shift, and go to state 64
-
-    $default  reduce using rule 20 (ExprList)
+    ')'  shift, and go to state 63
 
 
 State 41
 
-   23 ExprL0: ExprL1 •
+   21 ExprList: ExprL0 • ',' ExprList
+   22         | ExprL0 •
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
 
-    $default  reduce using rule 23 (ExprL0)
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ','  shift, and go to state 66
+
+    $default  reduce using rule 22 (ExprList)
 
 
 State 42
 
-   25 ExprL1: ExprL2 •
-   26 ExprL2: ExprL2 • NOT_EQ ExprL3
-   27       | ExprL2 • EQ ExprL3
-   28       | ExprL2 • LT_OR_EQ ExprL3
-   29       | ExprL2 • GT_OR_EQ ExprL3
-   30       | ExprL2 • LT ExprL3
-   31       | ExprL2 • GT ExprL3
+   25 ExprL0: ExprL1 •
 
-    NOT_EQ    shift, and go to state 65
-    EQ        shift, and go to state 66
-    LT_OR_EQ  shift, and go to state 67
-    GT_OR_EQ  shift, and go to state 68
-    LT        shift, and go to state 69
-    GT        shift, and go to state 70
-
-    $default  reduce using rule 25 (ExprL1)
+    $default  reduce using rule 25 (ExprL0)
 
 
 State 43
 
-   32 ExprL2: ExprL3 •
-   33 ExprL3: ExprL3 • '+' ExprL4
-   34       | ExprL3 • '-' ExprL4
+   27 ExprL1: ExprL2 •
+   28 ExprL2: ExprL2 • NOT_EQ ExprL3
+   29       | ExprL2 • EQ ExprL3
+   30       | ExprL2 • LT_OR_EQ ExprL3
+   31       | ExprL2 • GT_OR_EQ ExprL3
+   32       | ExprL2 • LT ExprL3
+   33       | ExprL2 • GT ExprL3
 
-    '+'  shift, and go to state 71
-    '-'  shift, and go to state 72
+    NOT_EQ    shift, and go to state 67
+    EQ        shift, and go to state 68
+    LT_OR_EQ  shift, and go to state 69
+    GT_OR_EQ  shift, and go to state 70
+    LT        shift, and go to state 71
+    GT        shift, and go to state 72
 
-    $default  reduce using rule 32 (ExprL2)
+    $default  reduce using rule 27 (ExprL1)
 
 
 State 44
 
-   35 ExprL3: ExprL4 •
-   36 ExprL4: ExprL4 • '*' ExprL5
-   37       | ExprL4 • '/' ExprL5
-   38       | ExprL4 • '%' ExprL5
+   34 ExprL2: ExprL3 •
+   35 ExprL3: ExprL3 • '+' ExprL4
+   36       | ExprL3 • '-' ExprL4
 
-    '*'  shift, and go to state 73
-    '/'  shift, and go to state 74
-    '%'  shift, and go to state 75
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
 
-    $default  reduce using rule 35 (ExprL3)
+    $default  reduce using rule 34 (ExprL2)
 
 
 State 45
 
-   39 ExprL4: ExprL5 •
+   37 ExprL3: ExprL4 •
+   38 ExprL4: ExprL4 • '*' ExprL5
+   39       | ExprL4 • '/' ExprL5
+   40       | ExprL4 • '%' ExprL5
 
-    $default  reduce using rule 39 (ExprL4)
+    '*'  shift, and go to state 75
+    '/'  shift, and go to state 76
+    '%'  shift, and go to state 77
+
+    $default  reduce using rule 37 (ExprL3)
 
 
 State 46
 
-   40 ExprL5: ExprL6 • '^' ExprL5
-   41       | ExprL6 •
+   41 ExprL4: ExprL5 •
 
-    '^'  shift, and go to state 76
-
-    $default  reduce using rule 41 (ExprL5)
+    $default  reduce using rule 41 (ExprL4)
 
 
 State 47
 
-   43 ExprL6: ExprL7 •
+   42 ExprL5: ExprL6 • '^' ExprL5
+   43       | ExprL6 •
 
-    $default  reduce using rule 43 (ExprL6)
+    '^'  shift, and go to state 78
+
+    $default  reduce using rule 43 (ExprL5)
 
 
 State 48
 
-   49 StrList: StrLit •
+   45 ExprL6: ExprL7 •
 
-    $default  reduce using rule 49 (StrList)
+    $default  reduce using rule 45 (ExprL6)
 
 
 State 49
 
-    9 Stmt: Printstrings '(' StrList • ')' ';'
+   51 StrList: StrLit •
 
-    ')'  shift, and go to state 77
+    $default  reduce using rule 51 (StrList)
 
 
 State 50
 
-   10 Stmt: Printlines '(' ExprL0 • ')' ';'
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
+    9 Stmt: Printstrings '(' StrList • ')' ';'
 
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-    ')'  shift, and go to state 78
+    ')'  shift, and go to state 79
 
 
 State 51
 
-   11 Stmt: Printspaces '(' ExprL0 • ')' ';'
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
+   10 Stmt: Printlines '(' ExprL0 • ')' ';'
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
 
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-    ')'  shift, and go to state 79
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ')'  shift, and go to state 80
 
 
 State 52
 
-   12 Stmt: Read '(' IdentList • ')' ';'
+   11 Stmt: Printspaces '(' ExprL0 • ')' ';'
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
 
-    ')'  shift, and go to state 80
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ')'  shift, and go to state 81
 
 
 State 53
 
-   47 IdentList: Id • ',' IdentList
-   48          | Id •
+   12 Stmt: Read '(' IdentList • ')' ';'
 
-    ','  shift, and go to state 81
-
-    $default  reduce using rule 48 (IdentList)
+    ')'  shift, and go to state 82
 
 
 State 54
 
-   13 Stmt: IF '(' ExprL0 • ')' '{' StmtSeq '}'
-   14     | IF '(' ExprL0 • ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
+   49 IdentList: Id • ',' IdentList
+   50          | Id •
 
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-    ')'  shift, and go to state 82
+    ','  shift, and go to state 83
+
+    $default  reduce using rule 50 (IdentList)
 
 
 State 55
 
-   15 Stmt: WHILE '(' ExprL0 • ')' '{' StmtSeq '}'
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
+   13 Stmt: IF '(' ExprL0 • ')' '{' StmtSeq '}'
+   14     | IF '(' ExprL0 • ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
 
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-    ')'  shift, and go to state 83
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ')'  shift, and go to state 84
 
 
 State 56
 
-   16 Stmt: FOR '(' AssnmtStmt • ';' ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}'
+   15 Stmt: WHILE '(' ExprL0 • ')' '{' StmtSeq '}'
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
 
-    ';'  shift, and go to state 84
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ')'  shift, and go to state 85
 
 
 State 57
 
-   18 AssnmtStmt: Id '=' ExprL0 •
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
-
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-
-    $default  reduce using rule 18 (AssnmtStmt)
-
-
-State 58
-
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
-   42 ExprL6: '(' ExprL0 • ')'
-
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-    ')'  shift, and go to state 85
-
-
-State 59
-
-   24 ExprL1: '!' ExprL2 •
-   26 ExprL2: ExprL2 • NOT_EQ ExprL3
-   27       | ExprL2 • EQ ExprL3
-   28       | ExprL2 • LT_OR_EQ ExprL3
-   29       | ExprL2 • GT_OR_EQ ExprL3
-   30       | ExprL2 • LT ExprL3
-   31       | ExprL2 • GT ExprL3
-
-    NOT_EQ    shift, and go to state 65
-    EQ        shift, and go to state 66
-    LT_OR_EQ  shift, and go to state 67
-    GT_OR_EQ  shift, and go to state 68
-    LT        shift, and go to state 69
-    GT        shift, and go to state 70
-
-    $default  reduce using rule 24 (ExprL1)
-
-
-State 60
-
-   44 ExprL7: '-' ExprL6 •
-
-    $default  reduce using rule 44 (ExprL7)
-
-
-State 61
-
-    8 Stmt: Print '(' ExprList ')' • ';'
+   16 Stmt: FOR '(' AssnmtStmt • ';' ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}'
 
     ';'  shift, and go to state 86
 
 
+State 58
+
+   18 AssnmtStmt: Id '=' ExprL0 •
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
+
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+
+    $default  reduce using rule 18 (AssnmtStmt)
+
+
+State 59
+
+   19 AssnmtStmt: Id '[' ExprL0 • ']' '=' ExprL0
+   20           | Id '[' ExprL0 • ']' '[' ExprL0 ']' '=' ExprL0
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
+
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ']'  shift, and go to state 87
+
+
+State 60
+
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
+   44 ExprL6: '(' ExprL0 • ')'
+
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ')'  shift, and go to state 88
+
+
+State 61
+
+   26 ExprL1: '!' ExprL2 •
+   28 ExprL2: ExprL2 • NOT_EQ ExprL3
+   29       | ExprL2 • EQ ExprL3
+   30       | ExprL2 • LT_OR_EQ ExprL3
+   31       | ExprL2 • GT_OR_EQ ExprL3
+   32       | ExprL2 • LT ExprL3
+   33       | ExprL2 • GT ExprL3
+
+    NOT_EQ    shift, and go to state 67
+    EQ        shift, and go to state 68
+    LT_OR_EQ  shift, and go to state 69
+    GT_OR_EQ  shift, and go to state 70
+    LT        shift, and go to state 71
+    GT        shift, and go to state 72
+
+    $default  reduce using rule 26 (ExprL1)
+
+
 State 62
 
-   21 ExprL0: ExprL0 OR • ExprL1
+   46 ExprL7: '-' ExprL6 •
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
-
-    ExprL1  go to state 87
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    $default  reduce using rule 46 (ExprL7)
 
 
 State 63
 
-   22 ExprL0: ExprL0 AND • ExprL1
+    8 Stmt: Print '(' ExprList ')' • ';'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
-
-    ExprL1  go to state 88
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ';'  shift, and go to state 89
 
 
 State 64
 
-   19 ExprList: ExprL0 ',' • ExprList
+   23 ExprL0: ExprL0 OR • ExprL1
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprList  go to state 89
-    ExprL0    go to state 40
-    ExprL1    go to state 41
-    ExprL2    go to state 42
-    ExprL3    go to state 43
-    ExprL4    go to state 44
-    ExprL5    go to state 45
-    ExprL6    go to state 46
-    ExprL7    go to state 47
+    ExprL1  go to state 90
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 65
 
-   26 ExprL2: ExprL2 NOT_EQ • ExprL3
+   24 ExprL0: ExprL0 AND • ExprL1
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL3  go to state 90
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL1  go to state 91
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 66
 
-   27 ExprL2: ExprL2 EQ • ExprL3
+   21 ExprList: ExprL0 ',' • ExprList
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
 
-    ExprL3  go to state 91
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprList  go to state 92
+    ExprL0    go to state 41
+    ExprL1    go to state 42
+    ExprL2    go to state 43
+    ExprL3    go to state 44
+    ExprL4    go to state 45
+    ExprL5    go to state 46
+    ExprL6    go to state 47
+    ExprL7    go to state 48
 
 
 State 67
 
-   28 ExprL2: ExprL2 LT_OR_EQ • ExprL3
+   28 ExprL2: ExprL2 NOT_EQ • ExprL3
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL3  go to state 92
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL3  go to state 93
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 68
 
-   29 ExprL2: ExprL2 GT_OR_EQ • ExprL3
+   29 ExprL2: ExprL2 EQ • ExprL3
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL3  go to state 93
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL3  go to state 94
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 69
 
-   30 ExprL2: ExprL2 LT • ExprL3
+   30 ExprL2: ExprL2 LT_OR_EQ • ExprL3
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL3  go to state 94
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL3  go to state 95
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 70
 
-   31 ExprL2: ExprL2 GT • ExprL3
+   31 ExprL2: ExprL2 GT_OR_EQ • ExprL3
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL3  go to state 95
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL3  go to state 96
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 71
 
-   33 ExprL3: ExprL3 '+' • ExprL4
+   32 ExprL2: ExprL2 LT • ExprL3
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL4  go to state 96
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL3  go to state 97
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 72
 
-   34 ExprL3: ExprL3 '-' • ExprL4
+   33 ExprL2: ExprL2 GT • ExprL3
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL4  go to state 97
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL3  go to state 98
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 73
 
-   36 ExprL4: ExprL4 '*' • ExprL5
+   35 ExprL3: ExprL3 '+' • ExprL4
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL5  go to state 98
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL4  go to state 99
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 74
 
-   37 ExprL4: ExprL4 '/' • ExprL5
+   36 ExprL3: ExprL3 '-' • ExprL4
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL5  go to state 99
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL4  go to state 100
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 75
 
-   38 ExprL4: ExprL4 '%' • ExprL5
+   38 ExprL4: ExprL4 '*' • ExprL5
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL5  go to state 100
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL5  go to state 101
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 76
 
-   40 ExprL5: ExprL6 '^' • ExprL5
+   39 ExprL4: ExprL4 '/' • ExprL5
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '-'     shift, and go to state 38
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
 
-    ExprL5  go to state 101
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    ExprL5  go to state 102
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 77
 
-    9 Stmt: Printstrings '(' StrList ')' • ';'
+   40 ExprL4: ExprL4 '%' • ExprL5
 
-    ';'  shift, and go to state 102
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
+
+    ExprL5  go to state 103
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 78
 
-   10 Stmt: Printlines '(' ExprL0 ')' • ';'
+   42 ExprL5: ExprL6 '^' • ExprL5
 
-    ';'  shift, and go to state 103
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '-'     shift, and go to state 39
+
+    ExprL5  go to state 104
+    ExprL6  go to state 47
+    ExprL7  go to state 48
 
 
 State 79
 
-   11 Stmt: Printspaces '(' ExprL0 ')' • ';'
-
-    ';'  shift, and go to state 104
-
-
-State 80
-
-   12 Stmt: Read '(' IdentList ')' • ';'
+    9 Stmt: Printstrings '(' StrList ')' • ';'
 
     ';'  shift, and go to state 105
 
 
+State 80
+
+   10 Stmt: Printlines '(' ExprL0 ')' • ';'
+
+    ';'  shift, and go to state 106
+
+
 State 81
 
-   47 IdentList: Id ',' • IdentList
+   11 Stmt: Printspaces '(' ExprL0 ')' • ';'
 
-    Ident  shift, and go to state 7
-
-    IdentList  go to state 106
-    Id         go to state 53
+    ';'  shift, and go to state 107
 
 
 State 82
 
-   13 Stmt: IF '(' ExprL0 ')' • '{' StmtSeq '}'
-   14     | IF '(' ExprL0 ')' • '{' StmtSeq '}' ELSE '{' StmtSeq '}'
+   12 Stmt: Read '(' IdentList ')' • ';'
 
-    '{'  shift, and go to state 107
+    ';'  shift, and go to state 108
 
 
 State 83
 
-   15 Stmt: WHILE '(' ExprL0 ')' • '{' StmtSeq '}'
+   49 IdentList: Id ',' • IdentList
 
-    '{'  shift, and go to state 108
+    Ident  shift, and go to state 7
+
+    IdentList  go to state 109
+    Id         go to state 54
 
 
 State 84
 
-   16 Stmt: FOR '(' AssnmtStmt ';' • ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}'
+   13 Stmt: IF '(' ExprL0 ')' • '{' StmtSeq '}'
+   14     | IF '(' ExprL0 ')' • '{' StmtSeq '}' ELSE '{' StmtSeq '}'
 
-    Ident   shift, and go to state 34
-    IntLit  shift, and go to state 35
-    '('     shift, and go to state 36
-    '!'     shift, and go to state 37
-    '-'     shift, and go to state 38
-
-    ExprL0  go to state 109
-    ExprL1  go to state 41
-    ExprL2  go to state 42
-    ExprL3  go to state 43
-    ExprL4  go to state 44
-    ExprL5  go to state 45
-    ExprL6  go to state 46
-    ExprL7  go to state 47
+    '{'  shift, and go to state 110
 
 
 State 85
 
-   42 ExprL6: '(' ExprL0 ')' •
+   15 Stmt: WHILE '(' ExprL0 ')' • '{' StmtSeq '}'
 
-    $default  reduce using rule 42 (ExprL6)
+    '{'  shift, and go to state 111
 
 
 State 86
+
+   16 Stmt: FOR '(' AssnmtStmt ';' • ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}'
+
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
+
+    ExprL0  go to state 112
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
+
+
+State 87
+
+   19 AssnmtStmt: Id '[' ExprL0 ']' • '=' ExprL0
+   20           | Id '[' ExprL0 ']' • '[' ExprL0 ']' '=' ExprL0
+
+    '='  shift, and go to state 113
+    '['  shift, and go to state 114
+
+
+State 88
+
+   44 ExprL6: '(' ExprL0 ')' •
+
+    $default  reduce using rule 44 (ExprL6)
+
+
+State 89
 
     8 Stmt: Print '(' ExprList ')' ';' •
 
     $default  reduce using rule 8 (Stmt)
 
 
-State 87
-
-   21 ExprL0: ExprL0 OR ExprL1 •
-
-    $default  reduce using rule 21 (ExprL0)
-
-
-State 88
-
-   22 ExprL0: ExprL0 AND ExprL1 •
-
-    $default  reduce using rule 22 (ExprL0)
-
-
-State 89
-
-   19 ExprList: ExprL0 ',' ExprList •
-
-    $default  reduce using rule 19 (ExprList)
-
-
 State 90
 
-   26 ExprL2: ExprL2 NOT_EQ ExprL3 •
-   33 ExprL3: ExprL3 • '+' ExprL4
-   34       | ExprL3 • '-' ExprL4
+   23 ExprL0: ExprL0 OR ExprL1 •
 
-    '+'  shift, and go to state 71
-    '-'  shift, and go to state 72
-
-    $default  reduce using rule 26 (ExprL2)
+    $default  reduce using rule 23 (ExprL0)
 
 
 State 91
 
-   27 ExprL2: ExprL2 EQ ExprL3 •
-   33 ExprL3: ExprL3 • '+' ExprL4
-   34       | ExprL3 • '-' ExprL4
+   24 ExprL0: ExprL0 AND ExprL1 •
 
-    '+'  shift, and go to state 71
-    '-'  shift, and go to state 72
-
-    $default  reduce using rule 27 (ExprL2)
+    $default  reduce using rule 24 (ExprL0)
 
 
 State 92
 
-   28 ExprL2: ExprL2 LT_OR_EQ ExprL3 •
-   33 ExprL3: ExprL3 • '+' ExprL4
-   34       | ExprL3 • '-' ExprL4
+   21 ExprList: ExprL0 ',' ExprList •
 
-    '+'  shift, and go to state 71
-    '-'  shift, and go to state 72
-
-    $default  reduce using rule 28 (ExprL2)
+    $default  reduce using rule 21 (ExprList)
 
 
 State 93
 
-   29 ExprL2: ExprL2 GT_OR_EQ ExprL3 •
-   33 ExprL3: ExprL3 • '+' ExprL4
-   34       | ExprL3 • '-' ExprL4
+   28 ExprL2: ExprL2 NOT_EQ ExprL3 •
+   35 ExprL3: ExprL3 • '+' ExprL4
+   36       | ExprL3 • '-' ExprL4
 
-    '+'  shift, and go to state 71
-    '-'  shift, and go to state 72
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
 
-    $default  reduce using rule 29 (ExprL2)
+    $default  reduce using rule 28 (ExprL2)
 
 
 State 94
 
-   30 ExprL2: ExprL2 LT ExprL3 •
-   33 ExprL3: ExprL3 • '+' ExprL4
-   34       | ExprL3 • '-' ExprL4
+   29 ExprL2: ExprL2 EQ ExprL3 •
+   35 ExprL3: ExprL3 • '+' ExprL4
+   36       | ExprL3 • '-' ExprL4
 
-    '+'  shift, and go to state 71
-    '-'  shift, and go to state 72
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
 
-    $default  reduce using rule 30 (ExprL2)
+    $default  reduce using rule 29 (ExprL2)
 
 
 State 95
 
-   31 ExprL2: ExprL2 GT ExprL3 •
-   33 ExprL3: ExprL3 • '+' ExprL4
-   34       | ExprL3 • '-' ExprL4
+   30 ExprL2: ExprL2 LT_OR_EQ ExprL3 •
+   35 ExprL3: ExprL3 • '+' ExprL4
+   36       | ExprL3 • '-' ExprL4
 
-    '+'  shift, and go to state 71
-    '-'  shift, and go to state 72
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
 
-    $default  reduce using rule 31 (ExprL2)
+    $default  reduce using rule 30 (ExprL2)
 
 
 State 96
 
-   33 ExprL3: ExprL3 '+' ExprL4 •
-   36 ExprL4: ExprL4 • '*' ExprL5
-   37       | ExprL4 • '/' ExprL5
-   38       | ExprL4 • '%' ExprL5
+   31 ExprL2: ExprL2 GT_OR_EQ ExprL3 •
+   35 ExprL3: ExprL3 • '+' ExprL4
+   36       | ExprL3 • '-' ExprL4
 
-    '*'  shift, and go to state 73
-    '/'  shift, and go to state 74
-    '%'  shift, and go to state 75
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
 
-    $default  reduce using rule 33 (ExprL3)
+    $default  reduce using rule 31 (ExprL2)
 
 
 State 97
 
-   34 ExprL3: ExprL3 '-' ExprL4 •
-   36 ExprL4: ExprL4 • '*' ExprL5
-   37       | ExprL4 • '/' ExprL5
-   38       | ExprL4 • '%' ExprL5
+   32 ExprL2: ExprL2 LT ExprL3 •
+   35 ExprL3: ExprL3 • '+' ExprL4
+   36       | ExprL3 • '-' ExprL4
 
-    '*'  shift, and go to state 73
-    '/'  shift, and go to state 74
-    '%'  shift, and go to state 75
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
 
-    $default  reduce using rule 34 (ExprL3)
+    $default  reduce using rule 32 (ExprL2)
 
 
 State 98
 
-   36 ExprL4: ExprL4 '*' ExprL5 •
+   33 ExprL2: ExprL2 GT ExprL3 •
+   35 ExprL3: ExprL3 • '+' ExprL4
+   36       | ExprL3 • '-' ExprL4
 
-    $default  reduce using rule 36 (ExprL4)
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
+
+    $default  reduce using rule 33 (ExprL2)
 
 
 State 99
 
-   37 ExprL4: ExprL4 '/' ExprL5 •
+   35 ExprL3: ExprL3 '+' ExprL4 •
+   38 ExprL4: ExprL4 • '*' ExprL5
+   39       | ExprL4 • '/' ExprL5
+   40       | ExprL4 • '%' ExprL5
 
-    $default  reduce using rule 37 (ExprL4)
+    '*'  shift, and go to state 75
+    '/'  shift, and go to state 76
+    '%'  shift, and go to state 77
+
+    $default  reduce using rule 35 (ExprL3)
 
 
 State 100
 
-   38 ExprL4: ExprL4 '%' ExprL5 •
+   36 ExprL3: ExprL3 '-' ExprL4 •
+   38 ExprL4: ExprL4 • '*' ExprL5
+   39       | ExprL4 • '/' ExprL5
+   40       | ExprL4 • '%' ExprL5
 
-    $default  reduce using rule 38 (ExprL4)
+    '*'  shift, and go to state 75
+    '/'  shift, and go to state 76
+    '%'  shift, and go to state 77
+
+    $default  reduce using rule 36 (ExprL3)
 
 
 State 101
 
-   40 ExprL5: ExprL6 '^' ExprL5 •
+   38 ExprL4: ExprL4 '*' ExprL5 •
 
-    $default  reduce using rule 40 (ExprL5)
+    $default  reduce using rule 38 (ExprL4)
 
 
 State 102
+
+   39 ExprL4: ExprL4 '/' ExprL5 •
+
+    $default  reduce using rule 39 (ExprL4)
+
+
+State 103
+
+   40 ExprL4: ExprL4 '%' ExprL5 •
+
+    $default  reduce using rule 40 (ExprL4)
+
+
+State 104
+
+   42 ExprL5: ExprL6 '^' ExprL5 •
+
+    $default  reduce using rule 42 (ExprL5)
+
+
+State 105
 
     9 Stmt: Printstrings '(' StrList ')' ';' •
 
     $default  reduce using rule 9 (Stmt)
 
 
-State 103
+State 106
 
    10 Stmt: Printlines '(' ExprL0 ')' ';' •
 
     $default  reduce using rule 10 (Stmt)
 
 
-State 104
+State 107
 
    11 Stmt: Printspaces '(' ExprL0 ')' ';' •
 
     $default  reduce using rule 11 (Stmt)
 
 
-State 105
+State 108
 
    12 Stmt: Read '(' IdentList ')' ';' •
 
     $default  reduce using rule 12 (Stmt)
 
 
-State 106
+State 109
 
-   47 IdentList: Id ',' IdentList •
+   49 IdentList: Id ',' IdentList •
 
-    $default  reduce using rule 47 (IdentList)
+    $default  reduce using rule 49 (IdentList)
 
 
-State 107
+State 110
 
    13 Stmt: IF '(' ExprL0 ')' '{' • StmtSeq '}'
    14     | IF '(' ExprL0 ')' '{' • StmtSeq '}' ELSE '{' StmtSeq '}'
@@ -1377,13 +1426,13 @@ State 107
 
     $default  reduce using rule 7 (StmtSeq)
 
-    StmtSeq     go to state 110
+    StmtSeq     go to state 115
     Stmt        go to state 17
     AssnmtStmt  go to state 18
     Id          go to state 19
 
 
-State 108
+State 111
 
    15 Stmt: WHILE '(' ExprL0 ')' '{' • StmtSeq '}'
 
@@ -1399,87 +1448,177 @@ State 108
 
     $default  reduce using rule 7 (StmtSeq)
 
-    StmtSeq     go to state 111
+    StmtSeq     go to state 116
     Stmt        go to state 17
     AssnmtStmt  go to state 18
     Id          go to state 19
 
 
-State 109
+State 112
 
    16 Stmt: FOR '(' AssnmtStmt ';' ExprL0 • ';' AssnmtStmt ')' '{' StmtSeq '}'
-   21 ExprL0: ExprL0 • OR ExprL1
-   22       | ExprL0 • AND ExprL1
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
 
-    OR   shift, and go to state 62
-    AND  shift, and go to state 63
-    ';'  shift, and go to state 112
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ';'  shift, and go to state 117
 
 
-State 110
+State 113
+
+   19 AssnmtStmt: Id '[' ExprL0 ']' '=' • ExprL0
+
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
+
+    ExprL0  go to state 118
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
+
+
+State 114
+
+   20 AssnmtStmt: Id '[' ExprL0 ']' '[' • ExprL0 ']' '=' ExprL0
+
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
+
+    ExprL0  go to state 119
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
+
+
+State 115
 
    13 Stmt: IF '(' ExprL0 ')' '{' StmtSeq • '}'
    14     | IF '(' ExprL0 ')' '{' StmtSeq • '}' ELSE '{' StmtSeq '}'
 
-    '}'  shift, and go to state 113
+    '}'  shift, and go to state 120
 
 
-State 111
+State 116
 
    15 Stmt: WHILE '(' ExprL0 ')' '{' StmtSeq • '}'
 
-    '}'  shift, and go to state 114
+    '}'  shift, and go to state 121
 
 
-State 112
+State 117
 
    16 Stmt: FOR '(' AssnmtStmt ';' ExprL0 ';' • AssnmtStmt ')' '{' StmtSeq '}'
 
     Ident  shift, and go to state 7
 
-    AssnmtStmt  go to state 115
+    AssnmtStmt  go to state 122
     Id          go to state 19
 
 
-State 113
+State 118
+
+   19 AssnmtStmt: Id '[' ExprL0 ']' '=' ExprL0 •
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
+
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+
+    $default  reduce using rule 19 (AssnmtStmt)
+
+
+State 119
+
+   20 AssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 • ']' '=' ExprL0
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
+
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+    ']'  shift, and go to state 123
+
+
+State 120
 
    13 Stmt: IF '(' ExprL0 ')' '{' StmtSeq '}' •
    14     | IF '(' ExprL0 ')' '{' StmtSeq '}' • ELSE '{' StmtSeq '}'
 
-    ELSE  shift, and go to state 116
+    ELSE  shift, and go to state 124
 
     $default  reduce using rule 13 (Stmt)
 
 
-State 114
+State 121
 
    15 Stmt: WHILE '(' ExprL0 ')' '{' StmtSeq '}' •
 
     $default  reduce using rule 15 (Stmt)
 
 
-State 115
+State 122
 
    16 Stmt: FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt • ')' '{' StmtSeq '}'
 
-    ')'  shift, and go to state 117
+    ')'  shift, and go to state 125
 
 
-State 116
+State 123
+
+   20 AssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' • '=' ExprL0
+
+    '='  shift, and go to state 126
+
+
+State 124
 
    14 Stmt: IF '(' ExprL0 ')' '{' StmtSeq '}' ELSE • '{' StmtSeq '}'
 
-    '{'  shift, and go to state 118
+    '{'  shift, and go to state 127
 
 
-State 117
+State 125
 
    16 Stmt: FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt ')' • '{' StmtSeq '}'
 
-    '{'  shift, and go to state 119
+    '{'  shift, and go to state 128
 
 
-State 118
+State 126
+
+   20 AssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' '=' • ExprL0
+
+    Ident   shift, and go to state 35
+    IntLit  shift, and go to state 36
+    '('     shift, and go to state 37
+    '!'     shift, and go to state 38
+    '-'     shift, and go to state 39
+
+    ExprL0  go to state 129
+    ExprL1  go to state 42
+    ExprL2  go to state 43
+    ExprL3  go to state 44
+    ExprL4  go to state 45
+    ExprL5  go to state 46
+    ExprL6  go to state 47
+    ExprL7  go to state 48
+
+
+State 127
 
    14 Stmt: IF '(' ExprL0 ')' '{' StmtSeq '}' ELSE '{' • StmtSeq '}'
 
@@ -1495,13 +1634,13 @@ State 118
 
     $default  reduce using rule 7 (StmtSeq)
 
-    StmtSeq     go to state 120
+    StmtSeq     go to state 130
     Stmt        go to state 17
     AssnmtStmt  go to state 18
     Id          go to state 19
 
 
-State 119
+State 128
 
    16 Stmt: FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt ')' '{' • StmtSeq '}'
 
@@ -1517,34 +1656,46 @@ State 119
 
     $default  reduce using rule 7 (StmtSeq)
 
-    StmtSeq     go to state 121
+    StmtSeq     go to state 131
     Stmt        go to state 17
     AssnmtStmt  go to state 18
     Id          go to state 19
 
 
-State 120
+State 129
+
+   20 AssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0 •
+   23 ExprL0: ExprL0 • OR ExprL1
+   24       | ExprL0 • AND ExprL1
+
+    OR   shift, and go to state 64
+    AND  shift, and go to state 65
+
+    $default  reduce using rule 20 (AssnmtStmt)
+
+
+State 130
 
    14 Stmt: IF '(' ExprL0 ')' '{' StmtSeq '}' ELSE '{' StmtSeq • '}'
 
-    '}'  shift, and go to state 122
+    '}'  shift, and go to state 132
 
 
-State 121
+State 131
 
    16 Stmt: FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt ')' '{' StmtSeq • '}'
 
-    '}'  shift, and go to state 123
+    '}'  shift, and go to state 133
 
 
-State 122
+State 132
 
    14 Stmt: IF '(' ExprL0 ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}' •
 
     $default  reduce using rule 14 (Stmt)
 
 
-State 123
+State 133
 
    16 Stmt: FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}' •
 

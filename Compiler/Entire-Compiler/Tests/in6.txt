@@ -13,11 +13,11 @@ while(val > 0) {
     val = val - 1;
 }
 
-printlines(1);
+printLines(1);
 
 for (val = 0; val <= 10; val = val + 1) {
     print(val);
-    printlines(1);
+    printLines(1);
     
     if (val == 5) {
         val = 8;

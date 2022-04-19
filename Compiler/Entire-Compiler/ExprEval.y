@@ -10,20 +10,9 @@
     extern int yylex(); /* The next token function. */
     extern char *yytext; /* The matched token text. */
     extern int yyleng; /* The token text length. */
-    extern int yyparse();
-    extern int yyerror(char *);
-    void dumpTable();
-
-    // BACKUP...MAY DELETE LATER
-    // =====================================================================================================================================
-    // Stmt			            : Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
-    //                          | Write '(' ExprList ')' ';'                                           { $$ = doPrintExpressions($3); };
-    // 			                | IF '(' ExprL0 ')' '{' StmtSeq '}'			                           { $$ = doIf($3, $6); };
-    //                          | AssnmtStmt ';'                                                       { $$ = $1; };
-    
-    // %token Write
-    // Print '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); }; // --> DO NOT THINK YOU NEED THIS NOW GIVEN THAT YOU HAVE EXPR LIST WORK WITH SINGLE PRINTS.
-    // =====================================================================================================================================
+    extern int yyparse(); /* Call function to parse data. */
+    extern int yyerror(char *); /* The error report function. */
+    void dumpTable(); /* Remove a table to free up memory. */
 
     extern SymTab *table;
 %}
@@ -98,15 +87,17 @@ Stmt			            : Print '(' ExprList ')' ';'                                 
                             | AssnmtStmt ';'                                                       { $$ = $1; };
 
 AssnmtStmt			        : Id '=' ExprL0							                               { $$ = doAssign($1, $3); };
+                            | Id '[' ExprL0 ']' '=' ExprL0                                         {};
+                            | Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0                          {};
 
 ExprList                    : ExprL0 ',' ExprList                                                  { $$ = createExprList($1, $3); };
                             | ExprL0                                                               { $$ = createExprList($1, NULL); };
 
-ExprL0                      : ExprL0 OR ExprL1                                                     { $$ = doBooleanOPs($1, $3, or); };
-                            | ExprL0 AND ExprL1                                                    { $$ = doBooleanOPs($1, $3, and); };
+ExprL0                      : ExprL0 OR ExprL1                                                     { $$ = doBooleanOps($1, $3, or); };
+                            | ExprL0 AND ExprL1                                                    { $$ = doBooleanOps($1, $3, and); };
                             | ExprL1                                                               { $$ = $1; };
 
-ExprL1                      : '!' ExprL2                                                           { $$ = doBooleanOPs($2, NULL, not); };
+ExprL1                      : '!' ExprL2                                                           { $$ = doBooleanOps($2, NULL, not); };
                             | ExprL2                                                               { $$ = $1; };
 
 ExprL2                      : ExprL2 NOT_EQ ExprL3                                                 { $$ = doEqualityOps($1, $3, "sne"); };
@@ -132,7 +123,7 @@ ExprL5                      : ExprL6 '^' ExprL5                                 
 ExprL6                      : '(' ExprL0 ')'                                                       { $$ = $2; };
                             | ExprL7                                                               { $$ = $1; };
 
-ExprL7    		            : '-'ExprL6                                                            { $$ = doIntLitNeg(yytext); };
+ExprL7    		            : '-'ExprL6                                                            { $$ = doIntLitNeg($2); };
                             | IntLit									                           { $$ = doIntLit(yytext); };
     		                | Ident									                               { $$ = doRval(yytext); };
 

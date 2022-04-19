@@ -36,10 +36,13 @@ extern FILE *aFile;
 // to move to the next instruction label.
 int NextLabel = 1;
 
-// --> MAYBE DELETE!!!
 // Create a global variable to indicate when
 // to move to the next string label.
 int NextStringLabel = 1;
+
+// Create a global variable to indicate when
+// to move to the next array label.
+int NextArrayLabel = 1;
 
 // Create a struct with temporary ('t'-registers)
 // to store values that are obtained throughout the
@@ -222,31 +225,47 @@ char *GenLabel() {
     return label;
 }
 
-
-
-
-
-
 /**
- * DESCRIPTION...
+ * The function generates a label for
+ * a string. The label created for the
+ * string is returned.
  */
 char *GenerateStringLabel() {
 
-    //
+    // Create a char* (string) for storing the
+    // label that will be created for the string.
     char *stringLabel;
 
-    //
+    // Create space for the string label and 
+    // store the characters for the label in
+    // the variable.
     stringLabel = (char *)malloc(8);
-    sprintf(stringLabel, "String%d", NextStringLabel++);
+    sprintf(stringLabel, "S%d", NextStringLabel++);
 
-    // 
+    // Return the string label from the function.
     return stringLabel;
 }
 
+/**
+ * The function generates a label for
+ * an array. The label created for the 
+ * array is returned.
+ */
+char *GenerateArrayLabel() {
 
+    // Create a char* (string) for storing the
+    // label that will be created for the array.
+    char *arrayLabel;
 
+    // Create space for the array label and
+    // store the characters for the label in
+    // the variable.
+    arrayLabel = (char *)malloc(8);
+    sprintf(arrayLabel, "A%d", NextArrayLabel++);
 
-
+    // Return the array label from the function.
+    return arrayLabel;
+}
 
 /**
  * The function searches for and finds
@@ -350,8 +369,8 @@ struct InstrSeq *SaveSeq() {
     struct InstrSeq *save, *code;
 
     // Create two variables for counting and 
-    // determining to add certain assembly 
-    // instructions.
+    // determining whether to add certain  
+    // assembly instructions.
     int i, scnt;
 
     // Create two char variables to determine the

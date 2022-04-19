@@ -163,7 +163,7 @@ void Finish(struct InstrSeq *Code) {
         // Add the following code to the instructions in order to 
         // avoid dropping off the program, and move to then next
         // entry in the symbol table.
-	    AppendSeq(code, GenInstr((char *) getCurrentName(table), ".word", "0", NULL, NULL));
+	      AppendSeq(code, GenInstr((char *) getCurrentName(table), ".word", "0", NULL, NULL));
         hasMore = nextEntry(table);
     }
   
@@ -197,16 +197,6 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
     // list variable, and a variable to represent a boolean.
     struct InstrSeq *resultInstruction = NULL;
     struct ExprResList *listOfExprs = list;
-    int includeNewline = 1;
-
-    // Include a check to determine if a newline should be printed.
-    // If there is more than one item in the list of expressions.
-    // This check is performed to determine whether or not a newline
-    // needs to be printed (newlines are printed after single-item 
-    // expressions, and not after multiple-item expressions).
-    if(listOfExprs->Next) {
-        includeNewline = 0;
-    }
 
     // Loop through the list of expressions and add assembly code to 
     // the linked list of instructions to print out each item in the
@@ -214,6 +204,7 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
     while(listOfExprs) {
 
         // Set the variable equal to the call for adding the instructions to the 
+        // linked list of instructions.
         resultInstruction = AppendSeq(resultInstruction, listOfExprs->Expr->Instrs);
 
         // Call the function multiple times to print out a given item in the expression.
@@ -236,20 +227,7 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
         // Move to the next item in the list of expressions.
         list = listOfExprs;
         listOfExprs = listOfExprs->Next;
-    }
-
-    // If the newline variable is equal to 1, print a newline.
-    // This indicates that we do not have more than one item in
-    // the expression list and therefore do want a newline in
-    // this case.
-    if(includeNewline) {
-
-        // Append assembly instructions to the linked list of instructions to 
-        // print out a newline. This is done only when there is a single item
-        // in the print statement.
-        AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "4", NULL)); // --> 4 is the ASCII character for a newline.
-        AppendSeq(resultInstruction, GenInstr(NULL, "la", "$a0", "_nl", NULL)); // --> Include the newline character.
-        AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+        free(list); // --> KEEP AN EYE ON THIS ONE!!!
     }
 
     // Return the resulting instructions.
@@ -294,9 +272,6 @@ extern struct ExprResList *createExprList(struct ExprRes *res, struct ExprResLis
  */
 extern struct InstrSeq *doPrintStrings(char *stringValue) {
 
-    // --> ASK BEN ABOUT THIS!!! YOUR $(MEMCHECK) FLAG DOES NOT WORK RIGHT NOW AND I THINK IT IS BECAUSE OF THIS!!!
-    // --> I THINK YOU HAVE TO SET SOME OTHER THINGS FIRST!!!
-
     // Create a struct of type StringItem and allocate space for it. The
     // struct is used to store each string literal that the user wants to
     // print out.
@@ -311,8 +286,10 @@ extern struct InstrSeq *doPrintStrings(char *stringValue) {
     resultString->StringLabel = GenerateStringLabel();
     listOfStrings = resultString;
 
-    struct InstrSeq *code = malloc(sizeof(struct InstrSeq));
-    AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
+    // Create a new struct of type InstrSeq, and append instructions
+    // to it that will print out a string value in MIPS assembly code.
+    struct InstrSeq *code = NULL;
+    code = AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
     AppendSeq(code, GenInstr(NULL, "la", "$a0", resultString->StringLabel, NULL));
     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
@@ -380,7 +357,7 @@ extern struct InstrSeq *doPrintformat(struct ExprRes *Res, enum PrintExprOps pri
     // Subtract one from the counter register and include a check to
     // ensure that there is no overlap in the loop (for example, if
     // the value is less than zero).
-    AppendSeq(code, GenInstr(NULL, "subi", TmpRegName(reg), TmpRegName(reg), "1")); // --> KEEP AN EYE ON...MAY BE "sub" INSTEAD!!!
+    AppendSeq(code, GenInstr(NULL, "subi", TmpRegName(reg), TmpRegName(reg), "1"));
     AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(reg), label1));
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
@@ -499,16 +476,30 @@ extern struct InstrSeq *doIf(struct ExprRes *Res, struct InstrSeq *seq) {
     struct InstrSeq *seq2;
     char *label = GenLabel();
 
+    // Create a new register value for helping in the 
+    // process of building the instructions. Append the
+    // first set of instructions on the InstSeq variable.
+    int reg = AvailTmpReg();
+    seq2 = AppendSeq(Res->Instrs, GenInstr(NULL, "sne", TmpRegName(reg), TmpRegName(Res->Reg), "$zero"));
+
     // Call the function to add the generated assembly instructions to 
     // the linked list of instructions that will be returned from the 
     // function.
-    AppendSeq(Res->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label));
-    seq2 = AppendSeq(Res->Instrs, seq);
+    AppendSeq(seq2, GenInstr(NULL, "beq", TmpRegName(reg), "$zero", label));
+    AppendSeq(seq2, seq);
     AppendSeq(seq2, GenInstr(label, NULL, NULL, NULL, NULL));
+
+    // Release the registers that were used to help
+    // generate the instructions. The registers are
+    // released so that they can be reused later on 
+    // in the execution of the compilation process.
+    ReleaseTmpReg(Res->Reg);
+    ReleaseTmpReg(reg);
 
     // Free the ExprRes struct and
     // return the instruction sequence.
     free(Res);
+    free(label);
     return seq2;
 }
 
@@ -542,15 +533,21 @@ extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, str
     // generation, labels are also added to move from what section
     // of the assembly code to another (this helps capture the 
     // behavior of the if-else statement).
-    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // --> KEEP IN MIND THAT YOU MAY TO USE A JUMP IF THIS DOES NOT WORK!!!
+    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // --> KEEP IN MIND THAT YOU MAY NEED TO USE A JUMP IF THIS DOES NOT WORK!!!
     AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(Res->Reg), label2));
     AppendSeq(code, seq2);
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
-    // Free the ExprRes struct and
-    // return the generated assembly
+    // Release the regisers used in this function to allow
+    // them to be used again in the compilation process.
+    ReleaseTmpReg(Res->Reg); // --> KEEP AN EYE ON THIS!!!
+
+    // Free the ExprRes struct, the labels,
+    // and return the generated assembly
     // code from the function.
     free(Res);
+    free(label1);
+    free(label2);
     return code;
 }
 
@@ -565,7 +562,7 @@ extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, str
  * code instructions that are produced.
  */
 extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
-   
+  
     // Create a new variable of type InstrSeq and allocate
     // space for it. The variable is used to store the 
     // assembly code instructions that are generated by the
@@ -587,9 +584,11 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
     AppendSeq(code, GenInstr(NULL, "j", label1, NULL, NULL));
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
-    // Free the ExprRes struct and return 
-    // the linked list of generated assembly
+    // Free the ExprRes struct, the labels, and  
+    // return the linked list of generated assembly
     // instructions 
+    free(label1);
+    free(label2);
     free(Res);
     return code;
 }
@@ -661,8 +660,8 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
     // through this function is not in the symbol table,
     // write out a message to indicate that.
     if(!findName(table, name)) {
-		writeIndicator(getCurrentColumnNum());
-		writeMessage("Undeclared variable");
+	      writeIndicator(getCurrentColumnNum());
+		    writeMessage("Undeclared variable");
     }
 
     // Set the code variable value equal to the
@@ -700,7 +699,7 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
  * the various boolean values being parsed in the 
  * C-like language.
  */
-extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator) {
+extern struct ExprRes *doBooleanOps(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator) {
    
     // Create a struct of type ExprRes for
     // storing the instruction that will be
@@ -793,33 +792,29 @@ extern struct ExprRes *doEqualityOps(struct ExprRes *Res1, struct ExprRes *Res2,
     // Create a new struct of type ExprRes, and
     // set the reg variable equal to the function
     // to obtain an available register.
-    struct ExprRes *Res;
     int reg = AvailTmpReg();
 
     // Create a new instruction based on the information passed through
     // the parameters of the function. The instruction is then appended
     // to a linked list of instructions upon being generated.
     AppendSeq(Res1->Instrs, Res2->Instrs);
-    Res = (struct ExprRes *)malloc(sizeof(struct ExprRes));
     AppendSeq(Res1->Instrs, GenInstr(NULL, inst, TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
-
-    // Set the Reg attribute to the created
-    // integer variable and the Instrs attribute
-    // to the generated instruction.
-    Res->Reg = reg;
-    Res->Instrs = Res1->Instrs;
     
     // Call the functions to release 
     // the temporary registers.
     ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
 
+    // Set the Reg attribute to the created
+    // integer variable and the Instrs attribute
+    // to the generated instruction.
+    Res1->Reg = reg;
+
     // Free the registers and
     // return the instruction
     // from the function.
-    free(Res1);
     free(Res2);
-    return Res;
+    return Res1;
 }
 
 /* ================================================================== */
@@ -906,6 +901,10 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
     // to determine what register number to use
     // for the operation.
     Res1->Reg = reg;
+    
+    // Free the temporary register so it
+    // can be reused by other processes.
+    ReleaseTmpReg(reg); // --> KEEP AN EYE ON!!!
 
     // Free the space in the result variable,
     // and return the other result.
@@ -962,7 +961,7 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     AppendSeq(Res1->Instrs, GenInstr(label, NULL, NULL, NULL, NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(reg2), label2));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "mul", TmpRegName(reg), TmpRegName(reg), TmpRegName(Res1->Reg)));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "sub", TmpRegName(reg2), TmpRegName(reg2), "1"));
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "subi", TmpRegName(reg2), TmpRegName(reg2), "1"));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "j", label, NULL, NULL));
     AppendSeq(Res1->Instrs, GenInstr(label3, NULL, NULL, NULL, NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
@@ -978,6 +977,9 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     // the second register struct, and return from the function.
     Res1->Reg = reg;
     free(Res2);
+    free(label);
+    free(label2);
+    free(label3);
     return Res1;
 }
 
@@ -998,21 +1000,15 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
  * one to ensure that it is read as negative in MIPS
  * assembly.
  */
-extern struct ExprRes *doIntLitNeg(char *digits) {
+extern struct ExprRes *doIntLitNeg(struct ExprRes *Res) {
 
-    // Create a struct of type ExprRes to store 
-    // the new instruction being created.
-    struct ExprRes *res;
-  
-    // Allocate space for the struct, find the available registers to
-    // use for creation of the instruction, and generate the instruction.
-    res = (struct ExprRes *) malloc(sizeof(struct ExprRes));
-    res->Reg = AvailTmpReg();
-    res->Instrs = GenInstr(NULL, "li", TmpRegName(res->Reg), digits, NULL);
-    AppendSeq(res->Instrs, GenInstr(NULL, "mul", TmpRegName(res->Reg), TmpRegName(res->Reg), "-1"));
+    // Multiply the expression by negative one in order to ensure that the
+    // negative value is applied to the expression result passed into this
+    // function.
+    AppendSeq(Res->Instrs, GenInstr(NULL, "mul", TmpRegName(Res->Reg), TmpRegName(Res->Reg), "-1"));
 
     // Return the resulting instruction.
-    return res;
+    return Res;
 }
 
 /**
@@ -1062,8 +1058,8 @@ struct ExprRes *doRval(char *name) {
     // If the value is not found in the symbol table,
     // meaning it was never created, return an error.
     if(!findName(table, name)) {
-		writeIndicator(getCurrentColumnNum());
-		writeMessage("Undeclared variable");
+		    writeIndicator(getCurrentColumnNum());
+		    writeMessage("Undeclared variable");
     }
 
     // Allocate space for the struct, find the available registers to
@@ -1075,3 +1071,5 @@ struct ExprRes *doRval(char *name) {
     // Return the resulting instruction.
     return res;
 }
+
+// --> MAY HAVE TO CREATE ANOTHER RVAL OR MODIFY THE EXISTING ONE TO WORK WITH ARRAYS!!!

@@ -5,5 +5,11 @@ num1 = 555;
 num2 = 777;
 num3 = 5;
 print(num1);
-printspaces(2*num3);
+printSpaces(2*num3);
 print(num2);
+printLines(2*num3);
+print(num3);
+
+num1 = -(5 * 5);
+printLines(1);
+print(num1);

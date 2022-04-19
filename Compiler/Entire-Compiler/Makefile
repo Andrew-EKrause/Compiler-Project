@@ -35,7 +35,7 @@ MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan # --> ADD T
 main:
 	bison -d -v $(BISON)
 	flex $(LEX)
-	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c CodeGen.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG) 
+	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c CodeGen.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG)
 
 # ===============================================
 # Group of cleaning protocols after execution.

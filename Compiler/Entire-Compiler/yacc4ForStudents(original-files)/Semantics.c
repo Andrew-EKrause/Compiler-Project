@@ -80,17 +80,17 @@ struct InstrSeq * doPrint(struct ExprRes * Expr) {
   struct InstrSeq *code;
     
   code = Expr->Instrs;
-  
-    AppendSeq(code,GenInstr(NULL,"li","$v0","1",NULL));
-    AppendSeq(code,GenInstr(NULL,"move","$a0",TmpRegName(Expr->Reg),NULL));
-    AppendSeq(code,GenInstr(NULL,"syscall",NULL,NULL,NULL));
 
-    AppendSeq(code,GenInstr(NULL,"li","$v0","4",NULL));
-    AppendSeq(code,GenInstr(NULL,"la","$a0","_nl",NULL));
-   AppendSeq(code,GenInstr(NULL,"syscall",NULL,NULL,NULL));
+  AppendSeq(code,GenInstr(NULL,"li","$v0","1",NULL));
+  AppendSeq(code,GenInstr(NULL,"move","$a0",TmpRegName(Expr->Reg),NULL));
+  AppendSeq(code,GenInstr(NULL,"syscall",NULL,NULL,NULL));
 
-    ReleaseTmpReg(Expr->Reg);
-    free(Expr);
+  AppendSeq(code,GenInstr(NULL,"li","$v0","4",NULL));
+  AppendSeq(code,GenInstr(NULL,"la","$a0","_nl",NULL));
+  AppendSeq(code,GenInstr(NULL,"syscall",NULL,NULL,NULL));
+
+  ReleaseTmpReg(Expr->Reg);
+  free(Expr);
 
   return code;
 }
@@ -184,7 +184,3 @@ Finish(struct InstrSeq *Code)
   
   return;
 }
-
-
-
-

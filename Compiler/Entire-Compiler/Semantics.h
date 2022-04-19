@@ -103,7 +103,7 @@ extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
 /*
     The function handles boolean operations.
 */
-extern struct ExprRes *doBooleanOPs(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator);
+extern struct ExprRes *doBooleanOps(struct ExprRes *Res1, struct ExprRes *Res2, enum BExprOps boolOperator);
 
 /*
     The function handles equality operations.
@@ -120,6 +120,6 @@ extern struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2)
 /* 
     The functions handle the cases where there is an int literal.
 */
-extern struct ExprRes *doIntLitNeg(char *digits);
+extern struct ExprRes *doIntLitNeg(struct ExprRes *Res);
 extern struct ExprRes *doIntLit(char *digits);
 extern struct ExprRes *doRval(char *name);
