@@ -169,7 +169,7 @@ $ ./compiler ./Tests/in1.txt listing.lst asmCode.asm
 **Important Assumptions for Project:**
 
 - This compiler was not designed for any commerical use, but rather for academic purposes. The machine is more complex compared to the vast majority of projects I have created, but can only be applied to the specified C-like language provided in the course by the instructor.
-- This project was created with the intent to satisfy a number of requriements, which were listed above as [Completed Parts of the Compiler](#completed-parts-of-the-compiler-project). Optimization was not a large focus of this project. Therefore, the compiler is inefficient when executing certain processes.
+- This project was created with the intent to satisfy a number of requriements, which were listed above in the [Completed Parts of the Compiler Project](#completed-parts-of-the-compiler-project) section. Optimization was not a large focus of this project. Therefore, the compiler is inefficient when executing certain processes.
 - There is a significant amount of functionality in this compiler. Given time constraints, certian files are not organizes as efficiently as they could be. However, this is a minor organizational issue that may be resolved in the future.
 
 <p>&nbsp;</p>
