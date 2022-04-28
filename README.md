@@ -25,7 +25,7 @@ The other folders that were listed above can also be explored if you wish to gai
 
 
 ###### Picture of the Compiler Grammar (yacc/bison file)
-<img width="774" alt="Screen Shot 2022-04-28 at 2 01 59 AM" src="https://user-images.githubusercontent.com/57727121/165695957-ebd3a3d0-20a0-4518-bfaa-781d0547f300.png">
+<img width="770" alt="Screen Shot 2022-04-28 at 2 06 03 AM" src="https://user-images.githubusercontent.com/57727121/165696302-bf20f68e-b915-4e65-ba3f-a3366d354ffe.png">
 
 
 **Resources for Project:**
