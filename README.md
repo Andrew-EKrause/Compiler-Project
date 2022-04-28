@@ -24,7 +24,9 @@ The other folders that were listed above can also be explored if you wish to gai
 ***
 
 
-ADD IMAGE OF YACC FILE HERE WITH YOUR GRAMMAR AND A CAPTION...
+###### Picture of the Compiler Grammar
+![hash-table](https://user-images.githubusercontent.com/57727121/131786240-e6c87aae-86d3-4e86-a445-1da34dc82202.jpg)
+<p>&nbsp;</p>
 
 
 **Resources for Project:**
@@ -88,7 +90,7 @@ $ ./compiler ./Tests/in1.txt listing.lst asmCode.asm
 
 <p>&nbsp;</p>
 
-# Completed Parts of the Compiler
+# Completed Parts of the Compiler Project
 ## PART 1: Integer Expressions
 
 - [x] Integers, Literals, Variagles
