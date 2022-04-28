@@ -1,7 +1,5 @@
 # **_Simple Compiler_**
 
-<p>&nbsp;</p>
-
 ## **Description**
 
 **_Compiler created for a C-like language in CS 442 Course_** <br/>
