@@ -680,6 +680,10 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
     AppendSeq(code, GenInstr(NULL, "j", label1, NULL, NULL));
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
 
+    // Release the temporary register that was
+    // used so that it can be used again.
+    ReleaseTmpReg(Res->Reg); // --> KEEP AN EYE ON THIS!!!
+
     // Free the ExprRes struct, the labels, and  
     // return the linked list of generated assembly
     // instructions 
@@ -1233,8 +1237,9 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     AppendSeq(Res1->Instrs, GenInstr(label2, NULL, NULL, NULL, NULL));
 
     // Release all of the registers after use.
-    ReleaseTmpReg(Res1->Reg);
+    ReleaseTmpReg(Res1->Reg); // --> KEEP AN EYE ON THIS!!!
     ReleaseTmpReg(Res2->Reg);
+    // ReleaseTmpReg(reg); // --> KEEP AN EYE ON THIS!!!
     ReleaseTmpReg(reg2);
     ReleaseTmpReg(reg3);
 
