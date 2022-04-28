@@ -25,8 +25,7 @@ The other folders that were listed above can also be explored if you wish to gai
 
 
 ###### Picture of the Compiler Grammar
-![hash-table](https://user-images.githubusercontent.com/57727121/131786240-e6c87aae-86d3-4e86-a445-1da34dc82202.jpg)
-<p>&nbsp;</p>
+<img width="766" alt="Screen Shot 2022-04-28 at 1 59 59 AM" src="https://user-images.githubusercontent.com/57727121/165695366-cfbcc70a-d1a6-47ac-a3f2-69b40ad2c599.png">
 
 
 **Resources for Project:**
