@@ -19,7 +19,7 @@
 # Include makefile flags here.
 # ===============================================
 CC = gcc # Flag to pass to gcc
-LEX = lex1.l # Lexical file; this file name can change
+LEX = lexFile.l # Lexical file; this file name can change
 BISON = ExprEval.y # Bison file; this file name can change
 OFLAG = -o # Flag to indicate use of object file
 CFLAG = -c # Flag to avoid linking

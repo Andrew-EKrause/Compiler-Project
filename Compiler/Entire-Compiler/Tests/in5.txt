@@ -5,6 +5,7 @@ int y;
 int a;
 int b;
 int c;
+
 x = 2;
 z = 4;
 w = 6;
@@ -12,4 +13,5 @@ y = 8;
 a = 10;
 b = 12;
 c = 14;
-print(2*x, x^3*(z*w), (a+b+c)/(x+y+z), c);
+
+print(2 * x, x ^ 3 * (z * w), (a + b + c) / (x + y + z), c);

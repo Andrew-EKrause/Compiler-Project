@@ -15,6 +15,13 @@
     void dumpTable(); /* Remove a table to free up memory. */
 
     extern SymTab *table;
+
+    /* // --> ADD ReadList, WHICH IS JUST A LIST OF INSTRUCTIONS. YOU */
+    /* // --> NEED THIS IN ORDER TO BE ABLE TO USE ARRAYS WITH THE Read() FUNCTIONALITY!!! */
+
+    // IdentList            : Id ',' IdentList                                                     { $$ = createIdentList($1, $3); };
+    //                      | Id                                                                   { $$ = createIdentList($1, NULL); };
+    // %type <IdList> IdentList
 %}
 
 %union {
@@ -28,7 +35,9 @@
 
 %type <InstrSeq> StmtSeq
 %type <InstrSeq> Stmt
+%type <string> ArrayIntLit
 %type <InstrSeq> AssnmtStmt
+%type <InstrSeq> ArrayAssnmtStmt
 %type <ExprResList> ExprList
 %type <string> StrList
 %type <ExprRes> ExprL0
@@ -39,7 +48,7 @@
 %type <ExprRes> ExprL5
 %type <ExprRes> ExprL6
 %type <ExprRes> ExprL7
-%type <IdList> IdentList
+%type <InstrSeq> ReadList
 %type <string> Id
 
 %token Int
@@ -70,7 +79,10 @@ Prog			            : Declarations StmtSeq						                           { Fini
 Declarations	            : Dec Declarations							                           { };
             	            |											                           { };
                             
-Dec			                : Int Ident                                                            { enterName(table, yytext); }';' {};
+Dec			                : Int Id ';'                                                           { enterNameAndFreeDec(table, $2); };
+                            | Int Id '[' ArrayIntLit ']' ';'                                       { createArrayDec($2, $4, NULL); };
+                            | Int Id '[' ArrayIntLit ']' '[' ArrayIntLit ']' ';'                   { createArrayDec($2, $4, $7); };
+
 StmtSeq 		            : Stmt StmtSeq								                           { $$ = AppendSeq($1, $2); };
     		                |											                           { $$ = NULL; };
 
@@ -78,17 +90,19 @@ Stmt			            : Print '(' ExprList ')' ';'                                 
                             | Printstrings '(' StrList ')' ';'                                     { $$ = doPrintStrings($3); };
                             | Printlines '(' ExprL0 ')' ';'                                        { $$ = doPrintformat($3, newline); };
                             | Printspaces '(' ExprL0 ')' ';'                                       { $$ = doPrintformat($3, space); };
-                            | Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
+                            | Read '(' ReadList ')' ';'                                            { $$ = $3; };
                             
                             | IF '(' ExprL0 ')' '{' StmtSeq '}'                                    { $$ = doIf($3, $6); };
                             | IF '(' ExprL0 ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'               { $$ = doIfElse($3, $6, $10); };
                             | WHILE '(' ExprL0 ')' '{' StmtSeq '}'                                 { $$ = doWhile($3, $6); };
                             | FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}'     { $$ = doFor($3, $5, $7, $10); };
                             | AssnmtStmt ';'                                                       { $$ = $1; };
+                            | ArrayAssnmtStmt ';'                                                  { $$ = $1; };
 
 AssnmtStmt			        : Id '=' ExprL0							                               { $$ = doAssign($1, $3); };
-                            | Id '[' ExprL0 ']' '=' ExprL0                                         {};
-                            | Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0                          {};
+
+ArrayAssnmtStmt             : Id '[' ExprL0 ']' '=' ExprL0                                         { $$ = doArrayAssign($1, $3, NULL, $6); };
+                            | Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0                          { $$ = doArrayAssign($1, $3, $6, $9); };
 
 ExprList                    : ExprL0 ',' ExprList                                                  { $$ = createExprList($1, $3); };
                             | ExprL0                                                               { $$ = createExprList($1, NULL); };
@@ -127,9 +141,15 @@ ExprL7    		            : '-'ExprL6                                             
                             | IntLit									                           { $$ = doIntLit(yytext); };
     		                | Ident									                               { $$ = doRval(yytext); };
 
-IdentList                   : Id ',' IdentList                                                     { $$ = createIdentList($1, $3); };
-                            | Id                                                                   { $$ = createIdentList($1, NULL); };
+ReadList                    : Id '[' ExprL0 ']' '[' ExprL0 ']' ',' ReadList                        { $$ = createReadListArray($1, $3, $6, $9); };
+                            | Id '[' ExprL0 ']' ',' ReadList                                       { $$ = createReadListArray($1, $3, NULL, $6); };
+                            | Id '[' ExprL0 ']' '[' ExprL0 ']'                                     { $$ = createReadListArray($1, $3, $6, NULL); };
+                            | Id '[' ExprL0 ']'                                                    { $$ = createReadListArray($1, $3, NULL, NULL); };
+                            | Id ',' ReadList                                                      { $$ = createReadListIdent($1, $3); };
+                            | Id                                                                   { $$ = createReadListIdent($1, NULL); };
+                            |                                                                      { $$ = NULL; };
 
+ArrayIntLit                 : IntLit                                                               { $$ = strdup(yytext); };
 StrList                     : StrLit                                                               { $$ = strdup(yytext); };
 Id			                : Ident									                               { $$ = strdup(yytext); };
 

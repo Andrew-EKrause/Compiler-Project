@@ -1,5 +1,6 @@
 ===================================================
             COMPILER PROJECT CHECKLIST
+                  Andrew Krause
 ===================================================
 
 
@@ -27,14 +28,14 @@ PART 2: Integer I/O (30 Points)
 [ x ] print a space between values
 [ x ] a newline is not printed
 [ x ] print(2*x, x^3*(z*w), abc/xyz, c)
-[ x ] printlines(expression) --> MORE BELOW:
+[ x ] printLines(expression) --> MORE BELOW:
 [ x ] print expression number of newlines    
-[ x ] printlines(2)
-[ x ] printspaces(expression) --> MORE BELOW:
-[ x ] printspaces(3*n)
-[   ] printString(“Literal String”) // --> FINISH THIS!!!
-[   ] printString(“Enter one integer”); --> MORE BELOW:
-[   ] ANYTHING ELSE???
+[ x ] printLines(2)
+[ x ] printSpaces(expression) --> MORE BELOW:
+[ x ] printSpaces(3*n)
+[ x ] printString(“Literal String”)
+[ x ] printString(“Enter one integer”);
+[ x ] ANYTHING ELSE???
 
 
 PART 3: Control Structures (30 Points) 
@@ -42,18 +43,18 @@ PART 3: Control Structures (30 Points)
 [ x ] if statements including optional else
 [ x ] while loops
 [ x ] for loops --> I THINK THESE ARE OPTIONAL???
-[   ] Use C syntax and the C definition of true (non-zero) and false (zero). // --> CHECK THIS!!!
-[   ] ANYTHING ELSE???
+[ x ] Use C syntax and the C definition of true (non-zero) and false (zero). // --> CHECK THIS!!!
+[ x ] ANYTHING ELSE???
 
 
 PART 4: Arrays (20 Points)
 ===================================================
-[   ] Single Dimension Arrays
-[   ] Size of the array is declared at compile time
-[   ] Use C syntax
-[   ] Subscripts must be able to use constants and expressions. 
+[ x ] Single Dimension Arrays
+[ x ] Size of the array is declared at compile time
+[ x ] Use C syntax
+[ x ] Subscripts must be able to use constants and expressions. 
       For example nums[2*i] = z * nums[j-3*k
-[   ] ANYTHING ELSE???
+[ x ] ANYTHING ELSE???
 
 
 // =================================================== \\
@@ -63,10 +64,10 @@ PART 4: Arrays (20 Points)
 
 PART 5: 2D Arrays (30 Points)
 ===================================================
-[   ] Size of the array is declared at compile time
-[   ] Use C syntax
-[   ] Subscripts must be able to use constants and expressions.
-[   ] ANYTHING ELSE???
+[ x ] Size of the array is declared at compile time
+[ x ] Use C syntax
+[ x ] Subscripts must be able to use constants and expressions.
+[ x ] ANYTHING ELSE???
 
 
 PART 6: Functions (40 Points)

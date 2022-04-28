@@ -396,8 +396,8 @@ struct InstrSeq *SaveSeq() {
             // Increment the scnt variable, store the address
             // offset in the addr variable, and store the 
             // instruction in the save variable.
-            scnt++;
-            sprintf(addr, "%d($sp)", scnt * 4);
+            scnt++; // --> MAY WANT TO SWITCH THIS AROUND WITH THE LINE BELOW IT!!!
+            sprintf(addr, "%d($sp)", scnt * 4); // --> MAY WANT TO SWITCH THIS AROUND WITH THE LINE ABOVE IT!!!
             save = AppendSeq(save, GenInstr(NULL, "sw", TmpRegName(i), addr, NULL));
         }
     }

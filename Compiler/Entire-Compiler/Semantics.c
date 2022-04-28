@@ -27,8 +27,8 @@
  * follow the order of productions (from top to 
  * bottom) of the grammar in the ExprEval.y file.
  * The functions out of order compared to the
- * ExprEval.y file are the createExprList() and 
- * the createIdentList() functions.
+ * ExprEval.y file are...ADD THIS LATER AFTER YOU
+ * FINISH COMMENTING EVERYTHING ELSE!!!.
  * 
  * ================================================
  * 
@@ -49,10 +49,10 @@
 
 // Include the .h files needed to 
 // complete the compilation process.
-#include "CodeGen.h"
-#include "Semantics.h"
 #include "SymTab.h"
 #include "IOMngr.h"
+#include "CodeGen.h"
+#include "Semantics.h"
 
 // Create an external global symbol table for
 // memory management of the variable values.
@@ -62,12 +62,17 @@ extern SymTab *table;
 // to print strings out in the C-like language.
 struct StringItem *listOfStrings;
 
+// Create a global list of arrays in order
+// to store arrays befoe using them in the 
+// C-like language.
+struct ArrayNode *listOfArrays;
+
 /* ========================== */
 /* Semantics support routines */
 /* ========================== */
 
 /* ================================================================== */
-/* SECTION FOR FINAL ASSEMBLY COMPONENTS: FINISH. */
+/* SECTION FOR FINAL ASSEMBLY COMPONENTS: FINISH AND ENTER NAME. */
 /* ================================================================== */
 
 /**
@@ -117,6 +122,80 @@ void Finish(struct InstrSeq *Code) {
     AppendSeq(code, GenInstr("_nl", ".asciiz", "\"\\n\"", NULL, NULL)); // --> Load a newline into the data section.
     AppendSeq(code, GenInstr("_spc", ".asciiz", "\" \"", NULL, NULL)); // --> Load a space into the data section.
 
+
+
+
+
+
+    // ================================================================ // --> REMOVE THIS LINE LATER!!!
+    // LOAD THE ARRAYS INTO THE DATA SECTION OF THE MIPS 
+    // CODE BEFORE THE MIPS PROGRAM IS RUN.
+
+    // Create two struct variables for traversing through the
+    // global list of arrays in the "listOfArrays" variable.
+    struct ArrayNode *arrayItem;
+    struct ArrayNode *nextArray;
+
+    // Assign the "arrayItem" struct to the global variable 
+    // to begin the process of traversing through the list
+    // of array values.
+    arrayItem = listOfArrays;
+
+    // Loop through the list of arrays and put each array declaration 
+    // in the global/data section of the MIPS assembly code in the file. 
+    // Essentially, you are adding each array value in the linked list 
+    // of arrays to the global/data section of the assembly code to 
+    // reserve space for it.
+    while(arrayItem) {
+
+        // If the second size attribute of a given array item
+        // in the struct is NULL, then generate space for a 1D
+        // array.
+        if(!arrayItem->Size2) {
+
+            // Call the function to store the list of array values in the 
+            // global/data section of the MIPS assembly code. These values
+            // are loaded and ready to use at compile time. A shift-left
+            // logical operation is performed to ensure that a proper amount
+            // of space is allocated.
+            // --> NEED TO DO A "SLL" ON THE ARRAY SIZE HERE FIRST; CHECK WHAT YOU HAVE!!!
+            AppendSeq(code, GenInstr(arrayItem->ArrayName, ".space", arrayItem->Size1<<2, NULL, NULL)); // --> NOT SURE THIS IS RIGHT!!! 
+
+        // If the second size attribute for a given array item 
+        // in the struct is not NULL, then generate space for
+        // a 2D array.
+        } else {
+
+            // Call the function to store the list of array values in the 
+            // global/data section of the MIPS assembly code. These values
+            // are loaded and ready to use at compile time. A shift-left
+            // logical operation is performed to ensure that a proper amount
+            // of space is allocated.
+            // --> NEED TO DO A "SLL" ON THE ARRAY SIZE HERE FIRST; CHECK WHAT YOU HAVE!!!
+            AppendSeq(code, GenInstr(arrayItem->ArrayName, ".space", (arrayItem->Size1 * arrayItem->Size2)<<2, NULL, NULL)); // --> NOT SURE THIS IS RIGHT!!! 
+        }
+        
+        // Move to the next array value
+        // in the list of arrays.
+        nextArray = arrayItem;
+        arrayItem = arrayItem->Next;
+
+        // Free the different attributes in the 
+        // StringItem struct in each iteration.
+        // free(nextArray->Size1); // --> DO NOT THINK YOU NEED TO DO IT THIS WAY; NOT SURE THIS IS RIGHT!!!
+        free(nextArray->ArrayLabel);
+        free(nextArray);
+    }
+
+
+    // ================================================================ // --> REMOVE THIS LINE LATER!!!
+
+
+
+
+
+
+
     // Create two struct variables for traversing through the
     // global list of strings in the "listOfStrings" variable.
     struct StringItem *stringItem;
@@ -163,7 +242,7 @@ void Finish(struct InstrSeq *Code) {
         // Add the following code to the instructions in order to 
         // avoid dropping off the program, and move to then next
         // entry in the symbol table.
-	      AppendSeq(code, GenInstr((char *) getCurrentName(table), ".word", "0", NULL, NULL));
+        AppendSeq(code, GenInstr((char *) getCurrentName(table), ".word", "0", NULL, NULL));
         hasMore = nextEntry(table);
     }
   
@@ -171,6 +250,23 @@ void Finish(struct InstrSeq *Code) {
     // file and return from the function.
     WriteSeq(code);
     return;
+}
+
+/**
+ * ENTER NAME (WITH FREE)
+ * 
+ * The function enters a name into the symbol table,
+ * and then frees the name variable in order to 
+ * help in the process of maintaining a clean memory
+ * in the compilation process.
+ */
+void enterNameAndFreeDec(SymTab *table, char *name) {
+
+    // The name into the symbol table, and 
+    // then free the name in order to help
+    // in maintaining clean memory.
+    enterName(table, name);
+    free(name);
 }
 
 /* ================================================================== */
@@ -373,87 +469,87 @@ extern struct InstrSeq *doPrintformat(struct ExprRes *Res, enum PrintExprOps pri
     return code;
 }
 
-/**
- * READ
- * 
- * The read function takes in a value that 
- * is entered by the user and stores it in
- * a declared variable. This function is 
- * useful in cases where user input needs
- * to be read in to a program. The function
- * loops through a list of identifiers to 
- * complete the read functionality. 
- */
-extern struct InstrSeq *doRead(struct IdList *entry) {
+// /** // --> MAYBE DELETE LATER!!!
+//  * READ
+//  * 
+//  * The read function takes in a value that 
+//  * is entered by the user and stores it in
+//  * a declared variable. This function is 
+//  * useful in cases where user input needs
+//  * to be read in to a program. The function
+//  * loops through a list of identifiers to 
+//  * complete the read functionality. 
+//  */
+// extern struct InstrSeq *doRead(struct IdList *entry) {
   
-    // Create a struct of type InstrSeq and reserve
-    // space for it. This will store the instructions
-    // generated in this function. Also create another 
-    // struct of type IdList to represent the number 
-    // of values that can be entered.
-    struct InstrSeq *code = malloc(sizeof(struct InstrSeq));
-    struct IdList *curr = entry;
+//     // Create a struct of type InstrSeq and reserve
+//     // space for it. This will store the instructions
+//     // generated in this function. Also create another 
+//     // struct of type IdList to represent the number 
+//     // of values that can be entered.
+//     struct InstrSeq *code = malloc(sizeof(struct InstrSeq));
+//     struct IdList *curr = entry;
 
-    // There is another entry for a value that will 
-    // be entered by the user, generate a series of
-    // instructions to store the values that will be
-    // entered.
-    while (curr) {
+//     // There is another entry for a value that will 
+//     // be entered by the user, generate a series of
+//     // instructions to store the values that will be
+//     // entered.
+//     while (curr) {
 
-        // Call the functions multiple times to generate
-        // assembly instructions to store the values that
-        // will be entered into the read function.
-        AppendSeq(code, GenInstr(NULL, "li", "$v0", "5", NULL));
-        AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
-        AppendSeq(code, GenInstr(NULL, "sw", "$v0", curr->TheEntry->name, NULL));
+//         // Call the functions multiple times to generate
+//         // assembly instructions to store the values that
+//         // will be entered into the read function.
+//         AppendSeq(code, GenInstr(NULL, "li", "$v0", "5", NULL));
+//         AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+//         AppendSeq(code, GenInstr(NULL, "sw", "$v0", curr->TheEntry->name, NULL));
 
-        // Free the entry name and current
-        // entry after it is entered into
-        // the assembly code being generated.
-        free(curr->TheEntry->name); 
-        free(curr->TheEntry); 
+//         // Free the entry name and current
+//         // entry after it is entered into
+//         // the assembly code being generated.
+//         free(curr->TheEntry->name); 
+//         free(curr->TheEntry); 
 
-        // Move to the next entry in
-        // the list of identifiers.
-        entry = curr;
-        curr = curr->Next;
+//         // Move to the next entry in
+//         // the list of identifiers.
+//         entry = curr;
+//         curr = curr->Next;
 
-        // Lastly, free the entry
-        // struct itself.
-        free(entry);
-    }
+//         // Lastly, free the entry
+//         // struct itself.
+//         free(entry);
+//     }
 
-    // Return the linked list of
-    // instructions that were
-    // generated in the function.
-    return code;
-}
+//     // Return the linked list of
+//     // instructions that were
+//     // generated in the function.
+//     return code;
+// }
 
-/**
- * {READ} - HELPER FUNCTION
- * 
- * The function is used to help complete the 
- * READ functionality of the compiler. The
- * function helps to create a list of identifers
- * that is used to run the read function of the
- * C-like language.
- */
-extern struct IdList *createIdentList(char *idName, struct IdList *list) {
+// /** // --> MAYBE DELETE LATER!!!
+//  * {READ} - HELPER FUNCTION
+//  * 
+//  * The function is used to help complete the 
+//  * READ functionality of the compiler. The
+//  * function helps to create a list of identifers
+//  * that is used to run the read function of the
+//  * C-like language.
+//  */
+// extern struct IdList *createIdentList(char *idName, struct IdList *list) {
 
-    // Create a new IdList to return from the
-    // function and reserve space for the list.
-    struct IdList *newList = malloc(sizeof(struct IdList));
+//     // Create a new IdList to return from the
+//     // function and reserve space for the list.
+//     struct IdList *newList = malloc(sizeof(struct IdList));
 
-    // Set the attributes of the list, and reserve
-    // space for the SymEntry and string of characters.
-    newList->Next = list;
-    newList->TheEntry = malloc(sizeof(SymEntry));
-    newList->TheEntry->name = strdup(idName);
+//     // Set the attributes of the list, and reserve
+//     // space for the SymEntry and string of characters.
+//     newList->Next = list;
+//     newList->TheEntry = malloc(sizeof(SymEntry));
+//     newList->TheEntry->name = strdup(idName);
 
-    // Return the list of identifiers
-    // from the function.
-    return newList;
-}
+//     // Return the list of identifiers
+//     // from the function.
+//     return newList;
+// }
 
 /* ================================================================== */
 /* SECTION FOR CONDITIONALS AND LOOPS: IF, IF-ELSE, WHILE, FOR, AND */
@@ -660,8 +756,8 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
     // through this function is not in the symbol table,
     // write out a message to indicate that.
     if(!findName(table, name)) {
-	      writeIndicator(getCurrentColumnNum());
-		    writeMessage("Undeclared variable");
+	    writeIndicator(getCurrentColumnNum());
+	    writeMessage("Undeclared variable");
     }
 
     // Set the code variable value equal to the
@@ -682,6 +778,175 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
     // Return the code variable with the instruction data.
     return code;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* ================================================================== */
+/* SECTION FOR ARRAYS: 1D ARRAYS AND 2D ARRAYS */
+/* ================================================================== */
+
+/**
+ * CREATE 1D ARRAYS AND 2D ARRAYS
+ * 
+ * Description...
+ */
+extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2) {
+
+    // Create a new struct of type InstrSeq, and append instructions
+    // to it that will help store the array in the .data segment so
+    // that the array is ready for use at compile time.
+    struct InstrSeq *code = NULL;
+
+    // Create a variable that finds the next available
+    // register that you can use in declaring the array.
+    int reg = AvailTmpReg();
+
+    // Create a struct of type ArrayNode and allocate space
+    // for it. The struct is used to store each Array that 
+    // the user declares.
+    struct ArrayNode *resultArray = malloc(sizeof(struct ArrayNode));
+
+    // Assume that at least one size was entered for the array declaration
+    // (this would make it a 1D array), and convert it to an actual integer.
+    // Declare a second integer for reserving space for a 2D array.
+    // int integerSize1 = atoi(size1); // --> MAYBE DELETE LATER!!!
+    int spaceOneDimension = atoi(size1);
+    int spaceTwoDimension;
+
+    // If the second array size variable is NULL, then
+    // generate MIPS assembly instructions for the creation
+    // of a single-dimensional array.
+    if(!size2) {
+
+        // Set each attivute of the ArrayNode struct for 1D arrays.
+        // Each attribute ensures that a given 1D array is properly
+        // processed and prepared to be converted to the MIPS code.
+        resultArray->ArrayName = name;
+        resultArray->ArrayLabel = GenerateArrayLabel();
+        resultArray->Size1 = spaceOneDimension;
+        resultArray->Size2 = NULL;
+        listOfArrays = resultArray;
+
+        // Create a new struct of type InstrSeq, and append instructions // --> NOT SURE THIS IS RIGHT!!!!
+        // to it that will declare an array in MIPS assembly code.
+        code = AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(reg), spaceOneDimension, "2"));
+        AppendSeq(code, GenInstr(NULL, "la", "$a0", resultArray->ArrayLabel, NULL));
+
+    // If the second array size variable is not NULL, 
+    // then generate MIPS assembly instructions for 
+    // the creation of a two-dimensional array.
+    } else {
+
+        // If there was a second size entered for the 
+        // array declaration, we are working with a 2D
+        // array. Convert the second size variable to
+        // an integer value.
+        int spaceTwoDimension = atoi(size2);
+
+        // Set each attivute of the ArrayNode struct for 2D arrays.
+        // Each attribute ensures that a given 2D array is properly
+        // processed and prepared to be converted to the MIPS code.
+        resultArray->ArrayName = name;
+        resultArray->ArrayLabel = GenerateArrayLabel();
+        resultArray->Size1 = spaceOneDimension;
+        resultArray->Size2 = spaceTwoDimension;
+        listOfArrays = resultArray;
+
+        // Obtain the total amount of space you will need for the 
+        // 2D array by multiplying the declared sizes by each other
+        // and then by four via the "sll" instruction.
+        spaceTwoDimension = spaceTwoDimension * spaceOneDimension;
+
+        // Create a new struct of type InstrSeq, and append instructions // --> NOT SURE THIS IS RIGHT!!!!
+        // to it that will declare an array in MIPS assembly code.
+        code = AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(reg), spaceTwoDimension, "2"));
+        AppendSeq(code, GenInstr(NULL, "la", "$a0", resultArray->ArrayLabel, NULL));
+    }
+
+    // Free up the register that was used.
+    ReleaseTmpReg(reg);
+
+    // =========================================
+    // NOTE: The list of arrays that was added
+    // to in this function will be visited in 
+    // the Finish() function and placed in the 
+    // global/data section of the MIPS assembly
+    // file.
+    // =========================================
+
+    // Return the resulting instructions for
+    // the arrays from the array declaration
+    // function.
+    return code;
+}
+
+/**
+ * ASSIGN 1D ARRAYS AND 2D ARRAYS
+ * 
+ * Description...
+ */
+extern struct InstrSeq *doArrayAssign(char *name, struct ExprRes *Res1, struct ExprRes *Res2, struct ExprRes *Res3) {
+
+    // Create a struct of type InstrSeq to store
+    // the new instruction being created.
+    struct InstrSeq *code = NULL;
+
+    // Create a variable that will store the address
+    // offset of the array instruction that is being
+    // generated.
+    char addressOffset[10];
+    // --> NOTES
+	// sll	$t0,	$s3,	2	# 2^i = 2^2 = 4 so k * 4
+	// add 	$t0,	$t0,	$s0	# address of arr[k]
+	// sw	$s3,	0($t0)		# A[k] = k
+
+
+    // If the ExprRes *Res2 variable is NULL, then generate 
+    // MIPS assembly instructions for an assignment to a 
+    // single-dimensional array.
+    if(!Res2) {
+
+        // Complete the assignment for the 1D array by generating
+        // MIPS instructions to complete the operation.
+        sprintf(addressOffset, "%d(%s)", 4, name);
+        code = AppendSeq(code, GenInstr(NULL, "sw", addressOffset, NULL, NULL));
+        AppendSeq(code, GenInstr(NULL, "add", TmpRegName(Res3->Reg), TmpRegName(Res1->Reg), NULL));
+
+        // Free up the registers used. 
+        ReleaseTmpReg(Res3->Reg);
+        ReleaseTmpReg(Res1->Reg);
+
+    // If ExprRes *Res2 variable is not NULL, then
+    // generate MIPS assembly instructions for the
+    // assignment of a two-dimensional array.
+    } else {
+
+        // WORK FOR 2D ARRAY ASSIGNMENT HERE...
+    }
+
+    // Return the resulting instructions for
+    // the arrays from the array assignment
+    // function.
+    return code;
+}
+
+
+
+
+
+
+
+
+
+
 
 /* ================================================================== */
 /* SECTION FOR BOOLEAN EXPRESSIONS: NEGATION, OR, AND AND. */
@@ -1072,4 +1337,107 @@ struct ExprRes *doRval(char *name) {
     return res;
 }
 
-// --> MAY HAVE TO CREATE ANOTHER RVAL OR MODIFY THE EXISTING ONE TO WORK WITH ARRAYS!!!
+
+
+
+
+
+
+
+
+/**
+ * READLIST ARRAY
+ * 
+ * Description...
+ */
+extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *readList1, struct ExprRes *readList2, struct InstrSeq *readList3) {
+
+    // Create a struct of type InstrSeq to store
+    // the new instruction being created.
+    struct InstrSeq *code = NULL;
+
+
+// ReadList                    : Id '[' ExprL0 ']' '[' ExprL0 ']' ',' ReadList                        { $$ = createReadListArray($1, $3, $6, $9); };
+//                             | Id '[' ExprL0 ']' ',' ReadList                                       { $$ = createReadListArray($1, $3, NULL, $6); };
+//                             | Id '[' ExprL0 ']' '[' ExprL0 ']'                                     { $$ = createReadListArray($1, $3, $6, NULL); };
+//                             | Id '[' ExprL0 ']'                                                    { $$ = createReadListArray($1, $3, NULL, NULL); };
+//                             | Id ',' ReadList                                                      { $$ = createReadListArray($1, NULL, NULL, $3); };
+//                             | Id                                                                   { $$ = createReadListIdent($1, NULL); };
+//                             |                                                                      { $$ = NULL; };
+
+
+    // ==============================================
+    // Include a series of conditionals to determine 
+    // what kind of array has data being read in for
+    // it.
+    // ==============================================
+
+    // If all the parameters are NOT NULL, then
+    // assume we are working with a 2D array 
+    // followed by a ReadList. Complete the
+    // actions below.
+    if(readList1 && readList2 && readList3) {
+
+        // ADD MORE...!!!
+
+    // If the third parameter is NULL, then we are
+    // working with a single-dimension array followed
+    // by a Readlist and complete the actions below.
+    } else if(readList1 && !readList2 && readList3) {
+
+        // ADD MORE...!!!
+
+    // If the fourth parameter is NULL, then we are
+    // working with a two-dimensional array NOT followed
+    // by a Readlist. Complete the actions below.
+    } else if(readList1 && readList2 && !readList3) {
+
+        // ADD MORE...!!!
+
+    // If the third and fourth parameters are NULL, then we
+    // are working with a single-dimension array NOT followed
+    // by a Readlist. Complete the actions below.
+    } else if(readList1 && !readList2 && !readList3) {
+
+        // ADD MORE...!!!
+
+    // If the second and third parameters are NULL, 
+    // then we aare working with an identifier followed
+    // by a Readlist. Complete the actions below.
+    } else { // if(!readList1 && !readList2 && readList3) { // --> THIS IS THE CASE THE ELSE IS FOR
+
+        // ADD MORE...!!!
+
+    }
+
+
+    // ADD MORE...???
+
+
+    // Return the instructions from the read
+    // array list function.
+    return code;
+}
+
+
+
+
+/**
+ * READLIST IDENTIFIER
+ * 
+ * Description...
+ */
+extern struct InstrSeq *createReadListIdent(char *readName, struct InstrSeq *readList) {
+
+    // Create a struct of type InstrSeq to store
+    // the new instruction being created.
+    struct InstrSeq *code = NULL;
+
+
+    // ADD MORE...!!! --> YOU WILL HAVE TWO CASES: ONE FOR WHEN THE InstrSeq *readList IS NOT NULL, AND ONE FOR WHEN IT IS!!!
+
+
+    // Return the instructions from the read
+    // list identifier function.
+    return code;
+}

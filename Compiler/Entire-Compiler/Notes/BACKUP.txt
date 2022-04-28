@@ -795,6 +795,12 @@ extern struct ExprRes *doIntLitNeg(struct ExprRes *Res) {
 
 
 
+
+
+
+
+
+
 // BACKUP...MAY DELETE LATER FOR ExprEval.y FILE.
 // =====================================================================================================================================
 // Stmt			            : Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
@@ -805,3 +811,292 @@ extern struct ExprRes *doIntLitNeg(struct ExprRes *Res) {
 // %token Write
 // Print '(' ExprL0 ')' ';'					                           { $$ = doPrint($3); }; // --> DO NOT THINK YOU NEED THIS NOW GIVEN THAT YOU HAVE EXPR LIST WORK WITH SINGLE PRINTS.
 // =====================================================================================================================================
+
+// BACKUP FOR Semantics.h FILE
+// extern struct InstrSeq *doPrint(struct ExprRes *Expr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%{
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include "IOMngr.h"
+    #include "SymTab.h"
+    #include "Semantics.h"
+    #include "CodeGen.h"
+
+    extern int yylex(); /* The next token function. */
+    extern char *yytext; /* The matched token text. */
+    extern int yyleng; /* The token text length. */
+    extern int yyparse(); /* Call function to parse data. */
+    extern int yyerror(char *); /* The error report function. */
+    void dumpTable(); /* Remove a table to free up memory. */
+
+    extern SymTab *table;
+
+    /* // --> REPLACE IdentList WITH ReadList, WHICH IS JUST A LIST OF INSTRUCTIONS. YOU */
+    /* // --> NEED THIS IN ORDER TO BE ABLE TO USE ARRAYS WITH THE Read() FUNCTIONALITY!!! */
+%}
+
+%union {
+    long val;
+    char * string;
+    struct ExprRes * ExprRes;
+    struct InstrSeq * InstrSeq;
+    struct IdList * IdList;
+    struct ExprResList * ExprResList;
+}
+
+%type <InstrSeq> StmtSeq
+%type <InstrSeq> Stmt
+%type <InstrSeq> AssnmtStmt
+%type <InstrSeq> ArrayAssnmtStmt
+%type <ExprResList> ExprList
+%type <string> StrList
+%type <ExprRes> ExprL0
+%type <ExprRes> ExprL1
+%type <ExprRes> ExprL2
+%type <ExprRes> ExprL3
+%type <ExprRes> ExprL4
+%type <ExprRes> ExprL5
+%type <ExprRes> ExprL6
+%type <ExprRes> ExprL7
+%type <IdList> IdentList
+%type <string> Id
+
+%token Int
+%token Ident	
+%token StrLit	
+%token Print
+%token Printstrings
+%token Printlines
+%token Printspaces
+%token Read
+%token IF
+%token ELSE
+%token WHILE
+%token FOR
+%token OR
+%token AND
+%token NOT_EQ
+%token EQ
+%token LT_OR_EQ
+%token GT_OR_EQ
+%token LT
+%token GT
+%token IntLit	
+
+%%
+
+Prog			            : Declarations StmtSeq						                           { Finish($2); };
+Declarations	            : Dec Declarations							                           { };
+            	            |											                           { };
+                            
+Dec			                : Int Ident                                                            { enterName(table, yytext); }';' {};
+StmtSeq 		            : Stmt StmtSeq								                           { $$ = AppendSeq($1, $2); };
+    		                |											                           { $$ = NULL; };
+
+Stmt			            : Print '(' ExprList ')' ';'                                           { $$ = doPrintExpressions($3); };
+                            | Printstrings '(' StrList ')' ';'                                     { $$ = doPrintStrings($3); };
+                            | Printlines '(' ExprL0 ')' ';'                                        { $$ = doPrintformat($3, newline); };
+                            | Printspaces '(' ExprL0 ')' ';'                                       { $$ = doPrintformat($3, space); };
+                            | Read '(' IdentList ')' ';'                                           { $$ = doRead($3); };
+                            
+                            | IF '(' ExprL0 ')' '{' StmtSeq '}'                                    { $$ = doIf($3, $6); };
+                            | IF '(' ExprL0 ')' '{' StmtSeq '}' ELSE '{' StmtSeq '}'               { $$ = doIfElse($3, $6, $10); };
+                            | WHILE '(' ExprL0 ')' '{' StmtSeq '}'                                 { $$ = doWhile($3, $6); };
+                            | FOR '(' AssnmtStmt ';' ExprL0 ';' AssnmtStmt ')' '{' StmtSeq '}'     { $$ = doFor($3, $5, $7, $10); };
+                            | AssnmtStmt ';'                                                       { $$ = $1; };
+                            | ArrayAssnmtStmt ';'                                                  { $$ = $1; };
+
+AssnmtStmt			        : Id '=' ExprL0							                               { $$ = doAssign($1, $3); };
+
+ArrayAssnmtStmt             : Id '[' ExprL0 ']' '=' ExprL0                                         { $$ = doArrayAssign($1, $3); };
+                            | Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0                          {};
+
+ExprList                    : ExprL0 ',' ExprList                                                  { $$ = createExprList($1, $3); };
+                            | ExprL0                                                               { $$ = createExprList($1, NULL); };
+
+ExprL0                      : ExprL0 OR ExprL1                                                     { $$ = doBooleanOps($1, $3, or); };
+                            | ExprL0 AND ExprL1                                                    { $$ = doBooleanOps($1, $3, and); };
+                            | ExprL1                                                               { $$ = $1; };
+
+ExprL1                      : '!' ExprL2                                                           { $$ = doBooleanOps($2, NULL, not); };
+                            | ExprL2                                                               { $$ = $1; };
+
+ExprL2                      : ExprL2 NOT_EQ ExprL3                                                 { $$ = doEqualityOps($1, $3, "sne"); };
+      		                | ExprL2 EQ ExprL3					                                   { $$ = doEqualityOps($1, $3, "seq"); };
+                            | ExprL2 LT_OR_EQ ExprL3                                               { $$ = doEqualityOps($1, $3, "sle"); };
+                            | ExprL2 GT_OR_EQ ExprL3                                               { $$ = doEqualityOps($1, $3, "sge"); };
+                            | ExprL2 LT ExprL3                                                     { $$ = doEqualityOps($1, $3, "slt"); };
+                            | ExprL2 GT ExprL3                                                     { $$ = doEqualityOps($1, $3, "sgt"); };
+                            | ExprL3                                                               { $$ = $1; };
+
+ExprL3                      : ExprL3 '+' ExprL4						                               { $$ = doArithmeticOps($1, $3, "add"); };
+    			            | ExprL3 '-' ExprL4							                           { $$ = doArithmeticOps($1, $3, "sub"); };
+    			            | ExprL4									                           { $$ = $1; };
+
+ExprL4                      : ExprL4 '*' ExprL5							                           { $$ = doArithmeticOps($1, $3, "mul"); };
+    		                | ExprL4 '/' ExprL5							                           { $$ = doArithmeticOps($1, $3, "div"); };
+    		                | ExprL4 '%' ExprL5							                           { $$ = doModulo($1, $3); };
+                            | ExprL5                                                               { $$ = $1; };
+
+ExprL5                      : ExprL6 '^' ExprL5                                                    { $$ = doExponential($1, $3); };
+    		                | ExprL6									                           { $$ = $1; };
+
+ExprL6                      : '(' ExprL0 ')'                                                       { $$ = $2; };
+                            | ExprL7                                                               { $$ = $1; };
+
+ExprL7    		            : '-'ExprL6                                                            { $$ = doIntLitNeg($2); };
+                            | IntLit									                           { $$ = doIntLit(yytext); };
+    		                | Ident									                               { $$ = doRval(yytext); };
+
+IdentList                   : Id ',' IdentList                                                     { $$ = createIdentList($1, $3); };
+                            | Id                                                                   { $$ = createIdentList($1, NULL); };
+
+StrList                     : StrLit                                                               { $$ = strdup(yytext); };
+Id			                : Ident									                               { $$ = strdup(yytext); };
+
+%%
+
+int yyerror(char *s) {
+    writeIndicator(getCurrentColumnNum());
+    writeMessage("Illegal Character in YACC");
+    return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --> WAS ORIGINALLY IN SEMANTICS.H FILE
+// extern struct InstrSeq *doRead(struct IdList *entry); // --> MAYBE DELETE LATER!!!
+// extern struct IdList *createIdentList(char *idName, struct IdList *list); // --> MAYBE DELETE LATER!!!
+//
+// --> WAS ORIGINALLY IN SEMANTICS.C FILE
+// /** // --> MAYBE DELETE LATER!!!
+//  * READ
+//  * 
+//  * The read function takes in a value that 
+//  * is entered by the user and stores it in
+//  * a declared variable. This function is 
+//  * useful in cases where user input needs
+//  * to be read in to a program. The function
+//  * loops through a list of identifiers to 
+//  * complete the read functionality. 
+//  */
+// extern struct InstrSeq *doRead(struct IdList *entry) {
+  
+//     // Create a struct of type InstrSeq and reserve
+//     // space for it. This will store the instructions
+//     // generated in this function. Also create another 
+//     // struct of type IdList to represent the number 
+//     // of values that can be entered.
+//     struct InstrSeq *code = malloc(sizeof(struct InstrSeq));
+//     struct IdList *curr = entry;
+
+//     // There is another entry for a value that will 
+//     // be entered by the user, generate a series of
+//     // instructions to store the values that will be
+//     // entered.
+//     while (curr) {
+
+//         // Call the functions multiple times to generate
+//         // assembly instructions to store the values that
+//         // will be entered into the read function.
+//         AppendSeq(code, GenInstr(NULL, "li", "$v0", "5", NULL));
+//         AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
+//         AppendSeq(code, GenInstr(NULL, "sw", "$v0", curr->TheEntry->name, NULL));
+
+//         // Free the entry name and current
+//         // entry after it is entered into
+//         // the assembly code being generated.
+//         free(curr->TheEntry->name); 
+//         free(curr->TheEntry); 
+
+//         // Move to the next entry in
+//         // the list of identifiers.
+//         entry = curr;
+//         curr = curr->Next;
+
+//         // Lastly, free the entry
+//         // struct itself.
+//         free(entry);
+//     }
+
+//     // Return the linked list of
+//     // instructions that were
+//     // generated in the function.
+//     return code;
+// }
+
+// /** // --> MAYBE DELETE LATER!!!
+//  * {READ} - HELPER FUNCTION
+//  * 
+//  * The function is used to help complete the 
+//  * READ functionality of the compiler. The
+//  * function helps to create a list of identifers
+//  * that is used to run the read function of the
+//  * C-like language.
+//  */
+// extern struct IdList *createIdentList(char *idName, struct IdList *list) {
+
+//     // Create a new IdList to return from the
+//     // function and reserve space for the list.
+//     struct IdList *newList = malloc(sizeof(struct IdList));
+
+//     // Set the attributes of the list, and reserve
+//     // space for the SymEntry and string of characters.
+//     newList->Next = list;
+//     newList->TheEntry = malloc(sizeof(SymEntry));
+//     newList->TheEntry->name = strdup(idName);
+
+//     // Return the list of identifiers
+//     // from the function.
+//     return newList;
+// }

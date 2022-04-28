@@ -1,25 +1,11 @@
+int num1;
+int num2;
+int num3;
 
-int val;
-read(val);
+num1 = 555;
+num2 = 777;
+num3 = 5;
 
-if (val % 2 == 0) {
-    print(1);
-} else {
-    print(2);
-}
-
-while(val > 0) {
-    print(val);
-    val = val - 1;
-}
-
-printLines(1);
-
-for (val = 0; val <= 10; val = val + 1) {
-    print(val);
-    printLines(1);
-    
-    if (val == 5) {
-        val = 8;
-    }
-}
+print(num1);
+printSpaces(2*num3);
+print(num2);
