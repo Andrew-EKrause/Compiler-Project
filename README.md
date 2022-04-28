@@ -19,10 +19,9 @@ The **in1.txt** file name can be changed to any of the file names within the "Te
 The other folders that were listed above can also be explored if you wish to gain a better understanding of how this particular compiler functions. Each folder contains a part of the compiler while, as mentioned above, the "Entire-Compiler" folder contains the compiler in its entirety. If you ever wish to make modifications to this project or want to use it to design your own compiler, you can use the code provided in this repository as a starting point. Enjoy exploring the project. 
 
 ## **Important Note:**
-
-<span style="color: red">
-If you are viewing this folder, I assume that you were granted special access given that this repository is private and restricted for the sake of academic integrity. Please do not share this code with students enrolled at the University of Wisconsin - La Crosse. If you are a student at UWL, please do not view or use this code.
-</span>
+***
+**If you are viewing this folder, I assume that you were granted special access given that this repository is private and restricted for the sake of academic integrity. Please do not share this code with students enrolled at the University of Wisconsin - La Crosse. If you are a student at UWL, please do not view or use this code.**
+***
 
 
 ADD IMAGE OF YACC FILE HERE WITH YOUR GRAMMAR AND A CAPTION...
