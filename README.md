@@ -24,8 +24,8 @@ The other folders that were listed above can also be explored if you wish to gai
 ***
 
 
-###### Picture of the Compiler Grammar
-<img width="766" alt="Screen Shot 2022-04-28 at 1 59 59 AM" src="https://user-images.githubusercontent.com/57727121/165695366-cfbcc70a-d1a6-47ac-a3f2-69b40ad2c599.png">
+###### Picture of the Compiler Grammar (yacc/bison file)
+<img width="774" alt="Screen Shot 2022-04-28 at 2 01 59 AM" src="https://user-images.githubusercontent.com/57727121/165695957-ebd3a3d0-20a0-4518-bfaa-781d0547f300.png">
 
 
 **Resources for Project:**
