@@ -19,13 +19,14 @@ The **in1.txt** file name can be changed to any of the file names within the "Te
 The other folders that were listed above can also be explored if you wish to gain a better understanding of how this particular compiler functions. Each folder contains a part of the compiler while, as mentioned above, the "Entire-Compiler" folder contains the compiler in its entirety. If you ever wish to make modifications to this project or want to use it to design your own compiler, you can use the code provided in this repository as a starting point. Enjoy exploring the project. 
 
 ## **Important Note:**
-```
-If you are viewing this folder, I assume that you were granted special access given that this repository is private and restricted for the sake of academic integrity. Please do not share this code with students enrolled at the University of Wisconsin - La Crosse. If you are a student at UWL, please do not view or use this code.
-```
 
+<span style="color: red">
+If you are viewing this folder, I assume that you were granted special access given that this repository is private and restricted for the sake of academic integrity. Please do not share this code with students enrolled at the University of Wisconsin - La Crosse. If you are a student at UWL, please do not view or use this code.
+</span>
 
 
 ADD IMAGE OF YACC FILE HERE WITH YOUR GRAMMAR AND A CAPTION...
+
 
 **Resources for Project:**
 
@@ -40,7 +41,7 @@ ADD IMAGE OF YACC FILE HERE WITH YOUR GRAMMAR AND A CAPTION...
 
 <p>&nbsp;</p>
 
-## **NOTES:**
+## **Other Notes:**
 
 Depending on the type of operating system that you run on your computer, you may need to download different technologies in order to properly run the compiler. For example, the majority of Windows users will need to use Lex and Yacc to run the project. 
 
@@ -129,7 +130,7 @@ $ ./compiler ./Tests/in1.txt listing.lst asmCode.asm
 - [x] Single Dimension Arrays
 - [x] Size of the array is declared at compile time
 - [x] Use C syntax
-- [x] Subscripts must be able to use constants and expressions. For example nums[2*i] = z * nums[j - 3 * k]
+- [x] Subscripts must be able to use constants and expressions. For example: nums[2*i] = z * nums[j - 3 * k]
 
 ## PART 5: 2D Arrays
 
@@ -137,7 +138,7 @@ $ ./compiler ./Tests/in1.txt listing.lst asmCode.asm
 - [x] Use C syntax
 - [x] Subscripts must be able to use constants and expressions.
 
-## PART 6: Functions
+## PART 6: Functions (incomplete)
 
 - [ ] void and int functions
 - [ ] Parameters: Pass by value for integers
