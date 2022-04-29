@@ -23,3 +23,4 @@ for (i = 0; i < count; i++) {
 }
 
 printString("\n");
+printString("Test 8 completed.");

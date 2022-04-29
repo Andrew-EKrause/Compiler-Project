@@ -15,13 +15,6 @@
     void dumpTable(); /* Remove a table to free up memory. */
 
     extern SymTab *table;
-
-    /* // --> ADD ReadList, WHICH IS JUST A LIST OF INSTRUCTIONS. YOU */
-    /* // --> NEED THIS IN ORDER TO BE ABLE TO USE ARRAYS WITH THE Read() FUNCTIONALITY!!! */
-
-    // IdentList            : Id ',' IdentList                                                     { $$ = createIdentList($1, $3); };
-    //                      | Id                                                                   { $$ = createIdentList($1, NULL); };
-    // %type <IdList> IdentList
 %}
 
 %union {
@@ -111,7 +104,7 @@ ExprL0                      : ExprL0 OR ExprL1                                  
                             | ExprL0 AND ExprL1                                                    { $$ = doBooleanOps($1, $3, and); };
                             | ExprL1                                                               { $$ = $1; };
 
-ExprL1                      : '!' ExprL2                                                           { $$ = doBooleanOps($2, NULL, not); };
+ExprL1                      : '!' ExprL1                                                           { $$ = doBooleanOps($2, NULL, not); };
                             | ExprL2                                                               { $$ = $1; };
 
 ExprL2                      : ExprL2 NOT_EQ ExprL3                                                 { $$ = doEqualityOps($1, $3, "sne"); };

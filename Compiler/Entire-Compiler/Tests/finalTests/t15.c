@@ -58,3 +58,5 @@ int count;
 count = readNums();
 sort(count);
 printNums(count);
+
+printString("\nTest 15 completed.");

@@ -9,7 +9,7 @@ read(count);
 
 while (count > 0) {
 
-    printString("Enter three integers: ");
+    printString("Enter three integers: \n");
     read(low, mid, high);
 
     if (low < mid && mid > high ) {
@@ -53,3 +53,5 @@ while (count > 0) {
     printString("\n");
     count = count - 1;
 }
+
+printString("\nTest 7 completed.");

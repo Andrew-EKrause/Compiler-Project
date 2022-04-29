@@ -841,10 +841,6 @@ extern struct ExprRes *doIntLitNeg(struct ExprRes *Res) {
 
 
 
-
-
-
-
 %{
     #include <stdio.h>
     #include <stdlib.h>
@@ -1100,3 +1096,72 @@ int yyerror(char *s) {
 //     // from the function.
 //     return newList;
 // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* // --> ADD ReadList, WHICH IS JUST A LIST OF INSTRUCTIONS. YOU */
+    /* // --> NEED THIS IN ORDER TO BE ABLE TO USE ARRAYS WITH THE Read() FUNCTIONALITY!!! */
+
+    // IdentList            : Id ',' IdentList                                                     { $$ = createIdentList($1, $3); };
+    //                      | Id                                                                   { $$ = createIdentList($1, NULL); };
+    // %type <IdList> IdentList
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --> MAYBE DELETE LATER!!!
+// /* 
+//     The struct contains the semantic 
+//     records for identifiers. 
+// */
+// struct IdList {
+//     struct SymEntry *TheEntry;
+//     struct IdList *Next;
+// };

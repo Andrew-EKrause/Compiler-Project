@@ -18,4 +18,4 @@ printSpaces(8);
 print(m + k * i ^ j);
 printString(" = m + k * i ^ j");
 
-printString("\n");
+printString("\nTest 3 completed.");

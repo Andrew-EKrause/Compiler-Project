@@ -17,10 +17,10 @@ printString(" = 8 / 3 + 2\n");
 
 m = k * j % i;
 print(m);
-printString(" = 2 * 8 %% 2\n");
+printString(" = 2 * 8 % 3\n");
 
 m = j ^ k ^ i;
 print(m);
 printString(" = 8 ^ 2 ^ 3\n");
 
-printString("Test 2 completed.");
+printString("\nTest 2 completed.");

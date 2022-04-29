@@ -1,0 +1,9 @@
+Enter three integers: Starting temp, ending temp and a positive increment: 
+1
+5
+2
+1 -17 256
+3 -16 257
+5 -15 258
+
+Test 4 completed.

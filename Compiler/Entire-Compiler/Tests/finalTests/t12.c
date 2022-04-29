@@ -18,4 +18,6 @@ x = n;
 print(fact());
 printString(" = ");
 print(x);
+
 printString("\n");
+printString("Test 12 completed.");

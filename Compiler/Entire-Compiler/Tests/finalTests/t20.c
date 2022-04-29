@@ -98,3 +98,5 @@ readArray(twoD);
 calcRowSums(rowSums, twoD);
 calcColSums(colSums, twoD);
 printSums(rowSums, colSums, twoD);
+
+printString("\nTest 20 completed.");

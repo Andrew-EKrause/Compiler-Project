@@ -51,3 +51,5 @@ void printNums() {
 readNums();
 sort();
 printNums();
+
+printString("\nTest 11 completed.");

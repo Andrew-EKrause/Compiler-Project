@@ -23,7 +23,7 @@ printString(" = 20 / 7\n");
 
 k = j % i;
 print(k);
-printString(" = 20 %% 7\n");
+printString(" = 20 % 7\n");
 
 k = -i;
 print(k);
@@ -31,6 +31,6 @@ printString(" = -7\n");
 
 k = i ^ 3;  
 print(k);
-print(" = 7^3\n");
+printString(" = 7^3\n");
 
-printString("Test 1 completed.");
+printString("\nTest 1 completed.");

@@ -54,3 +54,5 @@ int numbers[30];
 count = readNums(numbers);
 sort(numbers,count);
 printNums(numbers,count);
+
+printString("\nTest 16 completed.");

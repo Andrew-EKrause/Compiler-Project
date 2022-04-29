@@ -38,7 +38,7 @@ Grammar
    26       | ExprL0 AND ExprL1
    27       | ExprL1
 
-   28 ExprL1: '!' ExprL2
+   28 ExprL1: '!' ExprL1
    29       | ExprL2
 
    30 ExprL2: ExprL2 NOT_EQ ExprL3
@@ -159,10 +159,10 @@ Nonterminals, with rules where they appear
         on right: 11 12 14 15 16 17 20 21 22 23 24 25 26 46 51 52 53 54
     ExprL1 <ExprRes> (50)
         on left: 28 29
-        on right: 25 26 27
+        on right: 25 26 27 28
     ExprL2 <ExprRes> (51)
         on left: 30 31 32 33 34 35 36
-        on right: 28 29 30 31 32 33 34 35
+        on right: 29 30 31 32 33 34 35
     ExprL3 <ExprRes> (52)
         on left: 37 38 39
         on right: 30 31 32 33 34 35 36 37 38
@@ -663,14 +663,16 @@ State 41
 
 State 42
 
-   28 ExprL1: '!' • ExprL2
+   28 ExprL1: '!' • ExprL1
 
     Ident   shift, and go to state 39
     IntLit  shift, and go to state 40
     '('     shift, and go to state 41
+    '!'     shift, and go to state 42
     '-'     shift, and go to state 43
 
-    ExprL2  go to state 67
+    ExprL1  go to state 67
+    ExprL2  go to state 47
     ExprL3  go to state 48
     ExprL4  go to state 49
     ExprL5  go to state 50
@@ -930,20 +932,7 @@ State 66
 
 State 67
 
-   28 ExprL1: '!' ExprL2 •
-   30 ExprL2: ExprL2 • NOT_EQ ExprL3
-   31       | ExprL2 • EQ ExprL3
-   32       | ExprL2 • LT_OR_EQ ExprL3
-   33       | ExprL2 • GT_OR_EQ ExprL3
-   34       | ExprL2 • LT ExprL3
-   35       | ExprL2 • GT ExprL3
-
-    NOT_EQ    shift, and go to state 73
-    EQ        shift, and go to state 74
-    LT_OR_EQ  shift, and go to state 75
-    GT_OR_EQ  shift, and go to state 76
-    LT        shift, and go to state 77
-    GT        shift, and go to state 78
+   28 ExprL1: '!' ExprL1 •
 
     $default  reduce using rule 28 (ExprL1)
 

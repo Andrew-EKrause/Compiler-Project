@@ -34,7 +34,7 @@ The other folders that were listed above can also be explored if you wish to gai
 - Yacc (Windows): https://yacc.software.informer.com/0.4/
 - Flex (Mac): https://ports.macports.org/port/flex/
 - Bison (Mac): http://robupcraft.com/install-bison-mac/
-- C
+- C: https://www.tutorialspoint.com/cprogramming/index.htm
 - Mars IDE (attached in project)
 - W3Schools: https://www.w3schools.com/
 - Stack Overflow: https://stackoverflow.com/
@@ -105,15 +105,15 @@ $ ./compiler ./Tests/in1.txt listing.lst asmCode.asm
 ## PART 2: Integer I/O
 
 - [x] read(comma delimited list of variables): read(x, y, z)
-- [x] print(comma delimited list of expressions) --> MORE BELOW:
+- [x] print(comma delimited list of expressions)
 - [x] print results on the current line
 - [x] print a space between values
 - [x] a newline is not printed
 - [x] print(2*x, x^3*(z*w), abc/xyz, c)
-- [x] printLines(expression) --> MORE BELOW:
+- [x] printLines(expression)
 - [x] print expression number of newlines    
 - [x] printLines(2)
-- [x] printSpaces(expression) --> MORE BELOW:
+- [x] printSpaces(expression)
 - [x] printSpaces(3*n)
 - [x] printString(“Literal String”)
 - [x] printString(“Enter one integer”);

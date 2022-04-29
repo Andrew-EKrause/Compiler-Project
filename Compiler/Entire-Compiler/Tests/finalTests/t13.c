@@ -20,3 +20,5 @@ print(2 * fact(2 * x));
 printString(" = 2 * (2 * ");
 print(x);
 printString(")!\n");
+
+printString("\nTest 13 completed.");

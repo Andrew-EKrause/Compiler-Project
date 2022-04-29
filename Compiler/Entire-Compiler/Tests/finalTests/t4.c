@@ -18,3 +18,5 @@ while (current <= end) {
     printString("\n");
     current = current + inc;
 }
+
+printString("\nTest 4 completed.");

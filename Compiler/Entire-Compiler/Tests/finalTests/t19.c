@@ -70,4 +70,6 @@ while (j < 4) {
     printString("\t");
     j = j + 1;
 }
+
 printString("\n");
+printString("Test 19 completed.");

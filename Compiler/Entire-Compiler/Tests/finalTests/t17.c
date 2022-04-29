@@ -133,3 +133,5 @@ int numbers[30];
 count = readNums(numbers);
 quicksortStart(numbers, count);
 printNums(numbers, count);
+
+printString("\nTest 17 completed.");

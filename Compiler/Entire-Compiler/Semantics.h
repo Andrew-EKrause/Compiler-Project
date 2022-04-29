@@ -13,16 +13,6 @@
 /* Structs */
 /* ================= */
 
-// --> MAYBE DELETE LATER!!!
-// /* 
-//     The struct contains the semantic 
-//     records for identifiers. 
-// */
-// struct IdList {
-//     struct SymEntry *TheEntry;
-//     struct IdList *Next;
-// };
-
 /* 
     The struct contains a semantic 
     record for expression results. 
@@ -66,12 +56,12 @@ struct StringItem {
     created for enabling both 1D array and
     2D array functionality.
 */
-struct ArrayNode {
+struct ArrayItem {
     char *ArrayName;
-    char *ArrayLabel; // --> MAY NOT NEED LATER!!!
+    char *ArrayLabel;
     int Size1;
     int Size2;
-    struct ArrayNode *Next;
+    struct ArrayItem *Next;
 };
 
 /* ================= */
@@ -94,7 +84,7 @@ enum PrintExprOps {newline, space};
     The function adds the assembly code that appears
     at the top of all MIPS assembly program files.
 */
-extern void	Finish(struct InstrSeq *Code); // --> ADD ARRAY STUFF TO!!!
+extern void	Finish(struct InstrSeq *Code);
 
 /*
     The function calls the enterName() function of 
@@ -125,8 +115,8 @@ extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
 /*
     The functions handle cases where there are 1D arrays and 2D arrays.
 */
-extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2); // --> COMPLETE!!!
-extern struct InstrSeq *doArrayAssign(char *name, struct ExprRes *Res1, struct ExprRes *Res2, struct ExprRes *Res3); // --> COMPLETE!!!
+extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2);
+extern struct InstrSeq *doArrayAssign(char *name, struct ExprRes *Res1, struct ExprRes *Res2, struct ExprRes *Res3);
 /*
     The function handles boolean operations.
 */
@@ -155,5 +145,5 @@ extern struct ExprRes *doRval(char *name);
     The function creates a list of expressions. This function can
     work with identifiers and array expressions in the compiler.
 */
-extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *readList1, struct ExprRes *readList2, struct InstrSeq *readList3); // --> COMPLETE!!!
-extern struct InstrSeq *createReadListIdent(char *readName, struct InstrSeq *readList); // --> COMPLETE!!!
+extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *readSize1, struct ExprRes *readSize2, struct InstrSeq *readList);
+extern struct InstrSeq *createReadListIdent(char *readName, struct InstrSeq *readList);

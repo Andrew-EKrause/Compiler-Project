@@ -38,3 +38,4 @@ for (i = 0; i < count; i++) {
 }
 
 printString("\n");
+printString("\nTest 9 completed.");

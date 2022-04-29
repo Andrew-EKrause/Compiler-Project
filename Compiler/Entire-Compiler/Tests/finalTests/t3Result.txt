@@ -1,0 +1,7 @@
+Enter 4 integers. The second integer must be positive:
+2
+4
+6
+8
+2 4 6 8         104 = i ^ j * k + m        104 = m + k * i ^ j
+Test 3 completed.
