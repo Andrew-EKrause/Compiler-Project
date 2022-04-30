@@ -28,8 +28,8 @@ Grammar
 
    20 AssnmtStmt: Id '=' ExprL0
 
-   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '=' ExprL0
-   22                | Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
+   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
+   22                | Id '[' ExprL0 ']' '=' ExprL0
 
    23 ExprList: ExprL0 ',' ExprList
    24         | ExprL0
@@ -388,8 +388,8 @@ State 19
 State 20
 
    20 AssnmtStmt: Id • '=' ExprL0
-   21 ArrayAssnmtStmt: Id • '[' ExprL0 ']' '=' ExprL0
-   22                | Id • '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
+   21 ArrayAssnmtStmt: Id • '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
+   22                | Id • '[' ExprL0 ']' '=' ExprL0
 
     '['  shift, and go to state 35
     '='  shift, and go to state 36
@@ -580,8 +580,8 @@ State 34
 
 State 35
 
-   21 ArrayAssnmtStmt: Id '[' • ExprL0 ']' '=' ExprL0
-   22                | Id '[' • ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
+   21 ArrayAssnmtStmt: Id '[' • ExprL0 ']' '[' ExprL0 ']' '=' ExprL0
+   22                | Id '[' • ExprL0 ']' '=' ExprL0
 
     Ident   shift, and go to state 5
     IntLit  shift, and go to state 39
@@ -904,8 +904,8 @@ State 62
 
 State 63
 
-   21 ArrayAssnmtStmt: Id '[' ExprL0 • ']' '=' ExprL0
-   22                | Id '[' ExprL0 • ']' '[' ExprL0 ']' '=' ExprL0
+   21 ArrayAssnmtStmt: Id '[' ExprL0 • ']' '[' ExprL0 ']' '=' ExprL0
+   22                | Id '[' ExprL0 • ']' '=' ExprL0
    25 ExprL0: ExprL0 • OR ExprL1
    26       | ExprL0 • AND ExprL1
 
@@ -1347,8 +1347,8 @@ State 94
 
 State 95
 
-   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' • '=' ExprL0
-   22                | Id '[' ExprL0 ']' • '[' ExprL0 ']' '=' ExprL0
+   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' • '[' ExprL0 ']' '=' ExprL0
+   22                | Id '[' ExprL0 ']' • '=' ExprL0
 
     '['  shift, and go to state 125
     '='  shift, and go to state 126
@@ -1654,7 +1654,7 @@ State 124
 
 State 125
 
-   22 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' • ExprL0 ']' '=' ExprL0
+   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' • ExprL0 ']' '=' ExprL0
 
     Ident   shift, and go to state 5
     IntLit  shift, and go to state 39
@@ -1675,7 +1675,7 @@ State 125
 
 State 126
 
-   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '=' • ExprL0
+   22 ArrayAssnmtStmt: Id '[' ExprL0 ']' '=' • ExprL0
 
     Ident   shift, and go to state 5
     IntLit  shift, and go to state 39
@@ -1751,7 +1751,7 @@ State 132
 
 State 133
 
-   22 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 • ']' '=' ExprL0
+   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 • ']' '=' ExprL0
    25 ExprL0: ExprL0 • OR ExprL1
    26       | ExprL0 • AND ExprL1
 
@@ -1762,14 +1762,14 @@ State 133
 
 State 134
 
-   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '=' ExprL0 •
+   22 ArrayAssnmtStmt: Id '[' ExprL0 ']' '=' ExprL0 •
    25 ExprL0: ExprL0 • OR ExprL1
    26       | ExprL0 • AND ExprL1
 
     OR   shift, and go to state 70
     AND  shift, and go to state 71
 
-    $default  reduce using rule 21 (ArrayAssnmtStmt)
+    $default  reduce using rule 22 (ArrayAssnmtStmt)
 
 
 State 135
@@ -1860,7 +1860,7 @@ State 141
 
 State 142
 
-   22 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' • '=' ExprL0
+   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' • '=' ExprL0
 
     '='  shift, and go to state 149
 
@@ -1918,7 +1918,7 @@ State 148
 
 State 149
 
-   22 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' '=' • ExprL0
+   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' '=' • ExprL0
 
     Ident   shift, and go to state 5
     IntLit  shift, and go to state 39
@@ -2002,14 +2002,14 @@ State 153
 
 State 154
 
-   22 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0 •
+   21 ArrayAssnmtStmt: Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0 •
    25 ExprL0: ExprL0 • OR ExprL1
    26       | ExprL0 • AND ExprL1
 
     OR   shift, and go to state 70
     AND  shift, and go to state 71
 
-    $default  reduce using rule 22 (ArrayAssnmtStmt)
+    $default  reduce using rule 21 (ArrayAssnmtStmt)
 
 
 State 155

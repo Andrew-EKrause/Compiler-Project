@@ -1,0 +1,19 @@
+Enter the number of triples to be processed: 
+3
+Enter three integers: 
+3
+6
+9
+3 6 9 
+Enter three integers: 
+32
+-9
+67
+-9 32 67 
+Enter three integers: 
+9
+0
+-34
+-34 0 9 
+
+Test 6 completed.

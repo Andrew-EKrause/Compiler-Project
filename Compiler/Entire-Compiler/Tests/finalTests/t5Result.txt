@@ -1,0 +1,79 @@
+===========================================
+<Tests for Nested For-Loops and For Loops>
+===========================================
+
+Enter the first positive integer:
+3
+Enter the second positive integer:
+4
+Enter the third positive integer:
+5
+Enter a positive integer for the single for loop:
+6
+
+===========================================
+Nested for loops:
+===========================================
+Outer for loop values:
+0
+Inner for loop values:
+0
+0
+1
+2
+Inner for loop values:
+1
+1
+2
+3
+Inner for loop values:
+2
+2
+3
+4
+Outer for loop values:
+1
+Inner for loop values:
+1
+1
+2
+3
+Inner for loop values:
+2
+2
+3
+4
+Inner for loop values:
+3
+3
+4
+5
+Outer for loop values:
+2
+Inner for loop values:
+2
+2
+3
+4
+Inner for loop values:
+3
+3
+4
+5
+Inner for loop values:
+4
+4
+5
+6
+
+===========================================
+Single for loop:
+===========================================
+Single for loop iteration number: 0
+Single for loop iteration number: 1
+Single for loop iteration number: 2
+Single for loop iteration number: 3
+Single for loop iteration number: 4
+Single for loop iteration number: 5
+
+Test 5 completed.

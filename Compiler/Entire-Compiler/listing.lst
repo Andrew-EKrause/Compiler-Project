@@ -1,26 +1,207 @@
-1. int numbers[30];
-2. int count;
-3. int i;
-4. int s;
-5. int p;
-6. int temp;
-7. 
-8. printString("Enter the number of ints (30 or less) in the array: ");
-9. read(count);
+1. int pizzaSize;
+2. int pizzaType;
+3. int numberOfPizzas;
+4. int withBreadSticks;
+5. int orderConfirmed;
+6. 
+7. int pizzaSizeCost;
+8. int breadSticksCost;
+9. int totalCostOrPizzaType;
 10. 
-11. i = 0;
-12. while (i < count) {
-13. 
-14. 	printString("Enter an int: ");
-15. 	read(numbers[i]);
-16. 	i = i + 1;
-17. }
-18. 
-19. printString("\n\n");
-20. 
-21. for (i = 0; i < count; i = i + 1) {
-22. 	print(numbers[i]);
-23. }
-24. 
-25. printString("\n");
-26. printString("Test 8 completed.");
+11. 
+12. printString("===========================================\n");
+13. printString("<Simple Pizza Program>\n");
+14. printString("===========================================\n");
+15. 
+16. 
+17. printString("\nFirst, select the size of the pizza.\n");
+18. printString("Enter the number corresponding to the pizza\n");
+19. printString("size selection you want. Selections are listed\n");
+20. printString("below:\n");
+21. 
+22. printString("===========================================\n");
+23. printString("Pizza Size Selections:\n");
+24. printString("===========================================\n");
+25. printString("(1) = 8 inches - $5.00\n");
+26. printString("(2) = 12 inches - $8.00\n");
+27. printString("(3) = 16 inches - $12.00\n");
+28. printString("(4) = 20 inches - $14.00\n");
+29. printString("(5) = 24 inches - $16.00\n");
+30. read(pizzaSize);
+31. 
+32. 
+33. printString("\nNext, select the kind of pizza you want.\n");
+34. printString("Enter the number corresponding to the pizza\n");
+35. printString("selection. Selections are listed below:\n");
+36. 
+37. printString("===========================================\n");
+38. printString("Pizza Type Selections:\n");
+39. printString("===========================================\n");
+40. printString("(1) = Pepperoni - $1.00\n");
+41. printString("(2) = Sausage - $1.00\n");
+42. printString("(3) = Cheese - $0.00\n");
+43. printString("(4) = Sausage/Pepperoni - $2.00\n");
+44. printString("(5) = Chicken - $2.00\n");
+45. printString("(6) = Supreme - $3.00\n");
+46. read(pizzaType);
+47. 
+48. 
+49. printString("\nNow select the number of pizzas you want.\n");
+50. printString("Enter the number corresponding to the number\n");
+51. printString("of pizzas for your order. you want. Selections\n");
+52. printString("are listed below (can order up to 10):\n");
+53. 
+54. printString("===========================================\n");
+55. printString("Number of Pizzas Selections:\n");
+56. printString("===========================================\n");
+57. printString("(1) = 1 pizza\n");
+58. printString("(2) = 2 pizzas\n");
+59. printString("(3) = 3 pizzas\n");
+60. printString("(4) = 4 pizzas\n");
+61. printString("(5) = 5 pizzas\n");
+62. printString("(6) = 6 pizzas\n");
+63. printString("(7) = 7 pizzas\n");
+64. printString("(8) = 8 pizzas\n");
+65. printString("(9) = 9 pizzas\n");
+66. printString("(10) = 10 pizzas\n");
+67. read(numberOfPizzas);
+68. 
+69. 
+70. printString("\nLastly, select whether you want breadsticks\n");
+71. printString("with your pizza order. Selections are listed\n");
+72. printString("below:\n");
+73. 
+74. printString("===========================================\n");
+75. printString("With Breadsticks?\n");
+76. printString("===========================================\n");
+77. printString("(0) = No - $0.00\n");
+78. printString("(1) = Yes - $5.00\n");
+79. read(withBreadSticks);
+80. 
+81. 
+82. if(pizzaSize == 1) {
+83.     pizzaSizeCost = 5;
+84. }
+85. if(pizzaSize == 2) {
+86.     pizzaSizeCost = 8;
+87. }
+88. if(pizzaSize == 3) {
+89.     pizzaSizeCost = 12;
+90. }
+91. if(pizzaSize == 4) {
+92.     pizzaSizeCost = 14;
+93. }
+94. if(pizzaSize == 5) {
+95.     pizzaSizeCost = 16;
+96. }
+97. 
+98. 
+99. if(pizzaType == 1) {
+100.     totalCostOrPizzaType = 1;
+101. }
+102. if(pizzaType == 2) {
+103.     totalCostOrPizzaType = 1;
+104. }
+105. if(pizzaType == 3) {
+106.     totalCostOrPizzaType = 0;
+107. }
+108. if(pizzaType == 4) {
+109.     totalCostOrPizzaType = 2;
+110. }
+111. if(pizzaType == 5) {
+112.     totalCostOrPizzaType = 2;
+113. }
+114. if(pizzaType == 6) {
+115.     totalCostOrPizzaType = 3;
+116. }
+117. 
+118. 
+119. if(withBreadSticks == 0) {
+120.     breadSticksCost = 0;
+121. }
+122. if(withBreadSticks == 1) {
+123.     breadSticksCost = 5;
+124. }
+125. 
+126. 
+127. printString("\n===========================================\n");
+128. printString("Confirm Order?\n");
+129. printString("===========================================\n");
+130. printString("(0) = No\n");
+131. printString("(1) = Yes\n");
+132. read(orderConfirmed);
+133. 
+134. 
+135. if(orderConfirmed == 0) {
+136. 
+137.     printString("\nOrder was cancelled. Have a nice day!\n");
+138. 
+139. } else {
+140.     
+141.     printString("\n===========================================\n");
+142.     printString("ORDER RECEIPT:\n");
+143.     printString("===========================================\n");
+144. 
+145. 
+146.     printString("-Size of Pizza(s): ");
+147.     if(pizzaSize == 1) {
+148.         printString("8 inches\n");
+149.     }
+150.     if(pizzaSize == 2) {
+151.         printString("12 inches\n");
+152.     }
+153.     if(pizzaSize == 3) {
+154.         printString("16 inches\n");
+155.     }
+156.     if(pizzaSize == 4) {
+157.         printString("20 inches\n");
+158.     }
+159.     if(pizzaSize == 5) {
+160.         printString("24 inches\n");
+161.     }
+162. 
+163. 
+164.     printString("-Type of Pizza: ");
+165.     if(pizzaType == 1) {
+166.         printString("Pepperoni\n");
+167.     }
+168.     if(pizzaType == 2) {
+169.         printString("Sausage\n");
+170.     }
+171.     if(pizzaType == 3) {
+172.         printString("Cheese\n");
+173.     }
+174.     if(pizzaType == 4) {
+175.         printString("Sausage/Pepperoni\n");
+176.     }
+177.     if(pizzaType == 5) {
+178.         printString("Chicken\n");
+179.     }
+180.     if(pizzaType == 6) {
+181.         printString("Supreme\n");
+182.     }
+183. 
+184. 
+185.     printString("-Number of Pizzas: ");
+186.     print(numberOfPizzas);
+187.     printString("\n");
+188. 
+189. 
+190.     printString("-With Breadsticks? ");
+191.     if(withBreadSticks == 0) {
+192.         printString("No\n");
+193.     }
+194.     if(withBreadSticks == 1) {
+195.         printString("Yes\n");
+196.     }
+197. 
+198. 
+199.     totalCostOrPizzaType = (pizzaSizeCost * numberOfPizzas) + (totalCostOrPizzaType * numberOfPizzas) + breadSticksCost;
+200.     printString("\nTotal Cost of Order: $");
+201.     print(totalCostOrPizzaType);
+202.     printString(".00");
+203.     printString("\nThank you for your order. Have a nice day!\n");
+204. }
+205. printString("===========================================\n");
+206. 
+207. printString("\nTest 10 completed.");

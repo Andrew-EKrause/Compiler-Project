@@ -132,7 +132,7 @@ L9:
 _nl:	.asciiz		"\n"
 _spc:	.asciiz		" "
 S4:	.asciiz		"\nTest 3 completed."
-S3:	.asciiz		" = m + k * i ^ j"
+S3:	.asciiz		" = m + k * i ^ j\n"
 S2:	.asciiz		" = i ^ j * k + m"
 S1:	.asciiz		"Enter 4 integers. The second integer must be positive:\n"
 i:	.word		0
