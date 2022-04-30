@@ -1,6 +1,6 @@
 # **_Simple Compiler_**
 
-## **Description** UPDATED PICTURE WHEN PROJECT IS COMPLETED!!!
+## **Description** UPDATE PICTURE WHEN PROJECT IS COMPLETED!!!
 
 **_Compiler Created for a C-like language in CS 442 Course_** <br/>
 This project was created for a Computer Science course project at the University of Wiconsin - La Crosse. The course, called Structures of Compilers (CS 442) taught students the basics of the compilation process that takes place each time computer programs are executed. The compiler that was built in this class at UWL can process a simple C-like language and convert it to MIPS assembly code. The MIPS assembly code can be run in simulators such as Mars and Spim. A Mars4_5.jar file, which opens a simulator that can run the generated assembly code, is provided in this repository.
