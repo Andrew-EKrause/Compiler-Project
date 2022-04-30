@@ -25,7 +25,7 @@ OFLAG = -o # Flag to indicate use of object file
 CFLAG = -c # Flag to avoid linking
 GFLAG = -g -ggdb # Flags to invoke GDB debugger
 WFLAG = -Wall -Werror -Wextra # Flags to show warnings
-MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan # --> ADD THIS BACK LATER!!!
+MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan
 # Flags directly above are used to check for memory leaks
 
 # ===============================================
@@ -35,7 +35,7 @@ MEMCHECK = -fsanitize=address -fno-omit-frame-pointer -static-libsan # --> ADD T
 main:
 	bison -d -v $(BISON)
 	flex $(LEX)
-	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c CodeGen.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG)
+	$(CC) $(OFLAG) compiler ExprEval.tab.c lex.yy.c CodeGen.c Semantics.c SymTab.c IOMngr.c main.c $(GFLAG) $(MEMCHECK)
 
 # ===============================================
 # Group of cleaning protocols after execution.

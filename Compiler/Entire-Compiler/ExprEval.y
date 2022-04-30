@@ -73,8 +73,8 @@ Declarations	            : Dec Declarations							                           { }
             	            |											                           { };
                             
 Dec			                : Int Id ';'                                                           { enterNameAndFreeDec(table, $2); };
-                            | Int Id '[' ArrayIntLit ']' ';'                                       { createArrayDec($2, $4, NULL); };
-                            | Int Id '[' ArrayIntLit ']' '[' ArrayIntLit ']' ';'                   { createArrayDec($2, $4, $7); };
+                            | Int Id '[' ArrayIntLit ']' ';'                                       { doArrayDec($2, $4, NULL); };
+                            | Int Id '[' ArrayIntLit ']' '[' ArrayIntLit ']' ';'                   { doArrayDec($2, $4, $7); };
 
 StmtSeq 		            : Stmt StmtSeq								                           { $$ = AppendSeq($1, $2); };
     		                |											                           { $$ = NULL; };
@@ -94,8 +94,8 @@ Stmt			            : Print '(' ExprList ')' ';'                                 
 
 AssnmtStmt			        : Id '=' ExprL0							                               { $$ = doAssign($1, $3); };
 
-ArrayAssnmtStmt             : Id '[' ExprL0 ']' '=' ExprL0                                         { $$ = doArrayAssign($1, $3, NULL, $6); };
-                            | Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0                          { $$ = doArrayAssign($1, $3, $6, $9); };
+ArrayAssnmtStmt             : Id '[' ExprL0 ']' '[' ExprL0 ']' '=' ExprL0                          { $$ = doArrayAssign($1, $3, $6, $9); };
+                            | Id '[' ExprL0 ']' '=' ExprL0                                         { $$ = doArrayAssign($1, $3, NULL, $6); };
 
 ExprList                    : ExprL0 ',' ExprList                                                  { $$ = createExprList($1, $3); };
                             | ExprL0                                                               { $$ = createExprList($1, NULL); };
@@ -132,7 +132,9 @@ ExprL6                      : '(' ExprL0 ')'                                    
 
 ExprL7    		            : '-'ExprL6                                                            { $$ = doIntLitNeg($2); };
                             | IntLit									                           { $$ = doIntLit(yytext); };
-    		                | Ident									                               { $$ = doRval(yytext); };
+    		                | Id									                               { $$ = doRval($1); };
+                            | Id '[' ExprL0 ']' '[' ExprL0 ']'                                     { $$ = doRvalArray($1, $3, $6); };
+                            | Id '[' ExprL0 ']'                                                    { $$ = doRvalArray($1, $3, NULL); };
 
 ReadList                    : Id '[' ExprL0 ']' '[' ExprL0 ']' ',' ReadList                        { $$ = createReadListArray($1, $3, $6, $9); };
                             | Id '[' ExprL0 ']' ',' ReadList                                       { $$ = createReadListArray($1, $3, NULL, $6); };

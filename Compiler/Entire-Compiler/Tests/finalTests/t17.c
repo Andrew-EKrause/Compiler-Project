@@ -12,7 +12,7 @@ int readNums(int nums[]) {
     while (i < count) {
         printString("Enter an int: ");
         read(nums[i]);
-        i++;
+        i = i + 1;
     }
     return count;
 }
@@ -58,14 +58,14 @@ int partition(int nums[], int left, int right) {
 
     while (i < j) {
 
-        i = i+1;
+        i = i + 1;
         while (nums[i] < pivot) {
-            i = i+1;
+            i = i + 1;
         }
         
         j = j-1;
         while (nums[j] > pivot) {
-            j = j-1;
+            j = j - 1;
         }
 
         if (i < j) {
@@ -73,7 +73,7 @@ int partition(int nums[], int left, int right) {
         }
     }
 
-    swap(nums, i, right-1);
+    swap(nums, i, right - 1);
     return i;
 }
 
@@ -83,8 +83,8 @@ void quicksort(int nums[], int left, int right) {
     if (left+2 <= right) {
 
         i = partition(nums, left, right);
-        quicksort(nums, left, i-1);
-        quicksort(nums, i+1, right);
+        quicksort(nums, left, i - 1);
+        quicksort(nums, i + 1, right);
     }
 }
 
@@ -97,23 +97,23 @@ void insertionSort(int nums[], int size) {
 
     while (i < size) {
 
-        j = i-1;
+        j = i - 1;
         temp = nums[i];
 
         while (j >= 0 && nums[j] < temp) {
 
-            nums[j+1] = nums[j];
+            nums[j + 1] = nums[j];
             j = j - 1;
         }
 
-        nums[j+1] = temp;
+        nums[j +1 ] = temp;
         i = i + 1;
     }
 }
 
 void quicksortStart(int nums[], int size) {
 
-    quicksort(nums, 0, size-1);
+    quicksort(nums, 0, size - 1);
     insertionSort(nums, size);
 }
 
@@ -122,7 +122,7 @@ void printNums(int nums[], int size) {
     int i;
     printString("\n\n");
 
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < size; i = i + 1) {
         print(nums[i]);
     }
     printString("\n");

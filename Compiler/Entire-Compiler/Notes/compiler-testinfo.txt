@@ -7,7 +7,8 @@ TEST 1: Series of Commands to test your Compiler:
                        // --> Include a "-Wcounterexamples" flag if you want to see counterexamples when reduce/shift conflicts occur!
 2. flex lex1.l
 3. gcc -o compiler y.tab.c lex.yy.c Semantics.c SymTab.c IOMngr.c main.c -fsanitize=address
-4. ./compiler ./Tests/in1.txt listing.lst asmCode.asm OR ./compiler ./Tests/finalTests/t1.c listing.lst asmCode.asm
+4. ./compiler ./Tests/in1.txt listing.lst asmCode.asm <OR>
+   ./compiler ./Tests/finalTests/t1.c listing.lst asmCode.asm
 
 WILL WANT TO CREATE A bash script FOR ALL THIS!!!
 ==================================================
@@ -19,3 +20,7 @@ NOTES:
 // There is some memory management that you will have to worry about 
 // for the main compiler project.
 ==================================================
+
+
+--> NOTE TO SELF:
+--> WHENEVER YOU HAVE A CASE WHERE YOU ARE ASSIGNING A VALUE OR AN ARRAY VALUE TO ANOTHER ARRAY, IT DOES NOT WORK! SEE t8.c FOR MORE DETAILS!!!

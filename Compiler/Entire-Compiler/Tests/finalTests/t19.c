@@ -5,7 +5,7 @@ int i;
 int j;
 int k;
 
-printString("Enter 20 ints: ");
+printString("Enter 20 ints: \n");
 
 i = 0;
 while (i < 5) {
@@ -13,11 +13,11 @@ while (i < 5) {
     j = 0;
     while (j < 4) {
 
-        print(k);
+        read(k);
         twoD[i][j] = k;
         j = j + 1;
     }
-    i = i+1;
+    i = i + 1;
 }
 
 i = 0;
@@ -30,7 +30,7 @@ while (i < 5) {
         rowSums[i] = rowSums[i] + twoD[i][j];
         j = j + 1;
     }
-    i = i+1;
+    i = i + 1;
 }
 
 j = 0;
@@ -42,7 +42,7 @@ while (j < 4) {
         colSums[j] = colSums[j] + twoD[i][j];
         i = i + 1;
     }
-    j = j+1;
+    j = j + 1;
 }
 
 i = 0;
@@ -59,7 +59,7 @@ while (i < 5) {
         j = j + 1;
     }
     printString("\n");
-    i = i+1;
+    i = i + 1;
 }
 
 j = 0;

@@ -13,7 +13,7 @@ int readNums() {
 
         printString("Enter an int: ");
         read(numbers[i]);
-        i++;
+        i = i + 1;
     }
 
     return count;
@@ -33,7 +33,7 @@ void sort(int size) {
 
         while (j >= 0 && numbers[j] < temp) {
 
-            numbers[j+1] = numbers[j];
+            numbers[j + 1] = numbers[j];
             j = j - 1;
         }
 
@@ -47,7 +47,7 @@ void printNums(int size) {
     int i;
     printString("\n\n");
 
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < size; i = i + 1) {
 
         print(numbers[i]);
     }

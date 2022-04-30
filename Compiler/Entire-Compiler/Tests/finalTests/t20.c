@@ -15,7 +15,7 @@ void readArray(int n[5][4]) {
             n[i][j] = k;
             j = j + 1;
         }
-        i = i+1;
+        i = i + 1;
     }
 }
 
@@ -34,7 +34,7 @@ void calcRowSums(int r[], int n[5][4]) {
             r[i] = r[i] + n[i][j];
             j = j + 1;
         }
-        i = i+1;
+        i = i + 1;
     }
 }
 
@@ -51,7 +51,7 @@ void calcColSums(int c[], int n[5][4]) {
             c[j] = c[j] + n[i][j];
             i = i + 1;
         }
-        j = j+1;
+        j = j + 1;
     }
 }
 
@@ -73,7 +73,7 @@ void printSums(int r[], int c[], int n[5][4]) {
             j = j + 1;
         }
         printString("\n");
-        i = i+1;
+        i = i + 1;
     }
     
     j = 0;
@@ -82,7 +82,7 @@ void printSums(int r[], int c[], int n[5][4]) {
 
         print(c[j]);
         printString("\t");
-        j = j+1;
+        j = j + 1;
     }
     printString("\n");
 }

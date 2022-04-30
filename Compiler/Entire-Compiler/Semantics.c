@@ -119,36 +119,23 @@ void Finish(struct InstrSeq *Code) {
     AppendSeq(code, GenInstr(NULL, "syscall", NULL, NULL, NULL));
     AppendSeq(code, GenInstr(NULL, ".data", NULL, NULL, NULL));
     AppendSeq(code, GenInstr(NULL, ".align", "4", NULL, NULL));
-    AppendSeq(code, GenInstr("_nl", ".asciiz", "\"\\n\"", NULL, NULL)); // --> Load a newline into the data section.
-    AppendSeq(code, GenInstr("_spc", ".asciiz", "\" \"", NULL, NULL)); // --> Load a space into the data section.
+    AppendSeq(code, GenInstr("_nl", ".asciiz", "\"\\n\"", NULL, NULL));
+    AppendSeq(code, GenInstr("_spc", ".asciiz", "\" \"", NULL, NULL));
 
-
-
-
-
-
-    // ================================================================ // --> REMOVE THIS LINE LATER!!!
-
-    
-    // LOAD THE ARRAYS INTO THE DATA SECTION OF THE MIPS 
-    // CODE BEFORE THE MIPS PROGRAM IS RUN.
+    // ======================================================
+    // Load the arrays into the data section of the MIPS
+    // code before the MIPS program is run.
+    // ======================================================
 
     // Create two struct variables for traversing through the
     // global list of arrays in the "listOfArrays" variable.
     struct ArrayItem *arrayItem;
     struct ArrayItem *nextArray;
 
-    // --> CHECK WITH BEN...MAY NOT BE RIGHT!!!
-
     // Create string variables (char*) in order to 
     // add numerical values to the instructions.
-    char *arraySizeAsString1 = malloc(sizeof(100));
-    char *arraySizeAsString2 = malloc(sizeof(100));
-
-    // Create a temporary register in order to perform 
-    // basic mathematical operations in loading the size
-    // of the array into the .data section.
-    int reg = AvailTmpReg(); // --> CHECK WITH BEN; MIGHT NOT NEED THIS!!!
+    char *totalArraySize = NULL;
+    totalArraySize = malloc(100 * sizeof(totalArraySize));
 
     // Assign the "arrayItem" struct to the global variable 
     // to begin the process of traversing through the list
@@ -167,11 +154,8 @@ void Finish(struct InstrSeq *Code) {
         // are loaded and ready to use at compile time. A shift-left
         // logical operation is performed to ensure that a proper amount
         // of space is allocated.
-        sprintf(arraySizeAsString1, "%d", arrayItem->Size1);
-        sprintf(arraySizeAsString2, "%d", arrayItem->Size2);
-        AppendSeq(code, GenInstr(NULL, "mul", TmpRegName(reg), arraySizeAsString1, arraySizeAsString2));
-        AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(reg), TmpRegName(reg), "2"));
-        AppendSeq(code, GenInstr(arrayItem->ArrayName, ".space", TmpRegName(reg), NULL, NULL)); // --> NOT SURE THIS IS RIGHT!!! 
+        sprintf(totalArraySize, "%d", (arrayItem->Size1 * arrayItem->Size2)<<2);
+        AppendSeq(code, GenInstr(arrayItem->ArrayName, ".space", totalArraySize, NULL, NULL));
         
         // Move to the next array value
         // in the list of arrays.
@@ -180,22 +164,19 @@ void Finish(struct InstrSeq *Code) {
 
         // Free the different attributes in the 
         // StringItem struct in each iteration.
-        // free(nextArray->Size1); // --> DO NOT THINK YOU NEED TO DO IT THIS WAY; NOT SURE THIS IS RIGHT!!!
-        // free(nextArray->ArrayLabel);
+        free(nextArray->ArrayLabel);
         free(nextArray);
-        free(arraySizeAsString1);
-        free(arraySizeAsString2);
-        ReleaseTmpReg(reg); // --> SHOULD WE DO THIS, AND SHOULD WE RELEASE IT THIS WAY???
     }
 
+    // Free the total array size variable after 
+    // loading all of the arrays into the .data
+    // segment.
+    free(totalArraySize);
 
-    // ================================================================ // --> REMOVE THIS LINE LATER!!!
-
-
-
-
-
-
+    // ======================================================
+    // Load the strings into the data section of the MIPS
+    // code before the MIPS program is run.
+    // ======================================================
 
     // Create two struct variables for traversing through the
     // global list of strings in the "listOfStrings" variable.
@@ -295,6 +276,11 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
     struct InstrSeq *resultInstruction = NULL;
     struct ExprResList *listOfExprs = list;
 
+    // --> NOTES:
+    // --> 1 is the syscall number for printing an integer.
+    // --> 11 is the syscall number for printing a character.
+    // --> 32 is the ASCII character for a space. I use "_spc" here instead.
+
     // Loop through the list of expressions and add assembly code to 
     // the linked list of instructions to print out each item in the
     // expression.
@@ -306,13 +292,13 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
 
         // Call the function multiple times to print out a given item in the expression.
         AppendSeq(resultInstruction, GenInstr(NULL, "add", "$a0", TmpRegName(listOfExprs->Expr->Reg), "$zero"));
-        AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "1", NULL)); // --> 1 is the syscall number for printing an integer.
+        AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "1", NULL));
         AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
         // Call the function multiple times to print out a space in
         // order to separate item being printed out in the expression.
-        AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "11", NULL)); // --> 11 is the syscall number for printing a character.
-        AppendSeq(resultInstruction, GenInstr(NULL, "la", "$a0", "_spc", NULL)); // --> 32 is the ASCII character for a space. I use "_spc" here instead.
+        AppendSeq(resultInstruction, GenInstr(NULL, "li", "$v0", "11", NULL));
+        AppendSeq(resultInstruction, GenInstr(NULL, "la", "$a0", "_spc", NULL));
         AppendSeq(resultInstruction, GenInstr(NULL, "syscall", NULL, NULL, NULL));
 
         // Release the temporary registers so that they
@@ -582,7 +568,7 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
     // space for it. The variable is used to store the 
     // assembly code instructions that are generated by the
     // function. 
-    struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+    struct InstrSeq *code = NULL;
 
     // Create two new labels for proper jumps 
     // in the assembly code for the while loop.
@@ -592,7 +578,7 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
     // Call the function multiple times to generate assembly code
     // for the while loop and put it in the linked list of instructions
     // that will be returned from this function.
-    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL));
+    code = AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL));
     AppendSeq(code, Res->Instrs);
     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(Res->Reg), label2));
     AppendSeq(code, seq);
@@ -627,7 +613,7 @@ extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *Cond
     // Create a variable of type InstrSeq and reserve space for it. The 
     // variable will be used to store the assembly instructions generated
     // by this function. 
-    struct InstrSeq *code = (struct InstrSeq *)malloc(sizeof(struct InstrSeq));
+    struct InstrSeq *code = NULL;
     
     // Also create two labels through the GenLabel() function
     // in order to capture the loop and jump behavior of for
@@ -639,7 +625,7 @@ extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *Cond
     // code for the for loop. The assembly code that is created
     // is stored in the linked list of instructions, the "code"
     // variable.
-    AppendSeq(code, Assignment1);
+    code = AppendSeq(code, Assignment1);
     AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL));
     AppendSeq(code, CondRes->Instrs);
     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(CondRes->Reg), label2));
@@ -669,7 +655,7 @@ extern struct InstrSeq *doFor(struct InstrSeq *Assignment1, struct ExprRes *Cond
  * assigned to a variable. The label for this process
  * is the "sw" label (It stores the data in memory).
  */
-struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) { 
+struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
 
     // Create a struct of type InstrSeq to store
     // the new instruction being created.
@@ -702,16 +688,6 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
     return code;
 }
 
-
-
-
-
-
-
-
-
-
-
 /* ================================================================== */
 /* SECTION FOR ARRAYS: 1D ARRAYS AND 2D ARRAYS */
 /* ================================================================== */
@@ -733,7 +709,7 @@ struct InstrSeq *doAssign(char *name, struct ExprRes *Expr) {
  * the MIPS code generated in the compilatoion
  * process.
  */
-extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2) {
+extern struct InstrSeq *doArrayDec(char *name, char *size1, char *size2) {
 
     // Create a new struct of type InstrSeq, and append instructions
     // to it that will help store the array in the .data segment so
@@ -757,8 +733,10 @@ extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2) {
 
     // Ceate variable for converting the integers for the array
     // size into strings in order to eliminate memory leak issues.
-    char *spaceOneDimensionString = malloc(sizeof(100));
-    char *spaceTwoDimensionString = malloc(sizeof(100));
+    char *spaceOneDimensionString = NULL;
+    spaceOneDimensionString = malloc(100 * sizeof(spaceOneDimensionString));
+    char *spaceTwoDimensionString = NULL;
+    spaceTwoDimensionString = malloc(100 * sizeof(spaceTwoDimensionString));
 
     // If the second array size variable is NULL, then
     // generate MIPS assembly instructions for the creation
@@ -772,6 +750,7 @@ extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2) {
         resultArray->ArrayLabel = GenerateArrayLabel();
         resultArray->Size1 = spaceOneDimension;
         resultArray->Size2 = 1;
+        resultArray->Next = listOfArrays;
         listOfArrays = resultArray;
 
         // Create a new struct of type InstrSeq, and append instructions // --> NOT SURE THIS IS RIGHT!!!!
@@ -798,6 +777,7 @@ extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2) {
         resultArray->ArrayLabel = GenerateArrayLabel();
         resultArray->Size1 = spaceOneDimension;
         resultArray->Size2 = spaceTwoDimension;
+        resultArray->Next = listOfArrays;
         listOfArrays = resultArray;
 
         // Obtain the total amount of space you will need for the 
@@ -851,56 +831,86 @@ extern struct InstrSeq *doArrayAssign(char *name, struct ExprRes *Res1, struct E
     // the new instruction being created.
     struct InstrSeq *code = NULL;
 
-    // Create a variable that will store the address
-    // offset of the array instruction that is being
-    // generated.
-    char *addressOffset = malloc(sizeof(100));
+    // Create a temporary variable to help in calculating
+    // the offset for the array or 2D array that is passed
+    // through the function.
+    char *charOffset = NULL;
+    charOffset = malloc(100 * sizeof(charOffset));
 
+    // Load the address of the read name array and reserve space 
+    // in order to store values that are read in to the array.
+    code = AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "2"));
 
-    // --> NOTES
-	// sll	$t0,	$s3,	2	# 2^i = 2^2 = 4 so k * 4
-	// add 	$t0,	$t0,	$s0	# address of arr[k]
-	// sw	$s3,	0($t0)		# A[k] = k
+    // Create two struct variables for traversing through the
+    // global list of arrays in the "listOfArrays" variable.
+    struct ArrayItem *arrayAssignItem;
+    struct ArrayItem *nextAssignArray;
 
+    // Assign the "arrayReadItem" struct to the global variable 
+    // to begin the process of traversing through the list
+    // of array values.
+    arrayAssignItem = listOfArrays;
 
-    // If the ExprRes *Res2 variable is NULL, then generate 
-    // MIPS assembly instructions for an assignment to a 
-    // single-dimensional array.
-    if(!Res2) {
+    // If there is a second size, then you need
+    // to calculate the offset for the 2D array.
+    if(Res2) {
 
-        // Complete the assignment for the 1D array by generating
-        // MIPS instructions to complete the operation.
-        sprintf(addressOffset, "%s(%d)", name, 4);
-        code = AppendSeq(code, GenInstr(NULL, "sw", addressOffset, NULL, NULL));
-        AppendSeq(code, GenInstr(NULL, "add", TmpRegName(Res3->Reg), TmpRegName(Res1->Reg), NULL));
+        // Loop through the list of arrays and find which array
+        // is equal to the array name that was passed in as a 
+        // parameter to this function.
+        while(arrayAssignItem) {
 
-        // Free up the registers used. 
-        ReleaseTmpReg(Res3->Reg);
-        ReleaseTmpReg(Res1->Reg);
+            // If the second size attribute of a given array item
+            // in the struct is NULL, then generate space for a 1D
+            // array.
+            if(strcmp(arrayAssignItem->ArrayName, name) == 0 ) {
 
-    // If ExprRes *Res2 variable is not NULL, then
-    // generate MIPS assembly instructions for the
-    // assignment of a two-dimensional array.
-    } else {
+                // As soon as you find the array struct corresponding to the array
+                // that you are reading in, finish calculating the offset that you
+                // need for the 2D array.
+                AppendSeq(code, Res2->Instrs);
+                sprintf(charOffset, "%d", arrayAssignItem->Size1);
+                AppendSeq(code, GenInstr(NULL, "mul", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), charOffset));
+                AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), "2")); 
+                AppendSeq(code, GenInstr(NULL, "add", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
 
-        // WORK FOR 2D ARRAY ASSIGNMENT HERE...
-    }
+                // Release the temporary register for readSize2 
+                // so that it can be used again later on in the
+                // program.
+                ReleaseTmpReg(Res2->Reg);
 
-    // Return the resulting instructions for
-    // the arrays from the array assignment
-    // function.
-    return code;
+                // After completing the instruction generation
+                // above, break out of the loop.
+                break; 
+            }
+
+            // Move to the next array value
+            // in the list of arrays.
+            nextAssignArray = arrayAssignItem;
+            arrayAssignItem = nextAssignArray->Next;
+        }
+    } 
+
+    // Add the calculated offset to the tempVariable to be formatted 
+    // properly before generating a store word (sw) instruction for it.
+    // Then generate a store word instruction and put Res3 in as a value.
+    sprintf(charOffset, "%s(%s)", name, TmpRegName(Res1->Reg));
+    AppendSeq(code, GenInstr(NULL, "sw", TmpRegName(Res3->Reg), charOffset, NULL));
+
+    // Free the temporary registers that you used
+    // inside of this function. Free the temporary 
+    // variable and the readName variable as well.
+    ReleaseTmpReg(Res1->Reg);
+    ReleaseTmpReg(Res3->Reg);
+    free(charOffset);
+    free(name);
+
+    // Return the instructions from the read
+    // array list function.
+    return code; // --> WAS THE ORIGINAL!!!
+    // Res1->Instrs = code; // --> UPDATED!!!
+    // return code; // --> UPDATED!!!
 }
-
-
-
-
-
-
-
-
-
-
 
 /* ================================================================== */
 /* SECTION FOR BOOLEAN EXPRESSIONS: NEGATION, OR, AND AND. */
@@ -1123,7 +1133,7 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
     
     // Free the temporary register so it
     // can be reused by other processes.
-    ReleaseTmpReg(reg); // --> KEEP AN EYE ON!!!
+    ReleaseTmpReg(reg);
 
     // Free the space in the result variable,
     // and return the other result.
@@ -1152,7 +1162,7 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
 
     // Create three register variables to allocate
     // space for the exponential operation.
-    int reg = AvailTmpReg();
+    int reg1 = AvailTmpReg();
     int reg2 = AvailTmpReg();
     int reg3 = AvailTmpReg();
 
@@ -1167,7 +1177,7 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     AppendSeq(Res1->Instrs, Res2->Instrs);
 
     // Call the functions to complete the exponentiation operation.
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg1), TmpRegName(Res1->Reg), NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg2), TmpRegName(Res2->Reg), NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg3), TmpRegName(Res2->Reg), NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "sub", TmpRegName(reg3), TmpRegName(reg3), "1"));
@@ -1179,23 +1189,23 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     AppendSeq(Res1->Instrs, GenInstr(NULL, "sub", TmpRegName(reg2), TmpRegName(reg2), "1"));
     AppendSeq(Res1->Instrs, GenInstr(label, NULL, NULL, NULL, NULL));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "beq", "$zero", TmpRegName(reg2), label2));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "mul", TmpRegName(reg), TmpRegName(reg), TmpRegName(Res1->Reg)));
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "mul", TmpRegName(reg1), TmpRegName(reg1), TmpRegName(Res1->Reg)));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "subi", TmpRegName(reg2), TmpRegName(reg2), "1"));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "j", label, NULL, NULL));
     AppendSeq(Res1->Instrs, GenInstr(label3, NULL, NULL, NULL, NULL));
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg), TmpRegName(Res1->Reg), NULL));
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "move", TmpRegName(reg1), TmpRegName(Res1->Reg), NULL));
     AppendSeq(Res1->Instrs, GenInstr(label2, NULL, NULL, NULL, NULL));
 
     // Release all of the registers after use.
     ReleaseTmpReg(Res1->Reg); // --> KEEP AN EYE ON THIS!!!
     ReleaseTmpReg(Res2->Reg);
-    // ReleaseTmpReg(reg); // --> KEEP AN EYE ON THIS!!!
     ReleaseTmpReg(reg2);
     ReleaseTmpReg(reg3);
 
     // Set the first register equal to the first reg variable, free
     // the second register struct, and return from the function.
-    Res1->Reg = reg;
+    Res1->Reg = reg1; // --> WE SET RES1 = REG1, SO CAN WE FREE IT AFTERWARDS???
+    // ReleaseTmpReg(reg1); // --> KEEP AN EYE ON THIS!!!
     free(Res2);
     free(label);
     free(label2);
@@ -1263,8 +1273,8 @@ struct ExprRes *doIntLit(char *digits) {
  *
  * The function returns a struct that contains a new
  * instruction generated within the function. The
- * function handles cases where data is being stored
- * at some address in memory. The function ensures
+ * function handles cases where data is being obtained
+ * from some address in memory. The function ensures
  * that the r-value is added into a register via
  * the "lw" label (It loads the data from the data
  * memory through a specified address).
@@ -1293,6 +1303,108 @@ struct ExprRes *doRval(char *name) {
 }
 
 /**
+ * LOAD THE ARRAY
+ *
+ * The function returns a struct that contains a new
+ * instruction generated within the function. The
+ * function handles cases where data is being obtained
+ * from an array in memory. The function generates MIPS
+ * code that calculates the correct offset values in 
+ * order to access the proper data stored in the given
+ * array. That data is then loaded from the array into
+ * a register for use by the program being compiled.
+ */
+struct ExprRes *doRvalArray(char *name, struct ExprRes *Res1, struct ExprRes *Res2) { 
+
+    // Create a struct of type InstrSeq to store
+    // the new instruction being created.
+    struct InstrSeq *code = NULL;
+
+    // Create a temporary variable to help in calculating
+    // the offset for the array or 2D array that is passed
+    // through the function.
+    char *tempRvalVariable = NULL;
+    tempRvalVariable = malloc(100 * sizeof(tempRvalVariable));
+
+    // Load the address of the read name array and find
+    // the location in memory where the value is stored.
+    code = AppendSeq(Res1->Instrs, GenInstr(NULL, "sll", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), "2"));
+
+    // Create two struct variables for traversing through the
+    // global list of arrays in the "listOfArrays" variable.
+    struct ArrayItem *arrayRvalItem;
+    struct ArrayItem *nextRvalArray;
+
+    // Assign the "arrayReadItem" struct to the global variable 
+    // to begin the process of traversing through the list
+    // of array values.
+    arrayRvalItem = listOfArrays;
+
+    // If there is a second size, then you need
+    // to calculate the offset for the 2D array.
+    if(Res2) {
+
+        // Loop through the list of arrays and find which array
+        // is equal to the array name that was passed in as a 
+        // parameter to this function.
+        while(arrayRvalItem) {
+
+            // If the second size attribute of a given array item
+            // in the struct is NULL, then generate space for a 1D
+            // array.
+            if(strcmp(arrayRvalItem->ArrayName, name) == 0 ) {
+
+                // As soon as you find the array struct corresponding to the array
+                // that you are reading in, finish calculating the offset that you
+                // need for the 2D array.
+                AppendSeq(code, Res2->Instrs);
+                sprintf(tempRvalVariable, "%d", arrayRvalItem->Size1);
+                AppendSeq(code, GenInstr(NULL, "mul", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), tempRvalVariable));
+                AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(Res2->Reg), TmpRegName(Res2->Reg), "2")); 
+                AppendSeq(code, GenInstr(NULL, "add", TmpRegName(Res1->Reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
+
+                // Release the temporary register for readSize2 
+                // so that it can be used again later on in the
+                // program.
+                ReleaseTmpReg(Res2->Reg);
+
+                // After completing the instruction generation
+                // above, break out of the loop.
+                break; 
+            }
+
+            // Move to the next array value
+            // in the list of arrays.
+            nextRvalArray = arrayRvalItem;
+            arrayRvalItem = arrayRvalItem->Next;
+        }
+    } 
+
+    // Add the calculated offset to the tempVariable to be formatted 
+    // properly before generating a store word (sw) instruction for it.
+    // Then generate a store word instruction.
+    sprintf(tempRvalVariable, "%s(%s)", name, TmpRegName(Res1->Reg));
+    AppendSeq(code, GenInstr(NULL, "lw", TmpRegName(Res1->Reg), tempRvalVariable, NULL));
+
+    // Free the temporary registers that you used
+    // inside of this function. Free the temporary 
+    // variable and the readName variable as well.
+    ReleaseTmpReg(Res1->Reg); // --> KEEP AN EYE ON THIS!!!
+    free(tempRvalVariable);
+    free(name);
+
+    // Set the Res1 variable equal to the
+    // code instruction variable in order to
+    // retain all of the previous instructions
+    // that were generated.
+    Res1->Instrs = code;
+
+    // Return the resulting instruction for
+    // obtaining the value of the array.
+    return Res1;
+}
+
+/**
  * READLIST ARRAY
  * 
  * The function returns a struct that contains
@@ -1318,16 +1430,12 @@ extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *read
     // Create a temporary variable to help in calculating
     // the offset for the array or 2D array that is passed
     // through the function.
-    char *tempVariable = malloc(sizeof(100));
+    char *tempVariable = NULL;
+    tempVariable = malloc(100 * sizeof(tempVariable));
 
-    // Create an integer variable to represent
-    // the available temporary registers.
-    int reg = AvailTmpReg(); 
-
-    // Load the address of the read name array aand reserve space 
+    // Load the address of the read name array and reserve space 
     // in order to store values that are read in to the array.
-    code = AppendSeq(code, GenInstr(NULL, "la", TmpRegName(reg), readName, NULL));
-    AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(readSize1->Reg), TmpRegName(readSize1->Reg), "2"));
+    code = AppendSeq(readSize1->Instrs, GenInstr(NULL, "sll", TmpRegName(readSize1->Reg), TmpRegName(readSize1->Reg), "2"));
 
     // Create two struct variables for traversing through the
     // global list of arrays in the "listOfArrays" variable.
@@ -1356,6 +1464,7 @@ extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *read
                 // As soon as you find the array struct corresponding to the array
                 // that you are reading in, finish calculating the offset that you
                 // need for the 2D array.
+                AppendSeq(code, readSize2->Instrs);
                 sprintf(tempVariable, "%d", arrayReadItem->Size1);
                 AppendSeq(code, GenInstr(NULL, "mul", TmpRegName(readSize2->Reg), TmpRegName(readSize2->Reg), tempVariable));
                 AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(readSize2->Reg), TmpRegName(readSize2->Reg), "2")); 
@@ -1370,8 +1479,6 @@ extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *read
                 // above, break out of the loop.
                 break; 
             }
-
-            // FREE STUFF HERE???
 
             // Move to the next array value
             // in the list of arrays.
@@ -1400,13 +1507,15 @@ extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *read
     // inside of this function. Free the temporary 
     // variable and the readName variable as well.
     ReleaseTmpReg(readSize1->Reg);
-    ReleaseTmpReg(reg);
     free(tempVariable);
     free(readName);
 
     // Return the instructions from the read
     // array list function.
-    return code;
+    return code; // --> THIS WAS THE ORIGINAL!!!
+
+    // readSize1->Instrs = code; // --> UPDATED!!!
+    // return readSize1->Instrs; // --> UPDATED!!!
 }
 
 /**
@@ -1442,7 +1551,7 @@ extern struct InstrSeq *createReadListIdent(char *readName, struct InstrSeq *rea
     AppendSeq(code, readList); 
     free(readName);
 
-    // Return the instructions from the read
-    // list identifier function.
+    // Return the instructions from the
+    // read list identifier function.
     return code;
 }

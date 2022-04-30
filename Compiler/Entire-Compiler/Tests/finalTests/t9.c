@@ -12,28 +12,28 @@ while (i < count) {
 
     printString("Enter an int: ");
     read(numbers[i]);
-    i++;
+    i = i + 1;
 }
 
 i = 1;
 while (i < count) {
 
-    j = i-1;
+    j = i - 1;
     temp = numbers[i];
 
     while (j >= 0 && numbers[j] < temp) {
 
-        numbers[j+1] = numbers[j];
+        numbers[j + 1] = numbers[j];
         j = j - 1;
     }
 
-    numbers[j+1] = temp;
+    numbers[j + 1] = temp;
     i = i + 1;
 }
 
 printString("\n\n");
 
-for (i = 0; i < count; i++) {
+for (i = 0; i < count; i = i + 1) {
     print(numbers[i]);
 }
 

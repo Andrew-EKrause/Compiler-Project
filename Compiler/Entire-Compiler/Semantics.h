@@ -115,7 +115,7 @@ extern struct InstrSeq *doAssign(char *name, struct ExprRes *Res1);
 /*
     The functions handle cases where there are 1D arrays and 2D arrays.
 */
-extern struct InstrSeq *createArrayDec(char *name, char *size1, char *size2);
+extern struct InstrSeq *doArrayDec(char *name, char *size1, char *size2);
 extern struct InstrSeq *doArrayAssign(char *name, struct ExprRes *Res1, struct ExprRes *Res2, struct ExprRes *Res3);
 /*
     The function handles boolean operations.
@@ -140,6 +140,7 @@ extern struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2)
 extern struct ExprRes *doIntLitNeg(struct ExprRes *Res);
 extern struct ExprRes *doIntLit(char *digits);
 extern struct ExprRes *doRval(char *name);
+extern struct ExprRes *doRvalArray(char *name, struct ExprRes *Res1, struct ExprRes *Res2);
 
 /*
     The function creates a list of expressions. This function can

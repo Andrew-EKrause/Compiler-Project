@@ -14,7 +14,7 @@ void readNums() {
 
         printString("Enter an int: ");
         read(numbers[i]);
-        i++;
+        i = i + 1;
     }
 }
 

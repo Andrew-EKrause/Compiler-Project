@@ -1,132 +1,63 @@
 	.text	
 	.globl		main
 main:
-	li		$t0, 1
-	sw		$t0, x
-	li		$t0, 0
-	sw		$t0, y
 	li		$v0, 4
 	la		$a0, S1
 	syscall	
-	lw		$t0, x
-	add		$a0, $t0, $zero
-	li		$v0, 1
+	li		$v0, 5
 	syscall	
-	li		$v0, 11
-	la		$a0, _spc
-	syscall	
+	sw		$v0, count
+	li		$t0, 0
+	sw		$t0, i
+L1:
+	lw		$t0, i
+	lw		$t1, count
+	slt		$t2, $t0, $t1
+	beq		$zero, $t2, L2
 	li		$v0, 4
 	la		$a0, S2
 	syscall	
+	lw		$t0, i
+	sll		$t0, $t0, 2
+	li		$v0, 5
+	syscall	
+	sw		$v0, numbers($t0)
+	lw		$t0, i
+	li		$t1, 1
+	add		$t3, $t0, $t1
+	sw		$t3, i
+	j		L1
+L2:
 	li		$v0, 4
 	la		$a0, S3
 	syscall	
-	lw		$t0, y
+	li		$t0, 0
+	sw		$t0, i
+L3:
+	lw		$t0, i
+	lw		$t1, count
+	slt		$t2, $t0, $t1
+	beq		$zero, $t2, L4
+	lw		$t0, i
+	sll		$t0, $t0, 2
+	lw		$t0, numbers($t0)
 	add		$a0, $t0, $zero
 	li		$v0, 1
 	syscall	
 	li		$v0, 11
 	la		$a0, _spc
 	syscall	
+	lw		$t0, i
+	li		$t1, 1
+	add		$t3, $t0, $t1
+	sw		$t3, i
+	j		L3
+L4:
 	li		$v0, 4
 	la		$a0, S4
 	syscall	
-	lw		$t0, x
-	lw		$t1, y
-	sne		$t0, $t0, $zero
-	sne		$t1, $t1, $zero
-	and		$t2, $t0, $t1
-	sw		$t2, z
-	lw		$t0, z
-	add		$a0, $t0, $zero
-	li		$v0, 1
-	syscall	
-	li		$v0, 11
-	la		$a0, _spc
-	syscall	
 	li		$v0, 4
 	la		$a0, S5
-	syscall	
-	lw		$t0, x
-	lw		$t1, y
-	sne		$t0, $t0, $zero
-	sne		$t1, $t1, $zero
-	or		$t2, $t0, $t1
-	sw		$t2, z
-	lw		$t0, z
-	add		$a0, $t0, $zero
-	li		$v0, 1
-	syscall	
-	li		$v0, 11
-	la		$a0, _spc
-	syscall	
-	li		$v0, 4
-	la		$a0, S6
-	syscall	
-	lw		$t0, x
-	seq		$t1, $t0, $zero
-	sw		$t1, z
-	lw		$t0, z
-	add		$a0, $t0, $zero
-	li		$v0, 1
-	syscall	
-	li		$v0, 11
-	la		$a0, _spc
-	syscall	
-	li		$v0, 4
-	la		$a0, S7
-	syscall	
-	lw		$t0, x
-	lw		$t1, y
-	sne		$t0, $t0, $zero
-	sne		$t1, $t1, $zero
-	and		$t2, $t0, $t1
-	seq		$t0, $t2, $zero
-	sw		$t0, z
-	lw		$t0, z
-	add		$a0, $t0, $zero
-	li		$v0, 1
-	syscall	
-	li		$v0, 11
-	la		$a0, _spc
-	syscall	
-	li		$v0, 4
-	la		$a0, S8
-	syscall	
-	lw		$t0, x
-	seq		$t1, $t0, $zero
-	lw		$t0, y
-	seq		$t2, $t0, $zero
-	sne		$t1, $t1, $zero
-	sne		$t2, $t2, $zero
-	or		$t0, $t1, $t2
-	sw		$t0, z
-	lw		$t0, z
-	add		$a0, $t0, $zero
-	li		$v0, 1
-	syscall	
-	li		$v0, 11
-	la		$a0, _spc
-	syscall	
-	li		$v0, 4
-	la		$a0, S9
-	syscall	
-	lw		$t0, x
-	seq		$t1, $t0, $zero
-	seq		$t0, $t1, $zero
-	sw		$t0, z
-	lw		$t0, z
-	add		$a0, $t0, $zero
-	li		$v0, 1
-	syscall	
-	li		$v0, 11
-	la		$a0, _spc
-	syscall	
-	li		$v0, 4
-	la		$a0, S10
-	syscall	
-	li		$v0, 4
-	la		$a0, S11
 	syscall	
 	li		$v0, 10
 	syscall	
@@ -134,17 +65,14 @@ main:
 	.align		4
 _nl:	.asciiz		"\n"
 _spc:	.asciiz		" "
-S11:	.asciiz		"\nTest 18 completed."
-S10:	.asciiz		" = !!x\n"
-S9:	.asciiz		" = !x || !y\n"
-S8:	.asciiz		" = !(x && y)\n"
-S7:	.asciiz		" = !x\n"
-S6:	.asciiz		" = x || y\n"
-S5:	.asciiz		" = x && y\n"
+numbers:	.space		120
+S5:	.asciiz		"Test 8 completed."
 S4:	.asciiz		"\n"
-S3:	.asciiz		"y = "
-S2:	.asciiz		"\n"
-S1:	.asciiz		"x = "
-x:	.word		0
-y:	.word		0
-z:	.word		0
+S3:	.asciiz		"\n\n"
+S2:	.asciiz		"Enter an int: "
+S1:	.asciiz		"Enter the number of ints (30 or less) in the array: "
+i:	.word		0
+temp:	.word		0
+p:	.word		0
+s:	.word		0
+count:	.word		0
