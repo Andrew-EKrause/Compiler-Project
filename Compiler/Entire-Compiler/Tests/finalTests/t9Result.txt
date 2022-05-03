@@ -1,0 +1,30 @@
+Enter the number of ints (30 or less) in the array: 25
+Enter an int: 12
+Enter an int: -9
+Enter an int: 23
+Enter an int: 0
+Enter an int: 87
+Enter an int: 234
+Enter an int: 98
+Enter an int: -23
+Enter an int: -67
+Enter an int: 687
+Enter an int: 23
+Enter an int: 123
+Enter an int: 34
+Enter an int: 3
+Enter an int: 78
+Enter an int: 19
+Enter an int: 25
+Enter an int: -234
+Enter an int: 234
+Enter an int: 43
+Enter an int: 344
+Enter an int: 323
+Enter an int: 56
+Enter an int: 43
+Enter an int: -9
+
+687 344 323 234 234 123 98 87 78 56 43 43 34 25 23 23 19 12 3 0 -9 -9 -23 -67 -234
+
+Test 9 completed.

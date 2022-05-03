@@ -310,7 +310,7 @@ extern struct InstrSeq *doPrintExpressions(struct ExprResList *list) {
         // Move to the next item in the list of expressions.
         list = listOfExprs;
         listOfExprs = listOfExprs->Next;
-        free(list); // --> KEEP AN EYE ON THIS ONE!!!
+        free(list);
     }
 
     // Return the resulting instructions.
@@ -541,7 +541,7 @@ extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, str
 
     // Release the regisers used in this function to allow
     // them to be used again in the compilation process.
-    ReleaseTmpReg(Res->Reg); // --> KEEP AN EYE ON THIS!!!
+    ReleaseTmpReg(Res->Reg);
 
     // Free the ExprRes struct, the labels,
     // and return the generated assembly
@@ -587,7 +587,7 @@ extern struct InstrSeq *doWhile(struct ExprRes *Res, struct InstrSeq *seq) {
 
     // Release the temporary register that was
     // used so that it can be used again.
-    ReleaseTmpReg(Res->Reg); // --> KEEP AN EYE ON THIS!!!
+    ReleaseTmpReg(Res->Reg);
 
     // Free the ExprRes struct, the labels, and  
     // return the linked list of generated assembly
@@ -753,7 +753,7 @@ extern struct InstrSeq *doArrayDec(char *name, char *size1, char *size2) {
         resultArray->Next = listOfArrays;
         listOfArrays = resultArray;
 
-        // Create a new struct of type InstrSeq, and append instructions // --> NOT SURE THIS IS RIGHT!!!!
+        // Create a new struct of type InstrSeq, and append instructions
         // to it that will declare an array in MIPS assembly code.
         sprintf(spaceOneDimensionString, "%d", spaceOneDimension);
         code = AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(reg), spaceOneDimensionString, "2"));
@@ -785,7 +785,7 @@ extern struct InstrSeq *doArrayDec(char *name, char *size1, char *size2) {
         // and then by four via the "sll" instruction.
         spaceTwoDimension = spaceTwoDimension * spaceOneDimension;
 
-        // Create a new struct of type InstrSeq, and append instructions // --> NOT SURE THIS IS RIGHT!!!!
+        // Create a new struct of type InstrSeq, and append instructions
         // to it that will declare an array in MIPS assembly code.
         sprintf(spaceTwoDimensionString, "%d", spaceTwoDimension);
         code = AppendSeq(code, GenInstr(NULL, "sll", TmpRegName(reg), spaceTwoDimensionString, "2"));
@@ -894,6 +894,7 @@ extern struct InstrSeq *doArrayAssign(char *name, struct ExprRes *Res1, struct E
     // Add the calculated offset to the tempVariable to be formatted 
     // properly before generating a store word (sw) instruction for it.
     // Then generate a store word instruction and put Res3 in as a value.
+    AppendSeq(code, Res3->Instrs);
     sprintf(charOffset, "%s(%s)", name, TmpRegName(Res1->Reg));
     AppendSeq(code, GenInstr(NULL, "sw", TmpRegName(Res3->Reg), charOffset, NULL));
 
@@ -907,9 +908,7 @@ extern struct InstrSeq *doArrayAssign(char *name, struct ExprRes *Res1, struct E
 
     // Return the instructions from the read
     // array list function.
-    return code; // --> WAS THE ORIGINAL!!!
-    // Res1->Instrs = code; // --> UPDATED!!!
-    // return code; // --> UPDATED!!!
+    return code;
 }
 
 /* ================================================================== */
@@ -1116,7 +1115,7 @@ extern struct ExprRes *doModulo(struct ExprRes *Res1, struct ExprRes *Res2) {
     // the "mfhi" MIPS assembly instruction (move from hi)
     // to complete the modulus operation.
     AppendSeq(Res1->Instrs, Res2->Instrs);
-    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg))); // --> DO WE CARE ABOUT THE QUOTIENT???
+    AppendSeq(Res1->Instrs, GenInstr(NULL, "div", TmpRegName(reg), TmpRegName(Res1->Reg), TmpRegName(Res2->Reg)));
     AppendSeq(Res1->Instrs, GenInstr(NULL, "mfhi", TmpRegName(reg), NULL, NULL));
 
     // Call the functions below to indicate 
@@ -1197,15 +1196,15 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     AppendSeq(Res1->Instrs, GenInstr(label2, NULL, NULL, NULL, NULL));
 
     // Release all of the registers after use.
-    ReleaseTmpReg(Res1->Reg); // --> KEEP AN EYE ON THIS!!!
+    ReleaseTmpReg(Res1->Reg);
     ReleaseTmpReg(Res2->Reg);
     ReleaseTmpReg(reg2);
     ReleaseTmpReg(reg3);
 
     // Set the first register equal to the first reg variable, free
     // the second register struct, and return from the function.
-    Res1->Reg = reg1; // --> WE SET RES1 = REG1, SO CAN WE FREE IT AFTERWARDS???
-    // ReleaseTmpReg(reg1); // --> KEEP AN EYE ON THIS!!!
+    Res1->Reg = reg1;
+
     free(Res2);
     free(label);
     free(label2);
@@ -1389,7 +1388,6 @@ struct ExprRes *doRvalArray(char *name, struct ExprRes *Res1, struct ExprRes *Re
     // Free the temporary registers that you used
     // inside of this function. Free the temporary 
     // variable and the readName variable as well.
-    ReleaseTmpReg(Res1->Reg); // --> KEEP AN EYE ON THIS!!!
     free(tempRvalVariable);
     free(name);
 
@@ -1512,10 +1510,7 @@ extern struct InstrSeq *createReadListArray(char *readName, struct ExprRes *read
 
     // Return the instructions from the read
     // array list function.
-    return code; // --> THIS WAS THE ORIGINAL!!!
-
-    // readSize1->Instrs = code; // --> UPDATED!!!
-    // return readSize1->Instrs; // --> UPDATED!!!
+    return code;
 }
 
 /**

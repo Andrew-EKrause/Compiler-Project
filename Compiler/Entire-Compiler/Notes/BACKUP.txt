@@ -1165,3 +1165,58 @@ int yyerror(char *s) {
 //     struct SymEntry *TheEntry;
 //     struct IdList *Next;
 // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ReleaseTmpReg(Res1->Reg); // --> DO NOT THINK YOU SHOULD FREE THIS!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --> WE SET RES1 = REG1, SO CAN WE FREE IT AFTERWARDS???
+// ReleaseTmpReg(reg1); // --> KEEP AN EYE ON THIS!!!

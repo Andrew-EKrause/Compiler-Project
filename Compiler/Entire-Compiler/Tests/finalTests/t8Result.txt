@@ -1,0 +1,32 @@
+Enter the number of ints (30 or less) in the array: 28
+Enter an int: 12
+Enter an int: -9
+Enter an int: 340
+Enter an int: 126
+Enter an int: 57
+Enter an int: 1
+Enter an int: -87
+Enter an int: 0
+Enter an int: 23
+Enter an int: 1234
+Enter an int: 4
+Enter an int: 67
+Enter an int: 4
+Enter an int: 2
+Enter an int: 87
+Enter an int: 12
+Enter an int: 32
+Enter an int: 34
+Enter an int: 54
+Enter an int: 23
+Enter an int: 32
+Enter an int: 1
+Enter an int: 23
+Enter an int: -456
+Enter an int: 23
+Enter an int: 12
+Enter an int: 3
+Enter an int: 0
+
+12 -9 340 126 57 1 -87 0 23 1234 4 67 4 2 87 12 32 34 54 23 32 1 23 -456 23 12 3 0
+Test 8 completed.

@@ -1,6 +1,5 @@
-
 ==================================================
-TEST 1: Series of Commands to test your Compiler:
+Series of Commands to test your Compiler:
 ==================================================
 
 1. bison -d ExprEval.y // --> Include a "-v" flag if you ever want to see the output of the yacc file!
@@ -20,7 +19,3 @@ NOTES:
 // There is some memory management that you will have to worry about 
 // for the main compiler project.
 ==================================================
-
-
---> NOTE TO SELF:
---> WHENEVER YOU HAVE A CASE WHERE YOU ARE ASSIGNING A VALUE OR AN ARRAY VALUE TO ANOTHER ARRAY, IT DOES NOT WORK! SEE t8.c FOR MORE DETAILS!!!

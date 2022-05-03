@@ -16,10 +16,9 @@ while (i < count) {
 	i = i + 1;
 }
 
-printString("\n\n");
+printString("\n");
 
 for (i = 0; i < count; i = i + 1) {
-	numbers[i] = 123;
 	print(numbers[i]);
 }
 

@@ -71,5 +71,5 @@ while (j < 4) {
     j = j + 1;
 }
 
-printString("\n");
+printString("\n\n");
 printString("Test 19 completed.");
