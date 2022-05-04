@@ -14,8 +14,6 @@ WILL WANT TO CREATE A bash script FOR ALL THIS!!!
 
 NOTES:
 
-// COMPILING WITH gdb WILL HELP YOU DEBUG YOUR CODE EASIER.
-
-// There is some memory management that you will have to worry about 
-// for the main compiler project.
+// Compiling with gdb will help you debug your code easier.
+// Make sure that your memory management is efficient!
 ==================================================

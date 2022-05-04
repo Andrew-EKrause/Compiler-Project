@@ -93,7 +93,7 @@ void Finish(struct InstrSeq *Code) {
     // the new instruction being created.
     struct InstrSeq *code;
 
-    // --> Not sure why I put code below. Use for functions maybe later.
+    // --> Not sure why I put the code below. Use for functions maybe later.
     // struct SymEntry *entry;
     
     // Create a variable to track iteration through the
@@ -106,7 +106,7 @@ void Finish(struct InstrSeq *Code) {
     // at the top of the file. 
     code = GenInstr(NULL, ".text", NULL, NULL, NULL);
 
-    // --> NOT SURE WHY THE CODE BELOW IS COMMENTED OUT. CHECK LATER!!!
+    // --> Not sure why the code below is commented out. Maybe check later.
     // AppendSeq(code,GenInstr(NULL,".align","2",NULL,NULL));
     
     // Call the AppendSeq functions to display the heading
@@ -1207,6 +1207,8 @@ struct ExprRes *doExponential(struct ExprRes *Res1, struct ExprRes *Res2) {
     // the second register struct, and return from the function.
     Res1->Reg = reg1;
 
+    // Free ExprRes Res2 as 
+    // well as the labels.
     free(Res2);
     free(label);
     free(label2);
