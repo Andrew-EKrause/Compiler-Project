@@ -419,9 +419,11 @@ extern struct InstrSeq *doPrintformat(struct ExprRes *Res, enum PrintExprOps pri
 
     // Call the function multiple times to create a branch
     // instruction to help loop through and print out the
-    // correct number of specified newlines or spaces.
+    // correct number of specified newlines or spaces. A
+    // label is used to jump back to, based on amount of 
+    // new lines or spaces desired.
     AppendSeq(code, GenInstr(NULL, "beq", "$zero", TmpRegName(reg), label2));
-    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // Label to jump back to, based on amount of new lines or spaces desired.
+    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); 
     AppendSeq(code, GenInstr(NULL, "li", "$v0", "4", NULL));
 
     // If the enum value is equal to "newline", then
@@ -534,7 +536,7 @@ extern struct InstrSeq *doIfElse(struct ExprRes *Res, struct InstrSeq *seq1, str
     // generation, labels are also added to move from what section
     // of the assembly code to another (this helps capture the 
     // behavior of the if-else statement).
-    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL)); // --> KEEP IN MIND THAT YOU MAY NEED TO USE A JUMP IF THIS DOES NOT WORK!!!
+    AppendSeq(code, GenInstr(label1, NULL, NULL, NULL, NULL));
     AppendSeq(code, GenInstr(NULL, "bne", "$zero", TmpRegName(Res->Reg), label2));
     AppendSeq(code, seq2);
     AppendSeq(code, GenInstr(label2, NULL, NULL, NULL, NULL));
