@@ -291,19 +291,19 @@ void writeIndicator(int column) {
  */
 int countDigitSpace() {
      
-     // The number variable is initially one to
-     // account for the dot and space values.
-     int counter = 2;
-     int number = currentLineNum;
+    // The number variable is initially one to
+    // account for the dot and space values.
+    int counter = 2;
+    int number = currentLineNum;
 
     // While the number is not zero,
     // count the digits in the number.
-     while(number != 0) {
+    while(number != 0) {
 
-         // Count digits and increment counter.
-         number = number / 10;
-         counter++;
-     }
+        // Count digits and increment counter.
+        number = number / 10;
+        counter++;
+    }
 
     // Return the counter variable.
     return counter;
